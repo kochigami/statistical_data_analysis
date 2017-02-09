@@ -1,14 +1,16 @@
 ###
-CXX = g++
-SRC = test.cpp
-TARGET = test
-OBJ = $(SRC:.cpp=.o) 
-CXXFLAGS =`pkg-config --cflags opencv` 
-LDFLAGS = `pkg-config --libs opencv`
+CXX := g++
+SRC := $(wildcard *.cpp)
+TARGET := $(SRC:.cpp=)
+OBJ := $(SRC:.cpp=.o) 
+CXXFLAGS :=`pkg-config --cflags opencv` 
+LDFLAGS := `pkg-config --libs opencv`
 
 ## $(SRC:.cpp=.o) = test.cpp - .cpp + .o
 
 ###
+all:$(TARGET)
+
 $(TARGET): $(OBJ)
 	$(CXX) -o $@ $< $(LDFLAGS)
 .cpp.o:
