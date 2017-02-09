@@ -1,0 +1,29 @@
+###
+CXX = g++
+SRC = test.cpp
+TARGET = test
+OBJ = $(SRC:.cpp=.o) 
+CXXFLAGS =`pkg-config --cflags opencv` 
+LDFLAGS = `pkg-config --libs opencv`
+
+## $(SRC:.cpp=.o) = test.cpp - .cpp + .o
+
+###
+$(TARGET): $(OBJ)
+	$(CXX) -o $@ $< $(LDFLAGS)
+.cpp.o:
+	$(CXX) -o $@ -c $< $(CXXFLAGS)
+
+## $@ is current target file
+## $< is current dependent file (file no moto)
+## .cpp.o: if .o file is required, it is created from .cpp file (suffix rule)
+## g++ -o test.o -c test.cpp `pkg-config --cflags opencv`
+## $(TARGET): $(OBJ) (= test.o) -> g++ -o test test.o `pkg-config --libs opencv`
+### main: main.cpp
+###     g++ -o main main.cpp `pkg-config --cflag opencv` `pkg-config --libs opencv`
+###
+
+###
+.PHONY: clean #clean isn't an existing file. clean is defined as a task target
+clean:
+	$(RM) *.o test
