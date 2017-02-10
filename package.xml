@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>my_tutorial</name>
+  <version>0.0.1</version>
+  <description>This package is used to study opencv + ros</description>
+
+  <maintainer email="kochigami@jsk.t.u-tokyo.ac.jp">Kanae Kochigami</maintainer>
+  <author email="kochigami@jsk.t.u-tokyo.ac.jp">Kanae Kochigami</author>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>peppereus</build_depend>
+  <build_depend>naoqi_bridge_msgs</build_depend>
+
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>opencv2</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <export>
+
+  </export>
+</package>

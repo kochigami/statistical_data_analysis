@@ -12,7 +12,7 @@ LDFLAGS := `pkg-config --libs opencv`
 ###
 all:$(TARGET)
 
-test:test.o
+fill_in_color:fill_in_color.o
 	$(CXX) -o $@ $< $(LDFLAGS)
 test2:test2.o
 	$(CXX) -o $@ $< $(LDFLAGS)
