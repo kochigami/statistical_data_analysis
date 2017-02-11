@@ -16,6 +16,10 @@ fill_in_color:fill_in_color.o
 	$(CXX) -o $@ $< $(LDFLAGS)
 test2:test2.o
 	$(CXX) -o $@ $< $(LDFLAGS)
+gaussian:gaussian.o
+	$(CXX) -o $@ $< $(LDFLAGS)
+face_detection:face_detection.o
+	$(CXX) -o $@ $< $(LDFLAGS)
 
 .cpp.o:
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
