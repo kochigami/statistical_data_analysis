@@ -22,7 +22,7 @@ def face_detection():
                 cv2.circle(frame, (int((rect[0] + rect[2] * 0.5) * scale), int((rect[1] + rect[2] * 0.5) * scale)), int(rect[2] * scale), (80, 80, 255), 3, 8, 0)
                 
         cv2.imshow("Result Image", frame)
-        cv2.waitKey(3)
+        cv2.waitKey(1)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
