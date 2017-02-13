@@ -20,7 +20,10 @@ gaussian:gaussian.o
 	$(CXX) -o $@ $< $(LDFLAGS)
 face_detection:face_detection.o
 	$(CXX) -o $@ $< $(LDFLAGS)
-
+restore_3dpos:restore_3dpos.o
+	$(CXX) -o $@ $< $(LDFLAGS)
+orb:orb.o
+	$(CXX) -o $@ $< $(LDFLAGS)	
 .cpp.o:
 	$(CXX) -o $@ -c $< $(CXXFLAGS)
 
