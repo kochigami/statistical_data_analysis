@@ -18,13 +18,15 @@ def sample_variance (l):
     return sample_variance
 
 def main():
+    #a = [90, 75, 75, 75, 80, 65, 75, 80]
+    #b = [95, 80, 80, 80, 75, 75, 80, 85]
     a = [0, 1, 3, 1, 3, 3, 4, 2, 4, 1, 3, 3, 0, 2, 1]
-    # b = [1, 3, 2, 4, 3, 4, 2, 1, 5, 2, 3, 4, 5, 1, 1]
-    # t-value: -1.46759877141, degree of freedom: 14
+    #b = [1, 3, 2, 4, 3, 4, 2, 1, 5, 2, 3, 4, 5, 1, 1]
+    # paired t-value: -1.46759877141, degree of freedom: 14
     b = [1, 3, 2, 4, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5]
-    # t-value: -4.92800147686, degree of freedom: 14
+    # paired t-value: -4.92800147686, degree of freedom: 14
     t = t_value(a, b)
-    print "t-value: " + str(t) + ", degree of freedom: " + str((len(a) - 1))
+    print "paired t-value: " + str(t) + ", degree of freedom: " + str((len(a) - 1))
 
 def difference_average (l1, l2):
     difference_average = 0.0
