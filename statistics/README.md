@@ -9,6 +9,7 @@ Learning Statistics
 
 1'. unpaired t-test (対応のないt検定)
 -------------------------------------
+We have to look into variance type first by using F test.
 We use it when the number of samples is not paired. (組が一対一していない時は使う。使えるなら対応のあるt検定を使う方が良い。)
 
 
