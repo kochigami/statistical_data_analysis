@@ -5,6 +5,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from texttable import Texttable
 
 # within: gun-nai
 # between: gun-kan
@@ -22,15 +23,15 @@ def main(data, label):
     # print within_variance
     # print between_variance
     
-    ### calculate heihouwa ###
-    between_heihouwa = 0.0
-    within_heihouwa = 0.0
+    ### calculate sum of squares ###
+    between_sum_of_squares = 0.0
+    within_sum_of_squares = 0.0
     for i in range(len(label)):
-        between_heihouwa += (within_average - between_average[label[i]]) *  (within_average - between_average[label[i]]) * len(df[label[i]])
+        between_sum_of_squares += (within_average - between_average[label[i]]) *  (within_average - between_average[label[i]]) * len(df[label[i]])
     for i in range(len(label)):
-        within_heihouwa += between_variance[label[i]] * len(df[label[i]])
-    # print between_heihouwa
-    # print within_heihouwa
+        within_sum_of_squares += between_variance[label[i]] * len(df[label[i]])
+    # print between_sum_of_squares
+    # print within_sum_of_squares
 
     ### calculate dof ###
     between_dof = len(label) - 1
@@ -40,15 +41,23 @@ def main(data, label):
     # print between_dof
     # print within_dof
 
-    ### calculate heikin heihou ###
-    between_heikin_heihou = between_heihouwa / between_dof
-    within_heikin_heihou = within_heihouwa / within_dof
-    # print between_heikin_heihou
-    # print within_heikin_heihou
+    ### calculate mean square ###
+    between_mean_square = between_sum_of_squares / between_dof
+    within_mean_square = within_sum_of_squares / within_dof
+    # print between_mean_square
+    # print within_mean_square
 
     ### calculate F value ###
-    F = between_heikin_heihou / within_heikin_heihou
+    F = between_mean_square / within_mean_square
     # print F
+
+    table = Texttable()
+    table.set_cols_align(["c", "c", "c", "c", "c"])
+    table.set_cols_valign(["m", "m", "m", "m", "m"])
+    table.add_rows([ ["Factor", "Sum of Squares", "Dof", "Mean Square", "F"], 
+                     ["Between Groups", str(between_sum_of_squares), str(between_dof), str(between_mean_square), str(F)],
+                     ["Within Groups", str(within_sum_of_squares), str(within_dof), str(within_mean_square), ""] ])
+    print table.draw()
 
     print "one-way anova F value: " + str(F) + "\n degree of freedom between group: " + str(between_dof) + "\n degree of freedom within group: " + str(within_dof)     
 
