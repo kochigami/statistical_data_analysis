@@ -7,44 +7,68 @@ import numpy as np
 import math
 from texttable import Texttable
 
-def main(data, factor1, factor2):
+def main(data, factor1, factor2, condition_number_of_factor1, condition_number_of_factor2):
     df = DataFrame(data, index = [str(i+1)  for i  in np.arange(len(data[(data.keys())[0]])) ]) # must change the length of array
     label = []
     for i in range(len(data.keys())):
         label.append(str((data.keys())[i]))
-    sample = len(data.keys()) / 2
-
-    sample_sum_of_each_category_sum = [] # average to machigaeteiru
-    # sample_sum_of_each_category_average = [] #
-    sample_sum_of_each_category_variance = [] #
+    # sample = len(data.keys()) / 2
+    sample = len(label) / condition_number_of_factor1
+    
+    sample_sum_of_each_category_average = []
+    sample_sum_of_each_category_variance = []
     sample_num_of_each_category = []
     
+    ### calculate average ###
+    # average: each sample #
     for i in range(len(label)):
-        sample_sum_of_each_category_sum.append(df[label[i]].mean())
+        sample_sum_of_each_category_average.append(df[label[i]].mean())
         sample_num_of_each_category.append(len(df[label[i]]))
 
-    tmp_sum = 0.0
-    tmp_num = 0.0
-    for i in range(0, sample):
-        tmp_sum += df[label[i]].sum()
-        tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_sum.append(tmp_sum / tmp_num)
-    sample_num_of_each_category.append(tmp_num)
+    # average: factor1 #
+    tmp_sum = [0.0 for i in range(condition_number_of_factor1)]
+    print tmp_sum
+    tmp_num = [0.0 for i in range(condition_number_of_factor1)]
+    tmp_list = []
+    tmp_list = [(df[label].values.flatten())[i:i + (len(label) / condition_number_of_factor1)] for i in range(0, len(df[label]) * len(label), (len(label) / condition_number_of_factor1))]
+    for i in range(0, ((len(df[label]) * len(label)) / condition_number_of_factor1)):
+        a, b = divmod(i, condition_number_of_factor1)
+        tmp_sum[b] += sum(tmp_list[i])
+        #df[label[i]].sum()
+        tmp_num[b] += len(tmp_list[i])
+        #len(df[label[i]])
+        # sample_sum_of_each_category_average.append((sum(tmp_list[i]) / float(len(tmp_list[i]))))
+        # sample_num_of_each_category.append(float(len(tmp_list[i])))
+
+    for i in range(condition_number_of_factor1):
+        sample_sum_of_each_category_average.append(tmp_sum[i] / tmp_num[i])
+        sample_num_of_each_category.append(tmp_num[i])
+
+    ##################### some bugs 
 
     tmp_sum = 0.0
     tmp_num = 0.0
     for i in range(sample, len(label)):
         tmp_sum += df[label[i]].sum()
         tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_sum.append(tmp_sum / tmp_num)
+    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
     sample_num_of_each_category.append(tmp_num)
 
+    print sample_sum_of_each_category_average
+    # watashi [79.66666666666667, 72.66666666666667, 71.0, 74.33333333333333, 76.16666666666667, 72.66666666666667, 72.66666666666667] ;; N+C, h+m ni natteru
+    # answer  [79.66666666666667, 71.0, 72.66666666666667, 74.33333333333333, C, N, h, m, total]
+    
+
+    print sample_num_of_each_category
+    # [15, 15, 15, 15, 30.0, 30.0, 30.0]
+
+    # average: factor2 #
     tmp_sum = 0.0
     tmp_num = 0.0
     for i in range(0, len(label), 2):
         tmp_sum += df[label[i]].sum()
         tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_sum.append(tmp_sum / tmp_num)
+    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
     sample_num_of_each_category.append(tmp_num)
 
     tmp_sum = 0.0
@@ -52,15 +76,16 @@ def main(data, factor1, factor2):
     for i in range(1, len(label), 2):
         tmp_sum += df[label[i]].sum()
         tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_sum.append(tmp_sum / tmp_num)
+    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
     sample_num_of_each_category.append(tmp_num)
 
+    # average: total #
     tmp_sum = 0.0
     tmp_num = 0.0
     for i in range(len(label)):
         tmp_sum += df[label[i]].sum()
         tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_sum.append(tmp_sum / tmp_num)
+    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
     sample_num_of_each_category.append(tmp_num)
 
     ### calculate total variance ###
@@ -106,18 +131,18 @@ def main(data, factor1, factor2):
         
     ### calculate difference of factor1 ###
     difference_of_factor1 = 0.0
-    difference_of_factor1 = math.pow((sample_sum_of_each_category_sum[sample * 2] - sample_sum_of_each_category_sum[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2] + math.pow((sample_sum_of_each_category_sum[sample * 2 + 1] - sample_sum_of_each_category_sum[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 1]
+    difference_of_factor1 = math.pow((sample_sum_of_each_category_average[sample * 2] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2] + math.pow((sample_sum_of_each_category_average[sample * 2 + 1] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 1]
     # print difference_of_factor1
 
     ### calculate difference of factor2 ###
     difference_of_factor2 = 0.0
-    difference_of_factor2 = math.pow((sample_sum_of_each_category_sum[sample * 2 + 2] - sample_sum_of_each_category_sum[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 2] + math.pow((sample_sum_of_each_category_sum[sample * 2 + 3] - sample_sum_of_each_category_sum[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 3]
+    difference_of_factor2 = math.pow((sample_sum_of_each_category_average[sample * 2 + 2] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 2] + math.pow((sample_sum_of_each_category_average[sample * 2 + 3] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 3]
     # print difference_of_factor2
 
     ### calculate difference of interaction ###
     difference_of_each_group = 0.0
     for i in range(len(label)):
-        difference_of_each_group += math.pow((sample_sum_of_each_category_sum[i] - sample_sum_of_each_category_sum[sample * 2 * 2]), 2) * len(df[label[i]]) 
+        difference_of_each_group += math.pow((sample_sum_of_each_category_average[i] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * len(df[label[i]]) 
 
     # print difference_of_each_group
     
@@ -161,4 +186,4 @@ if __name__ == '__main__':
             'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]
     }
 
-    main(data, "Texture", "Flavor")
+    main(data, "Texture", "Flavor", 2, 2)
