@@ -7,14 +7,9 @@ import numpy as np
 import math
 from texttable import Texttable
 
-def main(data, label, factor1, factor2, condition_number_of_factor1, condition_number_of_factor2):
-    df = DataFrame(data, index = [str(i+1) for i in np.arange(len(data[(data.keys())[0]])) ])
-    sample = len(label) / condition_number_of_factor1
-    
+def calc_average(df, label, condition_number_of_factor1):
     sample_sum_of_each_category_average = []
-    sample_sum_of_each_category_variance = []
     sample_num_of_each_category = []
-    
     ### calculate average ###
     # average: each sample #
     for i in range(len(label)):
@@ -61,9 +56,12 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
     sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
     sample_num_of_each_category.append(tmp_num)
 
-    print sample_sum_of_each_category_average
+    #print sample_sum_of_each_category_average
+    return sample_sum_of_each_category_average, sample_num_of_each_category
 
+def calc_variance(df, label, sample, condition_number_of_factor1):
     ### calculate total variance ###
+    sample_sum_of_each_category_variance = []
     condition1 = []
     condition2 = []
     condition3 = []
@@ -94,8 +92,9 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
     sample_sum_of_each_category_variance.append(np.var(condition4))
     sample_sum_of_each_category_variance.append(np.var(df[label].values.flatten()))
     
-    print sample_sum_of_each_category_variance
-    
+    return sample_sum_of_each_category_variance
+
+def calc_sum_of_squares(df, label, sample_sum_of_each_category_average, sample_sum_of_each_category_variance):
     ### calculate sum of squares ###
     between_sum_of_squares = []
     for i in range(len(label)):
@@ -103,39 +102,42 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
  
     between_sum_of_squares.append(sample_sum_of_each_category_variance[len(sample_sum_of_each_category_average) - 1] * len(df[label]) * len(label)) # total
     #print between_sum_of_squares
-        
+    return between_sum_of_squares
+
+def calc_difference_of_factor1(condition_number_of_factor1, sample_sum_of_each_category_average, sample_num_of_each_category, label):
     ### calculate difference of factor1 ###
     difference_of_factor1 = 0.0
     for i in range(condition_number_of_factor1):
         difference_of_factor1 += math.pow((sample_sum_of_each_category_average[len(label) + i] - sample_sum_of_each_category_average[len(sample_sum_of_each_category_average) - 1]), 2) * sample_num_of_each_category[len(label) + i] 
-        #difference_of_factor1 = math.pow((sample_sum_of_each_category_average[sample * 2] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2] + math.pow((sample_sum_of_each_category_average[sample * 2 + 1] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 1]
-    print difference_of_factor1
+    return difference_of_factor1
 
-    ### TODO Next ###
+def calc_difference_of_factor2(condition_number_of_factor1, sample_sum_of_each_category_average, sample_num_of_each_category, label):
     ### calculate difference of factor2 ###
     difference_of_factor2 = 0.0
     for i in range(len(label) / condition_number_of_factor1):
         difference_of_factor2 += math.pow((sample_sum_of_each_category_average[len(label) + condition_number_of_factor1 + i] - sample_sum_of_each_category_average[len(sample_sum_of_each_category_average) - 1]), 2) * sample_num_of_each_category[len(label) + condition_number_of_factor1 + i]
-        #difference_of_factor2 = math.pow((sample_sum_of_each_category_average[sample * 2 + 2] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 2] + math.pow((sample_sum_of_each_category_average[sample * 2 + 3] - sample_sum_of_each_category_average[sample * 2 * 2]), 2) * sample_num_of_each_category[sample * 2 + 3]
-    print difference_of_factor2
+    return difference_of_factor2
 
+def calc_difference_of_each_group(df, sample_sum_of_each_category_average, label):
     ### calculate difference of interaction ###
     difference_of_each_group = 0.0
     for i in range(len(label)):
         difference_of_each_group += math.pow((sample_sum_of_each_category_average[i] - sample_sum_of_each_category_average[len(sample_sum_of_each_category_average) - 1]), 2) * len(df[label[i]]) 
-
-    print difference_of_each_group
+    return difference_of_each_group
     
+def calc_difference_of_interaction(difference_of_each_group, difference_of_factor1, difference_of_factor2):
     difference_of_interaction = 0.0
     difference_of_interaction = difference_of_each_group - difference_of_factor1 - difference_of_factor2
-    # print difference_of_interaction
+    return difference_of_interaction
 
+def calc_difference_of_others(sample, between_sum_of_squares):
     ### calculate difference_of_others
     difference_of_others = 0.0
     for i in range(sample * 2):
         difference_of_others += between_sum_of_squares[i]
-    # print difference_of_others
-    
+    return difference_of_others
+
+def show_table(df, label, factor1, factor2, condition_number_of_factor1, difference_of_factor1, difference_of_factor2, difference_of_interaction, difference_of_others, between_sum_of_squares):
     ### show a table ###
     total_num = 0
     for i in range(len(label)):
@@ -158,7 +160,32 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
                     ["Total", str(between_sum_of_squares[len(between_sum_of_squares) - 1]), str(total_num -1), "", ""]])
     
     print table.draw()
+
+def main(data, label, factor1, factor2, condition_number_of_factor1, condition_number_of_factor2):
+    df = DataFrame(data, index = [str(i+1) for i in np.arange(len(data[(data.keys())[0]])) ])
+    sample = len(label) / condition_number_of_factor1
     
+    sample_sum_of_each_category_average = []
+    sample_sum_of_each_category_variance = []
+    sample_num_of_each_category = []
+    
+    sample_sum_of_each_category_average, sample_num_of_each_category = calc_average(df, label, condition_number_of_factor1)
+    
+    sample_sum_of_each_category_variance = calc_variance(df, label, sample, condition_number_of_factor1)
+        
+    between_sum_of_squares = calc_sum_of_squares(df, label, sample_sum_of_each_category_average, sample_sum_of_each_category_variance)
+
+    difference_of_factor1 = calc_difference_of_factor1(condition_number_of_factor1, sample_sum_of_each_category_average, sample_num_of_each_category, label)
+
+    difference_of_factor2 = calc_difference_of_factor2(condition_number_of_factor1, sample_sum_of_each_category_average, sample_num_of_each_category, label)
+
+    difference_of_each_group = calc_difference_of_each_group(df, sample_sum_of_each_category_average, label)
+
+    difference_of_interaction = calc_difference_of_interaction(difference_of_each_group, difference_of_factor1, difference_of_factor2)
+
+    difference_of_others = calc_difference_of_others(sample, between_sum_of_squares)
+    
+    show_table(df, label, factor1, factor2, condition_number_of_factor1, difference_of_factor1, difference_of_factor2, difference_of_interaction, difference_of_others, between_sum_of_squares)
 
 if __name__ == '__main__':
     data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
