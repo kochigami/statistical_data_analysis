@@ -161,10 +161,18 @@ def show_table(df, label, factor1, factor2, condition_number_of_factor1, differe
     
     print table.draw()
 
+def obtain_df (data):
+    return DataFrame(data, index = [str(i+1) for i in np.arange(len(data[(data.keys())[0]])) ])
+
+def obtain_condition_number_of_factor2(label, condition_number_of_factor1):
+    return len(label) / condition_number_of_factor1
+
 def main(data, label, factor1, factor2, condition_number_of_factor1, condition_number_of_factor2):
-    df = DataFrame(data, index = [str(i+1) for i in np.arange(len(data[(data.keys())[0]])) ])
-    sample = len(label) / condition_number_of_factor1
+    df = obtain_df(data)
     
+    ## sample: condition_number_of_factor2 ##
+    sample = obtain_condition_number_of_factor2(label, condition_number_of_factor1)
+
     sample_sum_of_each_category_average = []
     sample_sum_of_each_category_variance = []
     sample_num_of_each_category = []
@@ -188,19 +196,19 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
     show_table(df, label, factor1, factor2, condition_number_of_factor1, difference_of_factor1, difference_of_factor2, difference_of_interaction, difference_of_others, between_sum_of_squares)
 
 if __name__ == '__main__':
-    data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
-            'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
-            'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
-            'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]
-        }
-
     # data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
-    #         'Crispy-normal': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
     #         'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
     #         'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
-    #         'Normal-normal' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
     #         'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]
     #     }
 
-    #main(data, ['Crispy-hot', 'Crispy-normal', 'Crispy-mild', 'Normal-hot', 'Normal-normal', 'Normal-mild'], "Texture", "Flavor", 2, 3)
-    main(data, ['Crispy-hot', 'Crispy-mild', 'Normal-hot', 'Normal-mild'], "Texture", "Flavor", 2, 2)
+    data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+            'Crispy-normal': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
+            'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
+            'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
+            'Normal-normal' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
+            'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]
+        }
+
+    main(data, ['Crispy-hot', 'Crispy-normal', 'Crispy-mild', 'Normal-hot', 'Normal-normal', 'Normal-mild'], "Texture", "Flavor", 2, 3)
+    #main(data, ['Crispy-hot', 'Crispy-mild', 'Normal-hot', 'Normal-mild'], "Texture", "Flavor", 2, 2)
