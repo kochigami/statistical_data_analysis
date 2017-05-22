@@ -7,92 +7,142 @@ import numpy as np
 import math
 from texttable import Texttable
 
-def calc_average(df, label, condition_number_of_factor1):
-    sample_sum_of_each_category_average = []
-    sample_num_of_each_category = []
-    ### calculate average ###
-    # average: each sample #
-    for i in range(len(label)):
-        sample_sum_of_each_category_average.append(df[label[i]].mean())
-        sample_num_of_each_category.append(len(df[label[i]]))
+class CalculateAverage:
+    def __init__(self):
+        self.sample_sum_of_each_category_average = []
+        self.sample_num_of_each_category = []
+        
+    def add_list(self, list_name, value):
+        list_name.append(value)
+        return list_name
 
-    # average: factor1 #
-    tmp_sum = [0.0 for i in range(condition_number_of_factor1)]
-    tmp_num = [0.0 for i in range(condition_number_of_factor1)]
-    tmp_list = []
-    tmp_list = [(df[label].values.flatten())[i:i + (len(label) / condition_number_of_factor1)] for i in range(0, len(df[label]) * len(label), (len(label) / condition_number_of_factor1))]
-    for i in range(0, ((len(df[label]) * len(label)) / (len(label) / condition_number_of_factor1))):
-        a, b = divmod(i, condition_number_of_factor1)
-        tmp_sum[b] += sum(tmp_list[i])
-        tmp_num[b] += len(tmp_list[i])
+    def calc_average_of_each_sample(self, df, label):
+        # average: each sample #
+        for i in range(len(label)):
+            self.add_list(self.sample_sum_of_each_category_average, df[label[i]].mean())
+            self.add_list(self.sample_num_of_each_category, len(df[label[i]]))
+        return self.sample_sum_of_each_category_average, self.sample_num_of_each_category
+
+    def calc_average_of_factor1(self, df, label, condition_number_of_factor1):
+        # average: factor1 #
+        tmp_sum = 0.0
+        tmp_num = 0.0
+        tmp_sum = [0.0 for i in range(condition_number_of_factor1)]
+        tmp_num = [0.0 for i in range(condition_number_of_factor1)]
+        tmp_list = []
+        tmp_list = [(df[label].values.flatten())[i:i + (len(label) / condition_number_of_factor1)] for i in range(0, len(df[label]) * len(label), (len(label) / condition_number_of_factor1))]
+        for i in range(0, ((len(df[label]) * len(label)) / (len(label) / condition_number_of_factor1))):
+            a, b = divmod(i, condition_number_of_factor1)
+            tmp_sum[b] += sum(tmp_list[i])
+            tmp_num[b] += len(tmp_list[i])
       
-    for i in range(condition_number_of_factor1):
-        sample_sum_of_each_category_average.append(tmp_sum[i] / tmp_num[i])
-        sample_num_of_each_category.append(tmp_num[i])
+        for i in range(condition_number_of_factor1):
+            self.add_list(self.sample_sum_of_each_category_average, tmp_sum[i] / tmp_num[i])
+            self.add_list(self.sample_num_of_each_category, tmp_num[i])
 
-    # average: factor2 #
-    tmp_sum = 0.0
-    tmp_num = 0.0
-    for i in range(0, len(label), (len(label) / condition_number_of_factor1)): #2
-        tmp_sum += df[label[i]].sum()
-        tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
-    sample_num_of_each_category.append(tmp_num)
+        return self.sample_sum_of_each_category_average, self.sample_num_of_each_category
 
-    tmp_sum = 0.0
-    tmp_num = 0.0
-    for i in range(1, len(label), (len(label) / condition_number_of_factor1)): #2
-        tmp_sum += df[label[i]].sum()
-        tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
-    sample_num_of_each_category.append(tmp_num)
+    def calc_average_of_factor2(self, df, label, condition_number_of_factor1):
+        # average: factor2 #
+        tmp_sum = 0.0
+        tmp_num = 0.0
+        for i in range(0, len(label), (len(label) / condition_number_of_factor1)): #2
+            tmp_sum += df[label[i]].sum()
+            tmp_num += len(df[label[i]])
+        self.add_list(self.sample_sum_of_each_category_average, tmp_sum / tmp_num)
+        self.add_list(self.sample_num_of_each_category, tmp_num)
 
-    # average: total #
-    tmp_sum = 0.0
-    tmp_num = 0.0
-    for i in range(len(label)):
-        tmp_sum += df[label[i]].sum()
-        tmp_num += len(df[label[i]])
-    sample_sum_of_each_category_average.append(tmp_sum / tmp_num)
-    sample_num_of_each_category.append(tmp_num)
+        tmp_sum = 0.0
+        tmp_num = 0.0
+        for i in range(1, len(label), (len(label) / condition_number_of_factor1)): #2
+            tmp_sum += df[label[i]].sum()
+            tmp_num += len(df[label[i]])
+        self.add_list(self.sample_sum_of_each_category_average, tmp_sum / tmp_num)
+        self.add_list(self.sample_num_of_each_category, tmp_num)
 
-    #print sample_sum_of_each_category_average
-    return sample_sum_of_each_category_average, sample_num_of_each_category
+        return self.sample_sum_of_each_category_average, self.sample_num_of_each_category
 
-def calc_variance(df, label, sample, condition_number_of_factor1):
-    ### calculate total variance ###
-    sample_sum_of_each_category_variance = []
-    condition1 = []
-    condition2 = []
-    condition3 = []
-    condition4 = []
+    def calc_average_of_total(self, df, label, condition_number_of_factor1):
+        # average: total #
+        tmp_sum = 0.0
+        tmp_num = 0.0
+        for i in range(len(label)):
+            tmp_sum += df[label[i]].sum()
+            tmp_num += len(df[label[i]])
+        self.add_list(self.sample_sum_of_each_category_average, tmp_sum / tmp_num)
+        self.add_list(self.sample_num_of_each_category, tmp_num)
+
+        return self.sample_sum_of_each_category_average, self.sample_num_of_each_category
+
+    def calc_average(self, df, label, condition_number_of_factor1):
+        # average: each sample #
+        self.sample_sum_of_each_category_average, self.sample_num_of_each_category = self.calc_average_of_each_sample(df, label)
+
+        # average: factor1 #
+        self.sample_sum_of_each_category_average, self.sample_num_of_each_category = self.calc_average_of_factor1(df, label, condition_number_of_factor1)
+
+        # average: factor2 #
+        self.sample_sum_of_each_category_average, self.sample_num_of_each_category = self.calc_average_of_factor2(df, label, condition_number_of_factor1)
+
+        # average: total #
+        self.sample_sum_of_each_category_average, self.sample_num_of_each_category = self.calc_average_of_total(df, label, condition_number_of_factor1)
+
+        return self.sample_sum_of_each_category_average, self.sample_num_of_each_category
+
+
+class CalculateVariance:
+    def __init__(self):
+        self.sample_sum_of_each_category_variance = []
+        
+    def add_list(self, list_name, value):
+        list_name.append(value)
+        return list_name
+
+    def calculate_total_variance(self, df, label):
+        # variance: total #
+        for i in range(len(label)):
+            self.add_list(self.sample_sum_of_each_category_variance, df[label[i]].var(ddof=False))
+        return self.sample_sum_of_each_category_variance
+        
+    def calculate_variance_of_each_condition(self, df, label, condition_number_of_factor1):
+        # variance: each condition #
+        condition1 = []
+        condition2 = []
+        condition3 = []
+        condition4 = []
+        sample = len (label) / condition_number_of_factor1
+        for i in range(0, sample):
+            for j in range(len(df[label[i]])):
+                condition1.append(df[label[i]][j])
     
-    for i in range(len(label)):
-        sample_sum_of_each_category_variance.append(df[label[i]].var(ddof=False))
+        for i in range(sample, len(label)):
+            for j in range(len(df[label[i]])):
+                condition2.append(df[label[i]][j])
 
-    for i in range(0, sample):
-        for j in range(len(df[label[i]])):
-            condition1.append(df[label[i]][j])
+        for i in range(0, len(label), (len(label) / condition_number_of_factor1)):
+            for j in range(len(df[label[i]])):
+                condition3.append(df[label[i]][j])
+
+        for i in range(1, len(label), (len(label) / condition_number_of_factor1)):
+            for j in range(len(df[label[i]])):
+                condition4.append(df[label[i]][j])
+
+        self.add_list(self.sample_sum_of_each_category_variance, np.var(condition1))
+        self.add_list(self.sample_sum_of_each_category_variance, np.var(condition2))
+        self.add_list(self.sample_sum_of_each_category_variance, np.var(condition3))
+        self.add_list(self.sample_sum_of_each_category_variance, np.var(condition4))
+        self.add_list(self.sample_sum_of_each_category_variance, np.var(df[label].values.flatten()))
+        
+        return self.sample_sum_of_each_category_variance
+
+    def calc_variance(self, df, label, condition_number_of_factor1):
+        ### calculate total variance ###
+        self.sample_sum_of_each_category_variance = self.calculate_total_variance(df, label)
     
-    for i in range(sample, len(label)):
-        for j in range(len(df[label[i]])):
-            condition2.append(df[label[i]][j])
-
-    for i in range(0, len(label), (len(label) / condition_number_of_factor1)):
-        for j in range(len(df[label[i]])):
-            condition3.append(df[label[i]][j])
-
-    for i in range(1, len(label), (len(label) / condition_number_of_factor1)):
-        for j in range(len(df[label[i]])):
-            condition4.append(df[label[i]][j])
-
-    sample_sum_of_each_category_variance.append(np.var(condition1))
-    sample_sum_of_each_category_variance.append(np.var(condition2))
-    sample_sum_of_each_category_variance.append(np.var(condition3))
-    sample_sum_of_each_category_variance.append(np.var(condition4))
-    sample_sum_of_each_category_variance.append(np.var(df[label].values.flatten()))
-    
-    return sample_sum_of_each_category_variance
+        ### calculate variance of each condition ###
+        self.sample_sum_of_each_category_variance = self.calculate_variance_of_each_condition(df, label, condition_number_of_factor1)
+        
+        return self.sample_sum_of_each_category_variance
 
 def calc_sum_of_squares(df, label, sample_sum_of_each_category_average, sample_sum_of_each_category_variance):
     ### calculate sum of squares ###
@@ -167,7 +217,7 @@ def obtain_df (data):
 def obtain_condition_number_of_factor2(label, condition_number_of_factor1):
     return len(label) / condition_number_of_factor1
 
-def main(data, label, factor1, factor2, condition_number_of_factor1, condition_number_of_factor2):
+def main(data, label, factor1, factor2, condition_number_of_factor1):
     df = obtain_df(data)
     
     ## sample: condition_number_of_factor2 ##
@@ -177,9 +227,11 @@ def main(data, label, factor1, factor2, condition_number_of_factor1, condition_n
     sample_sum_of_each_category_variance = []
     sample_num_of_each_category = []
     
-    sample_sum_of_each_category_average, sample_num_of_each_category = calc_average(df, label, condition_number_of_factor1)
+    calculate_average = CalculateAverage()
+    sample_sum_of_each_category_average, sample_num_of_each_category = calculate_average.calc_average(df, label, condition_number_of_factor1)
     
-    sample_sum_of_each_category_variance = calc_variance(df, label, sample, condition_number_of_factor1)
+    calculate_variance = CalculateVariance()
+    sample_sum_of_each_category_variance = calculate_variance.calc_variance(df, label, condition_number_of_factor1)
         
     between_sum_of_squares = calc_sum_of_squares(df, label, sample_sum_of_each_category_average, sample_sum_of_each_category_variance)
 
@@ -210,5 +262,5 @@ if __name__ == '__main__':
             'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]
         }
 
-    main(data, ['Crispy-hot', 'Crispy-normal', 'Crispy-mild', 'Normal-hot', 'Normal-normal', 'Normal-mild'], "Texture", "Flavor", 2, 3)
+    main(data, ['Crispy-hot', 'Crispy-normal', 'Crispy-mild', 'Normal-hot', 'Normal-normal', 'Normal-mild'], "Texture", "Flavor", 2)
     #main(data, ['Crispy-hot', 'Crispy-mild', 'Normal-hot', 'Normal-mild'], "Texture", "Flavor", 2, 2)
