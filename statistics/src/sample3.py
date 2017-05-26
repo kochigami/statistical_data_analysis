@@ -6,32 +6,40 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 from texttable import Texttable
+from calculate_average import CalculateAverage
+from calculate_variance import CalculateVariance
 
 # within: gun-nai
 # between: gun-kan
 
-def main(data, label):
+def main(df, label):
+
+    calculate_average = CalculateAverage()
+    calculate_variance = CalculateVariance()
+
     ### calculate total average ###
-    within_average = np.mean(df[label].values.flatten())
-    between_average = df[label].mean()
-    # print within_average
-    # print between_average
+    within_average, within_num = calculate_average.calc_average_of_total(df, label)
+    between_average, between_num = calculate_average.calc_average_of_each_sample(df, label)
+    #print within_average
+    #print between_average
 
     ### calculate total variance ###
-    within_variance = np.var(df[label].values.flatten())
-    between_variance = df[label].var(ddof=False)
-    # print within_variance
-    # print between_variance
+    within_variance = []
+    between_variance = calculate_variance.calculate_variance_of_each(df, label)
+    within_variance.append(calculate_variance.calc_variance_of_total(df, label))
+    #print within_variance
+    #print between_variance
     
     ### calculate sum of squares ###
     between_sum_of_squares = 0.0
     within_sum_of_squares = 0.0
     for i in range(len(label)):
-        between_sum_of_squares += (within_average - between_average[label[i]]) *  (within_average - between_average[label[i]]) * len(df[label[i]])
+        between_sum_of_squares += (within_average[0] - between_average[i]) *  (within_average[0] - between_average[i]) * len(df[label[i]])
     for i in range(len(label)):
-        within_sum_of_squares += between_variance[label[i]] * len(df[label[i]])
-    # print between_sum_of_squares
-    # print within_sum_of_squares
+        within_sum_of_squares += between_variance[i] * len(df[label[i]])
+    
+    #print between_sum_of_squares
+    #print within_sum_of_squares
 
     ### calculate dof ###
     between_dof = len(label) - 1
@@ -67,10 +75,14 @@ if __name__ == '__main__':
     #         'Mathematics': [86, 83, 76, 81, 75, 82, 87, 75],
     #         'Science' : [85, 69, 77, 77, 75, 74, 87, 69],
     #         'English': [80, 76, 84, 93, 76, 80, 79, 84]}
-    data = {'Japanese':  [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80],
-            'Mathematics': [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80],
-            'Science' : [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]}
+    # data = {'Japanese':  [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80],
+    #         'Mathematics': [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80],
+    #         'Science' : [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]}
 
-    df = DataFrame(data, index = [str(i+1)  for i  in np.arange(20)]) # must change the length of array
+    data = {'vision':  [2.148006, 2.198387, 2.009008, 2.033217, 2.148546, 1.64081],
+            'sound': [1.597316, 1.6, 2.398989, 2.418485, 2.306829, 1.579134],
+            'vision + sound' : [1.442516, 1.873331, 1.755275, 2.190506, 3.176726, 2.009838]}
 
-    main(df, ['Japanese', 'Mathematics', 'Science'])
+    df = DataFrame(data, index = [str(i+1)  for i  in np.arange(6)]) # must change the length of array
+
+    main(df, ['vision', 'sound', 'vision + sound'])
