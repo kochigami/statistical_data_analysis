@@ -118,7 +118,16 @@ class TwoWayAnova:
              "Interaction": F_of_interaction}
         
         self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way")
+
+        show_table_df = DataFrame (index=list("12345"), columns=[])
+        show_table_df['Sum of Squares'] = [sum_of_squares_of_factor1, sum_of_squares_of_factor2, sum_of_squares_of_interaction, sum_of_squares_of_others, sum_of_squares_of_factor1 + sum_of_squares_of_factor2 + sum_of_squares_of_interaction + sum_of_squares_of_others]
+        show_table_df['DOF'] = [dof_of_factor1, dof_of_factor2, dof_of_interaction, dof_of_others, dof_of_all]
+        show_table_df['Mean Square'] = [mean_square_of_factor1, mean_square_of_factor2, mean_square_of_interaction, mean_square_of_others, ""]
+        show_table_df['F'] = [F_of_factor1, F_of_factor2, F_of_interaction, "", ""]
+        show_table_df.index = ['Factor1', 'Factor2', 'Interaction', 'Others', 'Total']
         
+        self.analysis_of_variance.matplotlib_table(show_table_df)
+
 if __name__ == '__main__':
     # data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
     #         'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],

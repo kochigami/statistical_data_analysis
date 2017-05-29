@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from texttable import Texttable
+import pandas.tools.plotting as plotting
+import matplotlib.pyplot as plt
 
 class AnalysisOfVariance:
     def calc_sample_num(self, df, label, output_list):
@@ -27,3 +29,10 @@ class AnalysisOfVariance:
                             ["Others", str(float(sum_of_squares["Others"])), str(float(dof["Others"])), str(float(mean_squares["Others"])), ""],
                             ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
         print table.draw()
+
+    def matplotlib_table(self, df):
+        fig, ax = plt.subplots(1, 1)
+        plotting.table(ax, df, loc='center')
+        ax.axis('off')
+        plt.show()
+        
