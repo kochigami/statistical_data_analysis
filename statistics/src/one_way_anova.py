@@ -67,7 +67,16 @@ class OneWayAnova:
                         "Between Groups": between_mean_square}
 
         self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="one-way")
-        #print "one-way anova F value: " + str(F) + "\n degree of freedom between group: " + str(between_dof) + "\n degree of freedom within group: " + str(within_dof) 
+        #print "one-way anova F value: " + str(F) + "\n degree of freedom between group: " + str(between_dof) + "\n degree of freedom within group: " + str(within_dof)
+        
+        show_table_df = DataFrame (index=list("123"), columns=[])
+        show_table_df['Sum of Squares'] = [float(within_sum_of_squares), float(between_sum_of_squares), float(within_sum_of_squares) + float(between_sum_of_squares)]
+        show_table_df['DOF'] = [float(within_dof), float(between_dof), float(within_dof) + float(between_dof)]
+        show_table_df['Mean Square'] = [float(within_mean_square), float(between_mean_square), ""]
+        show_table_df['F'] = [float(F), "", ""]
+        show_table_df.index = ['Between', 'Within', 'Total']
+        
+        self.analysis_of_variance.matplotlib_table(show_table_df)
 
 if __name__ == '__main__':
     # data = {'Japanese':  [68, 75, 80, 71, 73, 79, 69, 65],
