@@ -17,43 +17,147 @@ class OneWayAnova:
 
     def calc_one_way_anova(self, df_of_each_group, label_of_each_group, df_of_all_samples, label_of_all_samples):
         
-        ### calculate total average ###
+        ### calculate average ###
+        '''
+        Calculate within_average: average (float) list of each category 
+        Args:
+           df_of_each_group: DataFrame of each category
+           label_of_each_group: string list. label of each category
+        Example:
+           within_average: [2.0296623333333335, 1.9834588333333334, 2.074698666666667]
+        '''
         within_average = []
         for i in range(len(label_of_each_group)):
             within_average.append(self.calculate_average.calc_average(df_of_each_group, label_of_each_group[i]))
+        '''
+        Calculate average_of_all: average (float) of all samples
+        Args:
+           df_of_all_samples: DataFrame of all samples
+           label_of_all_samples: string list. Normally, ["all"].
+        Example:
+           average_of_all: 2.029273
+        '''
         average_of_all = self.calculate_average.calc_average(df_of_all_samples, label_of_all_samples)
-        
+
         ### calculate sample nums ###
+        '''
+        Calculate sample_num_per_group: float list. sample num of each category
+        Args:
+           df_of_each_group: DataFrame of each category
+           label_of_each_group: string list. label of each category
+        Example:
+           sample_num_per_group: [6.0, 6.0, 6.0]
+        '''
         sample_num_per_group =[]
-        total_sample_num = []
         sample_num_per_group = self.analysis_of_variance.calc_sample_num(df_of_each_group, label_of_each_group, sample_num_per_group)
+        '''
+        Calculate total_sample_num: float list. sample num of all categories
+        Args:
+           df_of_all_samples: DataFrame of all samples
+           label_of_all_samples: string list. Normally, ["all"].
+        Example:
+           total_sample_num: [18.0]
+        '''
+        total_sample_num = []
         total_sample_num = self.analysis_of_variance.calc_sample_num(df_of_all_samples, label_of_all_samples, total_sample_num)
 
-        ### calculate total variance ###
+        ### calculate variance ###
+        '''
+        Calculate within_variance: variance (float) list of each category 
+        Args:
+           df_of_each_group: DataFrame of each category
+           label_of_each_group: string list. label of each category
+        Example:
+           within_variance: [0.03470865617688887, 0.1543511475384722, 0.2957196379978889]
+        '''
         within_variance = []
         for i in range(len(label_of_each_group)):
             within_variance.append(self.calculate_variance.calc_variance(df_of_each_group, label_of_each_group[i]))
-        variance_of_all = self.calculate_variance.calc_variance(df_of_all_samples, label_of_all_samples)
         
+        '''
+        Calculate variance_of_all: variance (float) of all samples
+        Args:
+           df_of_all_samples: DataFrame of all samples
+           label_of_all_samples: string list. Normally, ["all"].
+        Example:
+           variance_of_all: 0.162980674118
+        '''
+        variance_of_all = self.calculate_variance.calc_variance(df_of_all_samples, label_of_all_samples)
+
         ### calculate sum of squares ###
-        between_sum_of_squares = 0.0
+        '''
+        Calculate within_sum_of_squares: total sum of squares (float) of each category 
+        Args:
+           sample_num_per_group: calculated from "calculate sample nums" (float list)
+           within_variance: calculated from "calculate variance" (float list) 
+        Example:
+           within_sum_of_squares: 2.90867665028 
+        '''
         within_sum_of_squares = 0.0
-        for i in range(len(label_of_each_group)):
-            within_sum_of_squares += within_variance[i] * sample_num_per_group[i]
-        between_sum_of_squares = variance_of_all * total_sample_num[0] - within_sum_of_squares
+        for i in range(len(sample_num_per_group)):
+            within_sum_of_squares += self.analysis_of_variance.calc_sum_of_squares(within_variance[i], sample_num_per_group[i])
+        '''
+        Calculate between_sum_of_squares: total sum of squares (float) of each category 
+        Args:           
+           variance_of_all: calculated from "calculate variance" (float)
+           total_sample_num: calculated from "calculate sample nums" (float list)
+           within_sum_of_squares: calculated from "calculate sum of squares" (float)
+        Example:
+           between_sum_of_squares: 0.0249754838381
+        '''
+        between_sum_of_squares = 0.0
+        between_sum_of_squares = self.analysis_of_variance.calc_sum_of_squares(variance_of_all, total_sample_num[0]) - within_sum_of_squares
 
         ### calculate dof ###
-        between_dof = len(label_of_each_group) - 1.0
+        '''
+        Calculate between_dof: total dof (float) of each category num 
+        Args:           
+           label_of_each_group: args (string list)
+        Example:
+           between_dof: 2.0
+        '''
+        between_dof = self.analysis_of_variance.calc_dof(len(label_of_each_group))
+        '''
+        Calculate within_dof: total dof (float) of each category sample num
+        Args:           
+           label_of_each_group: args (string list)
+        Example:
+           within_dof: 15.0
+        '''
         within_dof = 0.0
         for i in range(len(label_of_each_group)):
-            within_dof += len(df[label_of_each_group[i]]) - 1.0
+            within_dof += self.analysis_of_variance.calc_dof(len(df[label_of_each_group[i]]))
 
         ### calculate mean square ###
-        between_mean_square = between_sum_of_squares / between_dof
-        within_mean_square = within_sum_of_squares / within_dof
+        '''
+        Calculate between_mean_square: mean_square (float) of between categories
+        Args:           
+           between_sum_of_squares: calculated from "calculate sum of squares" (float)
+           between_dof: calculated from "calculate dof" (float)
+        Example:
+           between_mean_square: 
+        '''
+        between_mean_square = self.analysis_of_variance.calc_mean_square(between_sum_of_squares, between_dof)
+        '''
+        Calculate within_mean_square: mean_square (float) of within each category
+        Args:           
+           within_sum_of_squares: calculated from "calculate sum of squares" (float)
+           within_dof: calculated from "calculate dof" (float)
+        Example:
+           within_mean_square: 
+        '''
+        within_mean_square = self.analysis_of_variance.calc_mean_square(within_sum_of_squares, within_dof)
 
         ### calculate F value ###
-        F = between_mean_square / within_mean_square
+        '''
+        Calculate F value. (float)
+        Args:
+           between_mean_square: calculated from "calculate mean square" (float)
+           within_mean_square: calculated from "calculate mean square" (float)
+        Example: 
+           F: 
+        '''
+        F = self.analysis_of_variance.calc_F(between_mean_square, within_mean_square)
 
         sum_of_squares = {"Within Groups": within_sum_of_squares,
                           "Between Groups": between_sum_of_squares,
@@ -70,9 +174,9 @@ class OneWayAnova:
         #print "one-way anova F value: " + str(F) + "\n degree of freedom between group: " + str(between_dof) + "\n degree of freedom within group: " + str(within_dof)
         
         show_table_df = DataFrame (index=list("123"), columns=[])
-        show_table_df['Sum of Squares'] = [float(within_sum_of_squares), float(between_sum_of_squares), float(within_sum_of_squares) + float(between_sum_of_squares)]
-        show_table_df['DOF'] = [float(within_dof), float(between_dof), float(within_dof) + float(between_dof)]
-        show_table_df['Mean Square'] = [float(within_mean_square), float(between_mean_square), ""]
+        show_table_df['Sum of Squares'] = [float(between_sum_of_squares), float(within_sum_of_squares), float(within_sum_of_squares) + float(between_sum_of_squares)]
+        show_table_df['DOF'] = [float(between_dof), float(within_dof), float(within_dof) + float(between_dof)]
+        show_table_df['Mean Square'] = [float(between_mean_square), float(within_mean_square), ""]
         show_table_df['F'] = [float(F), "", ""]
         show_table_df.index = ['Between', 'Within', 'Total']
         

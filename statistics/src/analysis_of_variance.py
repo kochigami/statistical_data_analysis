@@ -7,8 +7,20 @@ import matplotlib.pyplot as plt
 class AnalysisOfVariance:
     def calc_sample_num(self, df, label, output_list):
         for i in range(len(label)):
-            output_list.append(len(df[label[i]]))
+            output_list.append(float(len(df[label[i]])))
         return output_list
+
+    def calc_sum_of_squares(self, variance, sample_num):
+        return float(variance * sample_num)
+
+    def calc_dof(self, sample_num):
+        return sample_num - 1.0
+
+    def calc_mean_square(self, sum_of_squares, dof):
+        return float(sum_of_squares / dof)
+
+    def calc_F(self, between_mean_square, within_mean_square):
+        return float(between_mean_square / within_mean_square)
 
     def show_table(self, sum_of_squares, dof, mean_squares, F, analysis_type="one-way"):
         ### draw a table ###

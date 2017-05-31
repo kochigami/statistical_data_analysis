@@ -23,7 +23,7 @@ class CalculateVariance:
               label (string): label of each group of samples.
         Return: variance (float)
         '''
-        return df[label].var(ddof=False)
+        return float(df[label].var(ddof=False))
 
     # def calc_variance_of_total(self, df, label):
     #     # variance: total #
