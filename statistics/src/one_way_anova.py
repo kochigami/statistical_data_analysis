@@ -135,7 +135,7 @@ class OneWayAnova:
            between_sum_of_squares: calculated from "calculate sum of squares" (float)
            between_dof: calculated from "calculate dof" (float)
         Example:
-           between_mean_square: 
+           between_mean_square: 0.012
         '''
         between_mean_square = self.analysis_of_variance.calc_mean_square(between_sum_of_squares, between_dof)
         '''
@@ -144,7 +144,7 @@ class OneWayAnova:
            within_sum_of_squares: calculated from "calculate sum of squares" (float)
            within_dof: calculated from "calculate dof" (float)
         Example:
-           within_mean_square: 
+           within_mean_square: 0.194
         '''
         within_mean_square = self.analysis_of_variance.calc_mean_square(within_sum_of_squares, within_dof)
 
@@ -155,7 +155,7 @@ class OneWayAnova:
            between_mean_square: calculated from "calculate mean square" (float)
            within_mean_square: calculated from "calculate mean square" (float)
         Example: 
-           F: 
+           F: 0.064
         '''
         F = self.analysis_of_variance.calc_F(between_mean_square, within_mean_square)
 
