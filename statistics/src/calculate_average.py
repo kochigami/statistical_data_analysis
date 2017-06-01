@@ -25,7 +25,7 @@ class CalculateAverage:
               label (string): label of each group of samples.
         Return: average (float)
         '''
-        return df[label].mean()
+        return float(df[label].mean())
 
     # def calc_average_of_each_sample(self, df, label):
     #     # average: each sample #
