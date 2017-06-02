@@ -126,7 +126,7 @@ class OneWayAnova:
         '''
         within_dof = 0.0
         for i in range(len(label_of_each_group)):
-            within_dof += self.analysis_of_variance.calc_dof(len(df[label_of_each_group[i]]))
+            within_dof += self.analysis_of_variance.calc_dof(len(df_of_each_group[label_of_each_group[i]]))
 
         ### calculate mean square ###
         '''
@@ -187,22 +187,4 @@ class OneWayAnova:
         self.analysis_of_variance.matplotlib_table(show_table_df)
 
 if __name__ == '__main__':
-    # data = {'Japanese':  [68, 75, 80, 71, 73, 79, 69, 65],
-    #         'Mathematics': [86, 83, 76, 81, 75, 82, 87, 75],
-    #         'Science' : [85, 69, 77, 77, 75, 74, 87, 69],
-    #         'English': [80, 76, 84, 93, 76, 80, 79, 84]}
-    # data = {'Japanese':  [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80],
-    #         'Mathematics': [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80],
-    #         'Science' : [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]}
-
-    data = {'vision':  [2.148006, 2.198387, 2.009008, 2.033217, 2.148546, 1.64081],
-            'sound': [1.597316, 1.6, 2.398989, 2.418485, 2.306829, 1.579134],
-            'vision + sound' : [1.442516, 1.873331, 1.755275, 2.190506, 3.176726, 2.009838]}
-
-    data_all = {'all': [2.148006, 2.198387, 2.009008, 2.033217, 2.148546, 1.64081, 1.597316, 1.6, 2.398989, 2.418485, 2.306829, 1.579134, 1.442516, 1.873331, 1.755275, 2.190506, 3.176726, 2.009838]}
-
-    df = DataFrame(data, index = [str(i+1)  for i  in np.arange(6)]) # must change the length of array
-    df_all = DataFrame(data_all, index = [str(i+1)  for i  in np.arange(18)])
-
-    one_way_anova = OneWayAnova()
-    one_way_anova.calc_one_way_anova(df, ['vision', 'sound', 'vision + sound'], df_all, ['all'])
+    pass
