@@ -13,19 +13,31 @@ class AnalysisOfVariance:
         keyword
         """
         connected_data = []
+        connected_dict = None
         if keyword is None: 
             keyword = "each"
             return DataFrame(data, index = [str(i+1)  for i  in np.arange(len(data.values()[0]))])
 
-        elif keyword == "all" or keyword == "All":
-            for i in range(len(data.keys())):
-                connected_data += data[data.keys()[i]]
         else:
-            for i in range(len(data.keys())):
-                if keyword in data.keys()[i]:
+            if keyword == "all" or keyword == "All":
+                for i in range(len(data.keys())):
                     connected_data += data[data.keys()[i]]
-        new_dict = {keyword: connected_data}
-        return DataFrame(new_dict, index = [str(i+1)  for i  in np.arange(len(new_dict.values()[0]))])
+                new_dict = {keyword: connected_data}
+                return DataFrame(new_dict, index = [str(i+1)  for i  in np.arange(len(new_dict.values()[0]))])
+
+            else:
+                if len(keyword) > 0:
+                    for i in range(len(keyword)):
+                        connected_data = []
+                        for j in range(len(data.keys())):
+                            if keyword[i] in data.keys()[j]:
+                                connected_data += data[data.keys()[j]]
+                        new_dict = {keyword[i]: connected_data}
+                        if connected_dict is not None:
+                            connected_dict.update(new_dict)
+                        else:
+                            connected_dict = new_dict
+                    return DataFrame(connected_dict, index = [str(i+1)  for i  in np.arange(len(connected_dict.values()[0]))])
 
     def create_label(self, df):
         label = []
