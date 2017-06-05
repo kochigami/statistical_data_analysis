@@ -1,11 +1,38 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from pandas import DataFrame
+import numpy as np
 from texttable import Texttable
 import pandas.tools.plotting as plotting
 import matplotlib.pyplot as plt
 
 class AnalysisOfVariance:
+    def create_df(self, data, keyword=None):
+        """
+        data: dictionary of each data
+        keyword
+        """
+        connected_data = []
+        if keyword is None: 
+            keyword = "each"
+            return DataFrame(data, index = [str(i+1)  for i  in np.arange(len(data.values()[0]))])
+
+        elif keyword == "all" or keyword == "All":
+            for i in range(len(data.keys())):
+                connected_data += data[data.keys()[i]]
+        else:
+            for i in range(len(data.keys())):
+                if keyword in data.keys()[i]:
+                    connected_data += data[data.keys()[i]]
+        new_dict = {keyword: connected_data}
+        return DataFrame(new_dict, index = [str(i+1)  for i  in np.arange(len(new_dict.values()[0]))])
+
+    def create_label(self, df):
+        label = []
+        for i in range(len(df.keys())):
+            label.append(df.keys()[i])
+        return label
+
     def calc_sample_num(self, df, label, output_list):
         for i in range(len(label)):
             output_list.append(float(len(df[label[i]])))
@@ -66,4 +93,3 @@ class AnalysisOfVariance:
         plotting.table(ax, df, loc='center')
         ax.axis('off')
         plt.show()
-        
