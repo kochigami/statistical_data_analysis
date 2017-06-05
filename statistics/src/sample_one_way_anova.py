@@ -3,6 +3,7 @@
 from pandas import DataFrame
 import numpy as np
 from one_way_anova import OneWayAnova
+import sys
 
 def sample1():
      data = {'Japanese':  [68, 75, 80, 71, 73, 79, 69, 65],
@@ -41,7 +42,25 @@ def sample3():
      one_way_anova = OneWayAnova()
      one_way_anova.calc_one_way_anova(df, ['vision', 'sound', 'vision + sound'], df_all, ['all'])
 
+def sample4():
+     data = {'vision':  [2.03678, 1.870811, 2.860442, 3.23255, 2.26, 1.686727],
+             'sound': [7.67, 2.721273, 1.5, 2.586297, 3.43, 2.685902],
+             'vision + sound' : [1.42923, 1.54, 1.89001, 2.021806, 2.33, 1.06]}
+     data_all = {'all': [2.03678, 1.870811, 2.860442, 3.23255, 2.26, 1.686727, 7.67, 2.721273, 1.5, 2.586297, 3.43, 2.685902, 1.42923, 1.54, 1.89001, 2.021806, 2.33, 1.06]}
+     
+     df = DataFrame(data, index = [str(i+1)  for i  in np.arange(6)]) # must change the length of array
+     df_all = DataFrame(data_all, index = [str(i+1)  for i  in np.arange(18)])
+     
+     one_way_anova = OneWayAnova()
+     one_way_anova.calc_one_way_anova(df, ['vision', 'sound', 'vision + sound'], df_all, ['all'])
+
 if __name__ == '__main__':
-     #sample1()
-     #sample2()
-     sample3()
+     args = sys.argv
+     if args[1] == "sample1":
+          sample1()
+     elif args[1] == "sample2":
+          sample2()
+     elif args[1] == "sample3":
+          sample3()
+     elif args[1] == "sample4":
+          sample4()
