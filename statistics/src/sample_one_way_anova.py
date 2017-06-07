@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from pandas import DataFrame
-import numpy as np
-from one_way_anova import OneWayAnova
-from analysis_of_variance import AnalysisOfVariance
+from anova import ANOVA
 import sys
 
 if __name__ == '__main__':
@@ -29,10 +26,5 @@ if __name__ == '__main__':
                   'sound': [1.597316, 1.6, 2.398989, 2.418485, 2.306829, 1.579134],
                   'vision + sound' : [1.442516, 1.873331, 1.755275, 2.190506, 3.176726, 2.009838]}
 
-     analysis_of_variance = AnalysisOfVariance()
-     df = analysis_of_variance.create_df(data)
-     df_label = analysis_of_variance.create_label(df)
-     df_all = analysis_of_variance.create_df(data, "all")
-     df_all_label = analysis_of_variance.create_label(df_all)
-     one_way_anova = OneWayAnova()
-     one_way_anova.calc_one_way_anova(df, df_label, df_all, df_all_label)
+     anova = ANOVA()
+     anova.one_way_anova(data)
