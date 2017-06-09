@@ -43,3 +43,4 @@ if __name__ == '__main__':
         
     anova = ANOVA()
     anova.two_way_anova(data, factor1_label, factor2_label)
+    anova.draw_graph(data, "Experiment Result", "type", "value")

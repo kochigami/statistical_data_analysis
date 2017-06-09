@@ -28,3 +28,4 @@ if __name__ == '__main__':
 
      anova = ANOVA()
      anova.one_way_anova(data)
+     anova.draw_graph(data, "Average of each type", "type", "average value")
