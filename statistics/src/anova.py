@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import math
+import numpy as np
 from analysis_of_variance import AnalysisOfVariance
 from one_way_anova import OneWayAnova
 from two_way_anova import TwoWayAnova
+from draw_graph import DrawGraph
 
 class ANOVA:
     def one_way_anova(self, data):
@@ -51,3 +55,14 @@ class ANOVA:
         df_all_label = analysis_of_variance.create_label(df_all)
         two_way_anova = TwoWayAnova()
         two_way_anova.calc_two_way_anova(df, df_label, df_factor1, df_factor1_label, df_factor2, df_factor2_label, df_all, df_all_label)
+
+    def draw_graph(self, data, title, xlabel, ylabel):
+        """
+        make df
+        """
+        analysis_of_variance = AnalysisOfVariance()
+        df = analysis_of_variance.create_df(data)
+        label = analysis_of_variance.create_label(df)
+
+        draw_graph = DrawGraph()
+        draw_graph.draw_graph(df, label, title, xlabel, ylabel, mode="anova")
