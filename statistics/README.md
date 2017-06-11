@@ -1,21 +1,38 @@
-Learning Statistics
-===================
+T検定
+=====
 
-1. paired t-test （対応のあるt検定）
------------------------------------
-0. collected 15 people and asked to eat two chocolates
-1. Question: "Which chocolate do you like better, A or B?"
-2. asked to score two chocolates in the range of 0-5
+前提
+----
 
-1'. unpaired t-test (対応のないt検定)
--------------------------------------
-We have to look into variance type first by using F test.
-We use it when the number of samples is not paired. (組が一対一していない時は使う。使えるなら対応のあるt検定を使う方が良い。)
+- 各組のサンプル数は同じ
+- 各条件の平均値の差を比較する
+
+1. 対応のあるt検定
+------------------
+
+- 条件A, Bの比較をする時に、各々の条件を同じ人が試している時に用いる
+
+2. 対応のないt検定
+------------------
+
+- 条件A, Bの比較をする時に、各々の条件を別の人が試している時に用いる
 
 
-2. analysis of variance (ANOVA, 分散分析)
------------------------------------------
+分散分析
+========
+
+前提
+----
+
+- 被験者間計画での実装（今後改良）
+
+1. 一元配置
+-----------
+
+- 分析対象の要因が1つで、その1つが3つ以上の水準に分かれている時に用いる
 
 
-3. two-way factorical analysis of variance (二元配置分散分析)
--------------------------------------------------------------
+3. 二元配置
+-----------
+
+- 分析対象の要因が2つで、その2つを組み合わせて分析を行う時に用いる
