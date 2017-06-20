@@ -13,11 +13,13 @@ if __name__ == '__main__':
     t_test = TTEST()
 
     args = sys.argv
-    if args[1] == "unpaired":
-    ### unpaired-t-test ###
-        t_test.unpaired_ttest(data, "Test", ["Japanese", "English"], "type", "average")
-    elif args[1] == "paired":
-    ### unpaired-t-test ###
-        t_test.paired_ttest(data, "Test", ["Japanese", "English"], "type", "average")
+    if len(args) is not 2:
+        print "input which sample case you want to try: unpaired, paired"
+
     else:
-        print "please check argument"
+        if args[1] == "unpaired":
+            ### unpaired-t-test ###
+            t_test.unpaired_ttest(data, "Test", ["Japanese", "English"], "type", "average")
+        elif args[1] == "paired":
+            ### unpaired-t-test ###
+            t_test.paired_ttest(data, "Test", ["Japanese", "English"], "type", "average")
