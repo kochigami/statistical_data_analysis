@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 from pandas import DataFrame
 import numpy as np
+from analysis_of_variance import AnalysisOfVariance
+
+import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/basic')
 from calculate_average import CalculateAverage
 from calculate_variance import CalculateVariance
-from analysis_of_variance import AnalysisOfVariance
 
 # within: gun-nai
 # between: gun-kan
