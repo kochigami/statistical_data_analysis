@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from anova import ANOVA
 import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/anova')
+from anova import ANOVA
 
 """
 Be careful for names of each factor.

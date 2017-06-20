@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from anova import ANOVA
+
+#このファイルの絶対パス
+#print os.path.abspath(os.path.dirname(__file__))
+
+#このファイルの1つ上のディレクトリの絶対パス
+#print os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+
 import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/anova')
+from anova import ANOVA
 
 if __name__ == '__main__':
 

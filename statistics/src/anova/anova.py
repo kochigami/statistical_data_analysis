@@ -6,6 +6,10 @@ import numpy as np
 from analysis_of_variance import AnalysisOfVariance
 from one_way_anova import OneWayAnova
 from two_way_anova import TwoWayAnova
+
+import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/draw')
 from draw_graph import DrawGraph
 
 class ANOVA:

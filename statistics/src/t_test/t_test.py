@@ -5,6 +5,10 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+
+import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/draw')
 from draw_graph import DrawGraph
 
 class TTEST:

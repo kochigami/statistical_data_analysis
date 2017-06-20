@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-from t_test import TTEST 
 import sys
+import os
+sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/t_test')
+from t_test import TTEST 
 
 if __name__ == '__main__':
     data = {'Japanese':  [68, 75, 80, 71, 73, 79, 69, 65],
