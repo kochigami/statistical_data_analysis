@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from analysis_of_variance import AnalysisOfVariance
-from one_way_anova import OneWayAnova
+from new_one_way_anova import OneWayAnova ### temporary
 from two_way_anova import TwoWayAnova
 
 import sys
@@ -13,7 +13,10 @@ sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pard
 from draw_graph import DrawGraph
 
 class ANOVA:
-    def one_way_anova(self, data):
+    def __init__(self):
+        pass
+
+    def one_way_anova(self, data, test_mode="between"): ### temporary
         """
         Args:
         data = {'Japanese':  [68, 75, 80, 71, 73, 79, 69, 65],
@@ -27,7 +30,7 @@ class ANOVA:
         df_all = analysis_of_variance.create_df(data, "all")
         df_all_label = analysis_of_variance.create_label(df_all)
         one_way_anova = OneWayAnova()
-        one_way_anova.calc_one_way_anova(df, df_label, df_all, df_all_label)
+        one_way_anova.calc_one_way_anova(df, df_label, df_all, df_all_label, test_mode)
 
     def two_way_anova(self, data, factor1_label, factor2_label):
         """
@@ -70,3 +73,6 @@ class ANOVA:
 
         draw_graph = DrawGraph()
         draw_graph.draw_graph(df, label, title, xlabel, ylabel, mode="anova")
+
+if __name__ == '__main__':
+    pass
