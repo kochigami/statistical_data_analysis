@@ -9,12 +9,12 @@
 
 import sys
 import os
-sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/anova')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/anova')
 from anova import ANOVA
 
 if __name__ == '__main__':
      args = sys.argv
-     if len(args) is not 2:
+     if len(args) < 2:
           print "input which sample case you want to try: 1-4"
 
      else:
@@ -38,6 +38,12 @@ if __name__ == '__main__':
                        'sound': [1.597316, 1.6, 2.398989, 2.418485, 2.306829, 1.579134],
                        'vision + sound' : [1.442516, 1.873331, 1.755275, 2.190506, 3.176726, 2.009838]}
 
+          if len(args) == 3:
+               test_mode = args[2]
+
+          else:
+               test_mode = "between"
+
           anova = ANOVA()
-          anova.one_way_anova(data)
+          anova.one_way_anova(data, test_mode)
           anova.draw_graph(data, "Average of each type", "type", "average value")
