@@ -41,6 +41,9 @@ if __name__ == '__main__':
           if len(args) == 3:
                test_mode = args[2]
 
+          else:
+               test_mode = "between"
+
           anova = ANOVA()
           anova.one_way_anova(data, test_mode)
           anova.draw_graph(data, "Average of each type", "type", "average value")

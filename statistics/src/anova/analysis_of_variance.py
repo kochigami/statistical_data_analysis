@@ -68,11 +68,19 @@ class AnalysisOfVariance:
         table.set_cols_align(["c", "c", "c", "c", "c"])
         table.set_cols_valign(["m", "m", "m", "m", "m"])
         
-        if analysis_type == "one-way":
+        if analysis_type == "one-way-between":
             table.add_rows([ ["Factor", "Sum of Squares", "Dof", "Mean Square", "F"], 
                              ["Between Groups", str(float(sum_of_squares["Between Groups"])), str(float(dof["Between Groups"])), str(float(mean_squares["Between Groups"])), str(float(F))],
                              ["Within Groups", str(float(sum_of_squares["Within Groups"])), str(float(dof["Within Groups"])), str(float(mean_squares["Within Groups"])), ""],
                              ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
+
+        elif analysis_type == "one-way-within":
+            table.add_rows([ ["Factor", "Sum of Squares", "Dof", "Mean Square", "F"],
+                             ["Between Groups", str(float(sum_of_squares["Between Groups"])), str(float(dof["Between Groups"])), str(float(mean_squares["Between Groups"])), str(float(F))],
+                             ["Subject", str(float(sum_of_squares["Subject"])), str(float(dof["Subject"])), str(float(mean_squares["Subject"])), ""],
+                             ["Error", str(float(sum_of_squares["Error"])), str(float(dof["Error"])), str(float(mean_squares["Error"])), ""],
+                             ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
+
         else:
             table.add_rows([["Factor", "Sum of Squares", "Dof", "Mean Square", "F"], 
                             ["Factor1", str(float(sum_of_squares["Factor1"])), str(float(dof["Factor1"])), str(float(mean_squares["Factor1"])), float(F["Factor1"])],
@@ -82,13 +90,23 @@ class AnalysisOfVariance:
                             ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
         print table.draw()
 
-    def make_df_of_one_way_anova_for_matplotlib_table(self, between_sum_of_squares, within_sum_of_squares, between_dof, within_dof, between_mean_square, within_mean_square, F):
-        show_table_df = DataFrame (index=list("123"), columns=[])
-        show_table_df['Sum of Squares'] = [float(between_sum_of_squares), float(within_sum_of_squares), float(within_sum_of_squares) + float(between_sum_of_squares)]
-        show_table_df['DOF'] = [float(between_dof), float(within_dof), float(within_dof) + float(between_dof)]
-        show_table_df['Mean Square'] = [float(between_mean_square), float(within_mean_square), ""]
-        show_table_df['F'] = [float(F), "", ""]
-        show_table_df.index = ['Between', 'Within', 'Total']
+    def make_df_of_one_way_anova_for_matplotlib_table(self, mode, F, between_sum_of_squares, between_dof, between_mean_square, within_sum_of_squares, within_dof, within_mean_square, error_sum_of_squares=None, error_dof=None, error_mean_square=None):
+        if mode == "between":
+            show_table_df = DataFrame (index=list("123"), columns=[])
+            show_table_df['Sum of Squares'] = [float(between_sum_of_squares), float(within_sum_of_squares), float(within_sum_of_squares) + float(between_sum_of_squares)]
+            show_table_df['DOF'] = [float(between_dof), float(within_dof), float(within_dof) + float(between_dof)]
+            show_table_df['Mean Square'] = [float(between_mean_square), float(within_mean_square), ""]
+            show_table_df['F'] = [float(F), "", ""]
+            show_table_df.index = ['Between', 'Within', 'Total']
+
+        elif mode == "within":
+            show_table_df = DataFrame (index=list("1234"), columns=[])
+            show_table_df['Sum of Squares'] = [float(between_sum_of_squares), float(within_sum_of_squares), float(error_sum_of_squares), float(between_sum_of_squares) + float(within_sum_of_squares) + float(error_sum_of_squares)]
+            show_table_df['DOF'] = [float(between_dof), float(within_dof), float(error_dof), float(within_dof) + float(between_dof) + float(error_dof)]
+            show_table_df['Mean Square'] = [float(between_mean_square), float(within_mean_square), float(error_mean_square), ""]
+            show_table_df['F'] = [float(F), "", "", ""]
+            show_table_df.index = ['Between', 'Subject', 'Error', 'Total']
+
         return show_table_df
         
     def make_df_of_two_way_anova_for_matplotlib_table(self, sum_of_squares_of_factor1, sum_of_squares_of_factor2, sum_of_squares_of_interaction, sum_of_squares_of_others, dof_of_factor1, dof_of_factor2, dof_of_interaction, dof_of_others, dof_of_all, mean_square_of_factor1, mean_square_of_factor2, mean_square_of_interaction, mean_square_of_others, F_of_factor1, F_of_factor2, F_of_interaction):

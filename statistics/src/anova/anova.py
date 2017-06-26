@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from analysis_of_variance import AnalysisOfVariance
-from new_one_way_anova import OneWayAnova ### temporary
+from one_way_anova import OneWayAnova
 from two_way_anova import TwoWayAnova
 
 import sys
