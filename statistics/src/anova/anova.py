@@ -5,7 +5,7 @@ import math
 import numpy as np
 from analysis_of_variance import AnalysisOfVariance
 from one_way_anova import OneWayAnova
-from two_way_anova import TwoWayAnova
+from two_way_anova_within import TwoWayAnova
 
 import sys
 import os

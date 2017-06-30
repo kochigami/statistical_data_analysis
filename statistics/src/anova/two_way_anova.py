@@ -17,7 +17,7 @@ class TwoWayAnova:
         self.calculate_variance = CalculateVariance()
         self.analysis_of_variance = AnalysisOfVariance()
     
-    def calc_two_way_anova(self, df_of_each_group, label_of_each_group, df_factor1, label_factor1, df_factor2, label_factor2, df_of_all_samples, label_of_all_samples):
+    def calc_two_way_anova(self, df_of_each_group, label_of_each_group, df_factor1, label_factor1, df_factor2, label_factor2, df_of_all_samples, label_of_all_samples, test_mode="between"):
         ### calculate average ###
         '''
         Calculate within_average: average (float) list of each category 
