@@ -15,7 +15,7 @@ In this case, "vision", "sound", "both" is good.
 if __name__ == '__main__':
     args = sys.argv
 
-    if len(args) is not 2:
+    if len(args) is not 3:
         print "input which sample case you want to try: 2x2, 2x3, 2x3_nao"
 
     else:
@@ -56,5 +56,8 @@ if __name__ == '__main__':
             factor2_label = ["vision", "sound", "both"]
         
         anova = ANOVA()
-        anova.two_way_anova(data, factor1_label, factor2_label)
+        if args[2] == "within":
+            anova.two_way_anova(data, factor1_label, factor2_label, test_mode="within")
+        else:
+            anova.two_way_anova(data, factor1_label, factor2_label, test_mode="between")
         anova.draw_graph(data, "Experiment Result", "type", "value")
