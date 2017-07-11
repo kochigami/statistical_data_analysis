@@ -32,7 +32,7 @@ class ANOVA:
         one_way_anova = OneWayAnova()
         one_way_anova.calc_one_way_anova(df, df_label, df_all, df_all_label, test_mode)
 
-    def two_way_anova(self, data, factor1_label, factor2_label):
+    def two_way_anova(self, data, factor1_label, factor2_label, test_mode):
         """
         Args:
         data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
@@ -61,7 +61,7 @@ class ANOVA:
         df_all = analysis_of_variance.create_df(data, "all")
         df_all_label = analysis_of_variance.create_label(df_all)
         two_way_anova = TwoWayAnova()
-        two_way_anova.calc_two_way_anova(df, df_label, df_factor1, df_factor1_label, df_factor2, df_factor2_label, df_all, df_all_label)
+        two_way_anova.calc_two_way_anova(df, df_label, df_factor1, df_factor1_label, df_factor2, df_factor2_label, df_all, df_all_label, test_mode)
 
     def draw_graph(self, data, title, xlabel, ylabel):
         """

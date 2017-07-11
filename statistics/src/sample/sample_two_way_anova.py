@@ -15,10 +15,18 @@ In this case, "vision", "sound", "both" is good.
 if __name__ == '__main__':
     args = sys.argv
 
-    if len(args) is not 2:
+    if len(args) is not 3:
         print "input which sample case you want to try: 2x2, 2x3, 2x3_nao"
 
     else:
+        if args[1] == "test":
+            data = {'Crispy-hot':  [65, 75, 70, 75, 90, 80, 65, 50, 55, 80, 90, 70, 75, 80, 75],
+                    'Crispy-mild': [70, 80, 75, 75, 95, 80, 75, 55, 50, 85, 80, 70, 75, 80, 60],
+                    'Normal-hot' : [50, 55, 70, 75, 80, 85, 65, 55, 55, 75, 80, 75, 70, 65, 55],
+                    'Normal-mild' : [60, 65, 75, 80, 90, 80, 80, 55, 60, 82, 80, 70, 90, 70, 60]}
+            factor1_label = ["Crispy", "Normal"]
+            factor2_label = ["hot", "mild"]
+
         if args[1] == "2x2":
             data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
                     'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
@@ -48,5 +56,8 @@ if __name__ == '__main__':
             factor2_label = ["vision", "sound", "both"]
         
         anova = ANOVA()
-        anova.two_way_anova(data, factor1_label, factor2_label)
+        if args[2] == "within":
+            anova.two_way_anova(data, factor1_label, factor2_label, test_mode="within")
+        else:
+            anova.two_way_anova(data, factor1_label, factor2_label, test_mode="between")
         anova.draw_graph(data, "Experiment Result", "type", "value")
