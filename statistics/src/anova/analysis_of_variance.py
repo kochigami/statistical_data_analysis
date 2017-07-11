@@ -121,14 +121,24 @@ class AnalysisOfVariance:
 
         return show_table_df
         
-    def make_df_of_two_way_anova_for_matplotlib_table(self, sum_of_squares_of_factor1, sum_of_squares_of_factor2, sum_of_squares_of_interaction, sum_of_squares_of_others, dof_of_factor1, dof_of_factor2, dof_of_interaction, dof_of_others, dof_of_all, mean_square_of_factor1, mean_square_of_factor2, mean_square_of_interaction, mean_square_of_others, F_of_factor1, F_of_factor2, F_of_interaction):
-        show_table_df = DataFrame (index=list("12345"), columns=[])
-        show_table_df['Sum of Squares'] = [sum_of_squares_of_factor1, sum_of_squares_of_factor2, sum_of_squares_of_interaction, sum_of_squares_of_others, sum_of_squares_of_factor1 + sum_of_squares_of_factor2 + sum_of_squares_of_interaction + sum_of_squares_of_others]
-        show_table_df['DOF'] = [dof_of_factor1, dof_of_factor2, dof_of_interaction, dof_of_others, dof_of_all]
-        show_table_df['Mean Square'] = [mean_square_of_factor1, mean_square_of_factor2, mean_square_of_interaction, mean_square_of_others, ""]
-        show_table_df['F'] = [F_of_factor1, F_of_factor2, F_of_interaction, "", ""]
-        show_table_df.index = ['Factor1', 'Factor2', 'Interaction', 'Others', 'Total']
-        return show_table_df
+    def make_df_of_two_way_anova_for_matplotlib_table(self, sum_of_squares, dof, mean_squares, F, mode="between"):
+        if mode == "between":
+            show_table_df = DataFrame (index=list("12345"), columns=[])
+            show_table_df['Sum of Squares'] = [str(float(sum_of_squares["Factor1"])), str(float(sum_of_squares["Factor2"])), str(float(sum_of_squares["Interaction"])), str(float(sum_of_squares["Others"])), str(float(sum_of_squares["Total"]))]
+            show_table_df['DOF'] = [str(float(dof["Factor1"])), str(float(dof["Factor2"])), str(float(dof["Interaction"])), str(float(dof["Others"])), str(float(dof["Total"]))]
+            show_table_df['Mean Square'] = [str(float(mean_squares["Factor1"])), str(float(mean_squares["Factor2"])), str(float(mean_squares["Interaction"])), str(float(mean_squares["Others"])), ""]
+            show_table_df['F'] = [str(float(F["Factor1"])), str(float(F["Factor2"])), str(float(F["Interaction"])), "", ""]
+            show_table_df.index = ['Factor1', 'Factor2', 'Interaction', 'Others', 'Total']
+            return show_table_df
+
+        elif mode == "within":
+            show_table_df = DataFrame (index=list("12345678"), columns=[])
+            show_table_df['Sum of Squares'] = [str(float(sum_of_squares["Subject"])), str(float(sum_of_squares["Factor1"])), str(float(sum_of_squares["Subject x Factor1"])), str(float(sum_of_squares["Factor2"])), str(float(sum_of_squares["Subject x Factor2"])), str(float(sum_of_squares["Interaction"])), str(float(sum_of_squares["Subject x Interaction"])), str(float(sum_of_squares["Total"]))]
+            show_table_df['DOF'] = [str(float(dof["Subject"])), str(float(dof["Factor1"])), str(float(dof["Subject x Factor1"])), str(float(dof["Factor2"])), str(float(dof["Subject x Factor2"])), str(float(dof["Interaction"])), str(float(dof["Subject x Interaction"])), str(float(dof["Total"]))]
+            show_table_df['Mean Square'] = [str(float(mean_squares["Subject"])), str(float(mean_squares["Factor1"])), str(float(mean_squares["Subject x Factor1"])), str(float(mean_squares["Factor2"])), str(float(mean_squares["Subject x Factor2"])), str(float(mean_squares["Interaction"])), str(float(mean_squares["Subject x Interaction"])), ""]
+            show_table_df['F'] = ["", str(float(F["Factor1"])), "", str(float(F["Factor2"])), "", str(float(F["Interaction"])), "", ""]
+            show_table_df.index = ['Subject', 'Factor1', 'Subject x Factor1', 'Factor2', 'Subject x Factor2', 'Interaction', 'Subject x Interaction', 'Total']
+            return show_table_df
 
     def matplotlib_table(self, df):
         fig, ax = plt.subplots(1, 1)

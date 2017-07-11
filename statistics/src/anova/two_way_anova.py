@@ -172,6 +172,8 @@ class TwoWayAnova:
                  "Interaction": F_of_interaction}
         
             self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way-between")
+            show_table_df = self.analysis_of_variance.make_df_of_two_way_anova_for_matplotlib_table(sum_of_squares, dof, mean_squares, F, mode="between")
+            self.analysis_of_variance.matplotlib_table(show_table_df)
 
         elif test_mode == "within":
             sum_of_squares = {"Subject": sum_of_squares_of_subject,
@@ -205,28 +207,7 @@ class TwoWayAnova:
                  "Interaction": F_of_interaction}
 
             self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way-within")
-
-        if test_mode == "between":
-            '''
-            Draw matplotlib table.
-            Args: sum_of_squares_of_factor1
-                  sum_of_squares_of_factor2
-                  sum_of_squares_of_interaction
-                  sum_of_squares_of_others
-                  dof_of_factor1
-                  dof_of_factor2
-                  dof_of_interaction
-                  dof_of_others
-                  dof_of_all
-                  mean_square_of_factor1
-                  mean_square_of_factor2
-                  mean_square_of_interaction
-                  mean_square_of_others
-                  F_of_factor1
-                  F_of_factor2
-                  F_of_interaction
-            '''
-            show_table_df = self.analysis_of_variance.make_df_of_two_way_anova_for_matplotlib_table(sum_of_squares_of_factor1, sum_of_squares_of_factor2, sum_of_squares_of_interaction, sum_of_squares_of_others, dof_of_factor1, dof_of_factor2, dof_of_interaction, dof_of_others, dof_of_all, mean_square_of_factor1, mean_square_of_factor2, mean_square_of_interaction, mean_square_of_others, F_of_factor1, F_of_factor2, F_of_interaction)
+            show_table_df = self.analysis_of_variance.make_df_of_two_way_anova_for_matplotlib_table(sum_of_squares, dof, mean_squares, F, mode="within")
             self.analysis_of_variance.matplotlib_table(show_table_df)
 
 if __name__ == '__main__':
