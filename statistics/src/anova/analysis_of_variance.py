@@ -81,14 +81,26 @@ class AnalysisOfVariance:
                              ["Error", str(float(sum_of_squares["Error"])), str(float(dof["Error"])), str(float(mean_squares["Error"])), ""],
                              ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
 
-        else:
+        elif analysis_type == "two-way-between":
             table.add_rows([["Factor", "Sum of Squares", "Dof", "Mean Square", "F"], 
                             ["Factor1", str(float(sum_of_squares["Factor1"])), str(float(dof["Factor1"])), str(float(mean_squares["Factor1"])), float(F["Factor1"])],
                             ["Factor2", str(float(sum_of_squares["Factor2"])), str(float(dof["Factor2"])), str(float(mean_squares["Factor2"])), float(F["Factor2"])],
                             ["Interaction", str(float(sum_of_squares["Interaction"])), str(float(dof["Interaction"])), str(float(mean_squares["Interaction"])), float(F["Interaction"])],
                             ["Others", str(float(sum_of_squares["Others"])), str(float(dof["Others"])), str(float(mean_squares["Others"])), ""],
                             ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
-        print table.draw()
+            print table.draw()
+
+        else:
+            table.add_rows([["Factor", "Sum of Squares", "Dof", "Mean Square", "F"],
+                            ["Subject", str(float(sum_of_squares["Subject"])), str(float(dof["Subject"])), str(float(mean_squares["Subject"])), ""],
+                            ["Factor1", str(float(sum_of_squares["Factor1"])), str(float(dof["Factor1"])), str(float(mean_squares["Factor1"])), float(F["Factor1"])],
+                            ["Subject x Factor1", str(float(sum_of_squares["Subject x Factor1"])), str(float(dof["Subject x Factor1"])), str(float(mean_squares["Subject x Factor1"])), ""],
+                            ["Factor2", str(float(sum_of_squares["Factor2"])), str(float(dof["Factor2"])), str(float(mean_squares["Factor2"])), float(F["Factor2"])],
+                            ["Subject x Factor2", str(float(sum_of_squares["Subject x Factor2"])), str(float(dof["Subject x Factor2"])), str(float(mean_squares["Subject x Factor2"])), ""],
+                            ["Interaction", str(float(sum_of_squares["Interaction"])), str(float(dof["Interaction"])), str(float(mean_squares["Interaction"])), float(F["Interaction"])],
+                            ["Subject x Interaction", str(float(sum_of_squares["Subject x Interaction"])), str(float(dof["Subject x Interaction"])), str(float(mean_squares["Subject x Interaction"])), ""],
+                            ["Total", str(float(sum_of_squares["Total"])), str(float(dof["Total"])), "", ""]])
+            print table.draw()
 
     def make_df_of_one_way_anova_for_matplotlib_table(self, mode, F, between_sum_of_squares, between_dof, between_mean_square, within_sum_of_squares, within_dof, within_mean_square, error_sum_of_squares=None, error_dof=None, error_mean_square=None):
         if mode == "between":

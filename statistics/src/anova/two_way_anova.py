@@ -171,7 +171,7 @@ class TwoWayAnova:
                  "Factor2": F_of_factor2,
                  "Interaction": F_of_interaction}
         
-            self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way")
+            self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way-between")
 
         elif test_mode == "within":
             sum_of_squares = {"Subject": sum_of_squares_of_subject,
@@ -203,6 +203,8 @@ class TwoWayAnova:
             F = {"Factor1": F_of_factor1,
                  "Factor2": F_of_factor2,
                  "Interaction": F_of_interaction}
+
+            self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="two-way-within")
 
         if test_mode == "between":
             '''
