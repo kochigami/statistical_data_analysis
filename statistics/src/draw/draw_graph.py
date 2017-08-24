@@ -3,9 +3,32 @@
 import matplotlib.pyplot as plt
 import math
 import numpy as np
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/t_test')
+from t_test import TTEST
 
 class DrawGraph:
-    def draw_graph(self, df, label, title, xlabel, ylabel, p=None, mode="paired-ttest"):
+    """
+       if mode is paired-ttest or unpaired-ttest, data is like this.
+       data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+               'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+              Be sure that string list is like ([category1, category2]).
+
+       if mode is anova, data is like this.
+       data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+               'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
+               'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
+               'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+
+       title: string.
+       xlabel: string.
+       ylabel: string.
+       tight_layout: bool. if execute tight_layout, set True.
+       mode: string. paired-ttest, unpaired-ttest, anova
+       p: float. if mode is paired-ttest or unpaired-ttest, it is required.
+    """
+    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, mode="paired-ttest", p=None):
         """
         fig: make figure instance
         """
@@ -15,21 +38,23 @@ class DrawGraph:
         max_y_data: max y value for scale
         """
         y_data = []
-        for i in range(len(label)):
-            y_data.append(df[label[i]].mean())
+        for i in range(len(data.keys())):
+            y_data.append(np.mean(data[(data.keys())[i]]))
         max_y_data = math.ceil(max(y_data))
         """
         y_error: calculate sample_error as list [err_0, err_1]
         left: list of x value for each bar, now it is just empty
+        ddof=False means calculating Sample standard deviation
+        not Unbiased standard deviation (ddof=True)
         """
         y_error = []
-        for i in range(len(label)):
-            y_error.append(df[label[i]].std(ddof=False))
+        for i in range(len(data.keys())):
+            y_error.append(np.std(data[(data.keys())[i]], ddof=False))
         left = np.array([])
         """
         left: list of x value (the number of order) for each bar
         """
-        for i in range(len(label)):
+        for i in range(len(data.keys())):
             left = np.append(left, i+1)
         """
         make bar:
@@ -59,21 +84,28 @@ class DrawGraph:
         """
         add x_value in each bar
         """
-        plt.xticks(left, label)
+        plt.xticks(left, data.keys())
         """
         add title, label
         """
         if mode == "anova":
-            new_title = title + "\n(N = " + str(len(df[label[0]])) + " for each type)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type)"
         elif mode == "paired-ttest":
-            new_title = title + "\n(N = " + str(len(df[label[0]])) + " for each type, * p < 0.1, ** p < 0.05)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.1, ** p < 0.05)"
         elif mode == "unpaired-ttest":
-            new_title = title + "\n(N = " + str(len(df[label[0]]) * len(label)) + " for total, * p < 0.1, ** p < 0.05)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) * len(data.keys()) + " for total, * p < 0.1, ** p < 0.05)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         
-        if (mode == "paired-ttest" or mode == "unpaired-ttest") and p is not None:
+        if (mode == "paired-ttest" or mode == "unpaired-ttest") and p is None:
+            # FIXME: calculate p value
+            t_test = TTEST()
+            if mode == "paired-ttest":
+                p = t_test.paired_ttest(data)
+            else:
+                p = t_test.unpaired_ttest(data)
+        if p:
             """
             add p value and mark
             """
@@ -98,9 +130,16 @@ class DrawGraph:
         graph is made very small in order not to overlap.
         That's why I comment in this line. If necessary, please comment out it.
         """
-        # fig.tight_layout()
+        if tight_layout:
+            fig.tight_layout()
         """
         show graph
         """
         plt.show()
 
+if __name__ == '__main__':
+    data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+            'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+
+    d = DrawGraph()
+    d.draw_graph(data, "test", "x", "y")
