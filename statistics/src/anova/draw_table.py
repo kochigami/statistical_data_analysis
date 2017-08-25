@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
+from one_way_anova import OneWayAnova
+
 
 class DrawTable:
     '''
@@ -26,14 +28,13 @@ class DrawTable:
 
         # FIXME: calculate anova
         if mode == "between":
-            print "between"
+            one_way_anova_class = OneWayAnova()
+            data_list = one_way_anova_class.one_way_anova(data_list)
         elif mode == "within":
             print "within"
 
         # FIXME: set data_list_for_display after calculating anova
-        if mode == "between":
-            print "between"
-        elif mode == "within":
+        if mode == "within":
             print "within"
 
         # set information for table
@@ -57,6 +58,9 @@ class DrawTable:
 
 if __name__ == '__main__':
     draw_table = DrawTable()
-    data_list = np.random.randint(10,90, size=(4, 4))
+    data = {'Japanese': [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+            'English':  [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
+            'French' :  [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75]}
+    #data_list = np.random.randint(10,90, size=(4, 4))
     
-    draw_table.draw_table(data_list, mode="within")
+    draw_table.draw_table(data)
