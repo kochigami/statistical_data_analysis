@@ -1,134 +1,133 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from pandas import DataFrame
 import numpy as np
-from analysis_of_variance import AnalysisOfVariance
-
-import sys
-import os
-sys.path.append( os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/basic')
-from calculate_average import CalculateAverage
-from calculate_variance import CalculateVariance
+import math
 
 class OneWayAnova:
-    def __init__(self):
-        self.calculate_average = CalculateAverage()
-        self.calculate_variance = CalculateVariance()
-        self.analysis_of_variance = AnalysisOfVariance()
+    '''
+    data = {'Japanese': [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+            'English':  [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
+            'French' :  [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75]}
+    mode: string. between or within.
+    '''
+    def one_way_anova(self, data, mode="between"):
+        # sample num should be same in each category
+        if mode == "within":
+            for i in range(len(data.keys()) - 1):
+                if len(data[(data.keys())[i]]) != len(data[(data.keys())[i+1]]):
+                    print "Be sure that sample num of each category is same."
+                    return False
 
-    def calc_one_way_anova(self, df_of_each_group, label_of_each_group, df_of_all_samples, label_of_all_samples, test_mode="between"):
-        if test_mode == "between":
-            # calculate average of whole samples
-            average_of_all = self.calculate_average.calc_average(df_of_all_samples, label_of_all_samples)
+        if mode == "between":
+            # calculate total average
+            total_average = 0.0
+            total_sample_num = 0.0
+            for i in range(len(data.keys())):
+                total_sample_num += len(data[(data.keys())[i]])
+                for j in range(len(data[(data.keys())[i]])):
+                    total_average += (data[(data.keys())[i]])[j]
+            total_average = total_average / total_sample_num
 
-            # calculate average of each group
-            within_average = []
-            for i in range(len(label_of_each_group)):
-                within_average.append(self.calculate_average.calc_average(df_of_each_group, label_of_each_group[i]))
+            # calculate average per category
+            average_per_group = []
+            for i in range(len(data.keys())):
+                average_per_group.append(np.mean(data[(data.keys())[i]]))
 
             # calculate sum of squares
             ss_total = 0.0
-            for i in range(len(label_of_each_group)):
-                for j in range(len(df_of_each_group[label_of_each_group[0]])):
-                    ss_total += pow((df_of_each_group[label_of_each_group[i]])[j] - average_of_all, 2.0)
+            for i in range(len(data.keys())):
+                for j in range(len(data[(data.keys())[i]])):
+                    ss_total += pow(((data[(data.keys())[i]])[j] - total_average), 2.0)
 
             ss_between = 0.0
-            for i in range(len(label_of_each_group)):
-                ss_between += pow(within_average[i] - average_of_all, 2.0) * len(df_of_each_group[label_of_each_group[i]])
+            for i in range(len(data.keys())):
+                ss_between += pow((average_per_group[i] - total_average), 2.0) * len(data[(data.keys())[i]])
 
             ss_within = ss_total - ss_between
 
             # calculate dof (group type & sample number of each type)
-            between_dof = self.analysis_of_variance.calc_dof(len(label_of_each_group))
-            within_dof = 0.0
-            for i in range(len(label_of_each_group)):
-                within_dof += self.analysis_of_variance.calc_dof(len(df_of_each_group[label_of_each_group[i]]))
+            between_dof = len(data.keys()) - 1
+            total_dof = total_sample_num - 1
+            within_dof = total_dof - between_dof
 
             # calculate mean square
-            between_mean_square = self.analysis_of_variance.calc_mean_square(ss_between, between_dof)
-            within_mean_square = self.analysis_of_variance.calc_mean_square(ss_within, (len(label_of_each_group) * within_dof))
+            mean_square_between = ss_between / float(between_dof)
+            mean_square_within = ss_within / float(within_dof)
 
             # calculate F
-            F = self.analysis_of_variance.calc_F(between_mean_square, within_mean_square)
+            F = mean_square_between / mean_square_within
 
-            # table
-            sum_of_squares = {"Within Groups": ss_within,
-                              "Between Groups": ss_between,
-                              "Total": ss_total}
+            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01],
+                           [math.ceil(ss_within * 100.0) * 0.01, int(within_dof), math.ceil(mean_square_within * 100.0) * 0.01, '--'], 
+                           [math.ceil((ss_between + ss_within) * 100.0) * 0.01, int(between_dof + within_dof),'--', '--']]
+            return answer_list
 
-            dof = {"Within Groups": within_dof,
-                   "Between Groups": between_dof,
-                   "Total": within_dof + between_dof}
+        elif mode == "within":
+            # total
+            total_S = 0.0
+            total_sample_num = 0.0
+            for i in range(len(data.keys())):
+                total_sample_num += len(data[(data.keys())[i]])
+                for j in range(len(data[(data.keys())[i]])):
+                    total_S += pow((data[(data.keys())[i]])[j], 2.0)
 
-            mean_squares = {"Within Groups": within_mean_square,
-                            "Between Groups": between_mean_square}
+            # each category
+            category_S = 0.0
+            for i in range(len(data.keys())):
+                category_S += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
+            
+            # each subject
+            # sample num should be same in each category
+            # that's why checking array length at first code
+            subject_S = 0.0
+            subject_S_tmp = 0.0
+            target_num = 0
+            count = 0
+            for i in range(len(data[(data.keys())[0]])):
+                for j in range(len(data.keys())):
+                    if i == target_num:
+                        subject_S_tmp += (data[(data.keys())[j]])[i]
+                        count += 1
+                    if count == len(data.keys()):
+                        subject_S += pow(subject_S_tmp, 2.0) / len(data.keys())
+                        count = 0
+                        target_num += 1
+                        subject_S_tmp = 0.0
 
-            self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="one-way-between")
-
-            # show table
-            show_table_df = self.analysis_of_variance.make_df_of_one_way_anova_for_matplotlib_table("between", F, ss_between, between_dof, between_mean_square, ss_within,  within_dof,  within_mean_square)
-            self.analysis_of_variance.matplotlib_table(show_table_df)
-
-        elif test_mode == "within":
-            # preparation
-            ss_total_data = 0.0
-            for i in range(len(label_of_each_group)):
-                for j in range(len(df_of_each_group[label_of_each_group[0]])):
-                    ss_total_data += pow((df_of_each_group[label_of_each_group[i]])[j], 2.0)
-
-            ss_between_data = 0.0
-            for i in range(len(label_of_each_group)):
-                ss_between_data += pow(df_of_each_group[label_of_each_group[i]].sum(), 2.0) / len(df_of_each_group[label_of_each_group[i]])
-
-            ss_subject_data = 0.0
-            for i in range(len(df_of_each_group[label_of_each_group[0]])):
-                tmp = 0.0
-                for j in range(len(label_of_each_group)):
-                    tmp += df_of_each_group[label_of_each_group[j]][i]
-                ss_subject_data += pow(tmp, 2.0) / len(label_of_each_group)
-
-            # calculate X (correction term)
-            x = pow(df_of_all_samples[label_of_all_samples].sum(), 2.0) / (len(label_of_each_group) * len(df_of_each_group[label_of_each_group[0]]))
+            # calculate x (correction term)
+            x = 0.0
+            for i in range(len(data.keys())):
+                x += sum(data[(data.keys())[i]])
+            x = pow(x, 2.0) / (len(data.keys()) * len(data[(data.keys())[0]]))
 
             # calculate sum of squares
-            ss_total = ss_total_data - x
-            ss_between = ss_between_data - x
-            ss_subject = ss_subject_data - x
+            ss_total = total_S - x
+            ss_between = category_S - x
+            ss_subject = subject_S - x
             ss_error = ss_total - ss_between - ss_subject
 
             # calculate dof (group type & sample number of each type)
-            between_dof = self.analysis_of_variance.calc_dof(len(label_of_each_group))
-            subject_dof = self.analysis_of_variance.calc_dof(len(df_of_each_group[label_of_each_group[0]]))
-            error_dof = len(df_of_all_samples[label_of_all_samples]) - 1 - between_dof - subject_dof
+            between_dof = len(data.keys()) - 1.0
+            subject_dof = len(data[(data.keys())[0]]) - 1.0
+            error_dof =  total_sample_num - 1 - between_dof - subject_dof
 
             # calculate mean square
-            between_mean_square = self.analysis_of_variance.calc_mean_square(ss_between, between_dof)
-            subject_mean_square = self.analysis_of_variance.calc_mean_square(ss_subject, subject_dof)
-            error_mean_square = self.analysis_of_variance.calc_mean_square(ss_error, error_dof)
+            mean_square_between = ss_between / between_dof
+            mean_square_subject = ss_subject / subject_dof            
+            mean_square_error = ss_error / error_dof
 
             # calculate F
-            F = self.analysis_of_variance.calc_F(between_mean_square, error_mean_square)
+            F = mean_square_between / mean_square_error
 
-            # preparation for table
-            sum_of_squares = {"Between Groups": ss_between,
-                              "Subject": ss_subject,
-                              "Error": ss_error,
-                              "Total": ss_total}
+            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01],
+                           [math.ceil(ss_subject * 100.0) * 0.01, int(subject_dof), math.ceil(mean_square_subject * 100.0) * 0.01, '--'],
+                           [math.ceil(ss_error * 100.0) * 0.01, int(error_dof), math.ceil(mean_square_error * 100.0) * 0.01, '--'],
+                           [math.ceil(ss_total * 100.0) * 0.01, int(between_dof + subject_dof + error_dof),'--', '--']]
+            return answer_list
 
-            dof = {"Between Groups": between_dof,
-                   "Subject": subject_dof,
-                   "Error": error_dof,
-                   "Total": between_dof + subject_dof + error_dof}
-
-            mean_squares = {"Between Groups": between_mean_square,
-                            "Subject": subject_mean_square,
-                            "Error": error_mean_square}
-
-            # show table
-            self.analysis_of_variance.show_table(sum_of_squares, dof, mean_squares, F, analysis_type="one-way-within")
-
-            show_table_df = self.analysis_of_variance.make_df_of_one_way_anova_for_matplotlib_table("within", F, ss_between, between_dof, between_mean_square, ss_subject, subject_dof, subject_mean_square, ss_error, error_dof, error_mean_square)
-            self.analysis_of_variance.matplotlib_table(show_table_df)
+        else:
+            print "Please choose mode 'between' or 'within'."
+            return False
 
 if __name__ == '__main__':
     pass

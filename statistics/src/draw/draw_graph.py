@@ -67,20 +67,20 @@ class DrawGraph:
         ecolor: color of yerror
         capsize: umbrella size of yerror
         """
-        plt.bar(left, y_data, color="#FF5B70", yerr=y_error, align="center", ecolor="blue", capsize=60)
+        plt.bar(left, y_data, color="cyan", yerr=y_error, align="center", ecolor="blue", capsize=60)
         """
         plt.rcParams["font.size"]: modify character size in a graph
         plt.tick_params(labelsize=28): modify character size in x, ylabel
         """
-        plt.rcParams["font.size"] = 28
+        plt.rcParams["font.size"] = 16
         plt.tick_params(labelsize=12)
         """
         add y_value in each bar
+        w = 0.4 (bar width from bar center line is 0.4)
         """
         ax = plt.gca()
-        w = 0.4
         for i in range(len(y_data)):
-            ann = ax.annotate(str((round (y_data[i] * 100.0)) * 0.01), xy=(left[i] - w * 0.5, y_data[i] / 2.0), fontsize=28)
+            ann = ax.annotate(str((round (y_data[i] * 100.0)) * 0.01), xy=(left[i] - 0.15, y_data[i] / 2.0), fontsize=28)
         """
         add x_value in each bar
         """
@@ -111,14 +111,14 @@ class DrawGraph:
             """
             if p < 0.05:
                 input_word = "**" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
-                plt.text(1.0, max_y_data * 0.95, input_word)
+                plt.text(1.3, max_y_data * 0.75, input_word)
             elif p < 0.1:
                 input_word = "*" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
-                plt.text(1.0, max_y_data * 0.95, input_word)
+                plt.text(1.3, max_y_data * 0.75, input_word)
             else:
                 input_word = " p = " + str(round (p * 1000.0) * 0.001)
-                plt.text(1.0, max_y_data * 0.95, input_word)
-            plt.text(1.0, max_y_data * 0.85, "|---------------------------|")
+                plt.text(1.3, max_y_data * 0.75, input_word)
+            plt.text(1.0, max_y_data * 0.65, "|--------------------------------------------|")
         
         """
         show grid
@@ -142,4 +142,4 @@ if __name__ == '__main__':
             'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
 
     d = DrawGraph()
-    d.draw_graph(data, "test", "x", "y")
+    d.draw_graph(data, "test", "x", "y", tight_layout=True)
