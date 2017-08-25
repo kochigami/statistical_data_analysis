@@ -98,7 +98,7 @@ class OneWayAnova:
             x = 0.0
             for i in range(len(data.keys())):
                 x += sum(data[(data.keys())[i]])
-            x = pow(x, 2.0) / (len(data.keys()) * len(data[(data.keys())[i]]))
+            x = pow(x, 2.0) / (len(data.keys()) * len(data[(data.keys())[0]]))
 
             # calculate sum of squares
             ss_total = total_S - x
