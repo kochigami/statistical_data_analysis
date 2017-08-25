@@ -27,15 +27,11 @@ class DrawTable:
         fig, ax = plt.subplots()
 
         # FIXME: calculate anova
+        one_way_anova_class = OneWayAnova()
         if mode == "between":
-            one_way_anova_class = OneWayAnova()
             data_list = one_way_anova_class.one_way_anova(data_list)
         elif mode == "within":
-            print "within"
-
-        # FIXME: set data_list_for_display after calculating anova
-        if mode == "within":
-            print "within"
+            data_list = one_way_anova_class.one_way_anova(data_list, mode="within")
 
         # set information for table
         # cellText: data text inside each cell
@@ -61,6 +57,5 @@ if __name__ == '__main__':
     data = {'Japanese': [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
             'English':  [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
             'French' :  [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75]}
-    #data_list = np.random.randint(10,90, size=(4, 4))
     
     draw_table.draw_table(data)
