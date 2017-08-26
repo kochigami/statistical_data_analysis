@@ -107,9 +107,6 @@ class TwoWayAnova:
             f_2 = ms_2 / ms_e
             f_1x2 = ms_1x2 / ms_e
             
-            print f_1
-            print f_2
-            print f_1x2
             answer_list = [[math.ceil(ss_1 * 100.0) * 0.01, int(category1_dof), math.ceil(ms_1 * 100.0) * 0.01, math.ceil(f_1 * 100.0) * 0.01],
                            [math.ceil(ss_2 * 100.0) * 0.01, int(category2_dof), math.ceil(ms_2 * 100.0) * 0.01, math.ceil(f_2 * 100.0) * 0.01],
                            [math.ceil(ss_1x2 * 100.0) * 0.01, int(category1x2_dof), math.ceil(ms_1x2 * 100.0) * 0.01, math.ceil(f_1x2 * 100.0) * 0.01],

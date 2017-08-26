@@ -138,8 +138,19 @@ class DrawGraph:
         plt.show()
 
 if __name__ == '__main__':
-    data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
-            'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+    args = sys.argv
+    if len(args) is not 2:
+        print "input which case you want to try: unpaired-ttest, paired-ttest"
+    else:
+        d = DrawGraph()
+        if args[1] == "unpaired-ttest":
+            # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap4/sec1.html
+            data = {'HamburgerA':  [70, 75, 70, 85, 90, 70, 80, 75],
+                    'HamburgerB' : [85, 80, 95, 70, 80, 75, 80, 90]}
+            d.draw_graph(data, "test", "x", "y", tight_layout=True, mode="unpaired-ttest")
 
-    d = DrawGraph()
-    d.draw_graph(data, "test", "x", "y", tight_layout=True)
+        elif args[1] == "paired-ttest":
+            # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap5/sec1.html
+            data = {'HamburgerA':  [90, 75, 75, 75, 80, 65, 75, 80],
+                    'HamburgerB' : [95, 80, 80, 80, 75, 75, 80, 85]}
+            d.draw_graph(data, "test", "x", "y", tight_layout=True)
