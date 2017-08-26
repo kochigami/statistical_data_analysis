@@ -144,11 +144,13 @@ if __name__ == '__main__':
     else:
         d = DrawGraph()
         if args[1] == "unpaired-ttest":
+            # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap4/sec1.html
             data = {'HamburgerA':  [70, 75, 70, 85, 90, 70, 80, 75],
                     'HamburgerB' : [85, 80, 95, 70, 80, 75, 80, 90]}
             d.draw_graph(data, "test", "x", "y", tight_layout=True, mode="unpaired-ttest")
 
         elif args[1] == "paired-ttest":
+            # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap5/sec1.html
             data = {'HamburgerA':  [90, 75, 75, 75, 80, 65, 75, 80],
                     'HamburgerB' : [95, 80, 80, 80, 75, 75, 80, 85]}
             d.draw_graph(data, "test", "x", "y", tight_layout=True)
