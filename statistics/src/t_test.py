@@ -82,8 +82,7 @@ class TTEST:
                 sample_variance_2 += pow(((data[(data.keys())[1]])[i] - np.average(data[(data.keys())[1]])), 2.0)
             sample_variance_2 = (1.0 / (len(data[(data.keys())[1]]) - 1)) * sample_variance_2
 
-            t = diff_average / math.sqrt((sample_variance_1 / len(data[(data.keys())[0]])) + (sample_variance_2 / len(data[(data.keys())[1]])))
-            
+            t = abs(diff_average / math.sqrt((sample_variance_1 / len(data[(data.keys())[0]])) + (sample_variance_2 / len(data[(data.keys())[1]]))))
             dof = pow((sample_variance_1 / len(data[(data.keys())[0]])) + (sample_variance_2 / len(data[(data.keys())[1]])) , 2.0) / ((pow(sample_variance_1 / len(data[(data.keys())[0]]), 2.0) / (len(data[(data.keys())[0]]) - 1.0)) + ((pow(sample_variance_2 / len(data[(data.keys())[1]]), 2.0) / (len(data[(data.keys())[1]]) - 1.0))))
             dof = math.ceil(dof)
             p = calc_p.sf(t, dof)
@@ -94,7 +93,7 @@ class TTEST:
             diff_average = np.average(data[(data.keys())[0]]) - np.average(data[(data.keys())[1]])
             diff_variance = (np.var(data[(data.keys())[0]]) * len(data[(data.keys())[0]]) + np.var(data[(data.keys())[1]]) * len(data[(data.keys())[1]])) / (len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]) -2)
             diff_error = math.sqrt (diff_variance * ((1.0 / len(data[(data.keys())[0]]) + (1.0 / len(data[(data.keys())[1]])))))
-            t = diff_average / diff_error
+            t = abs(diff_average / diff_error)
             dof = len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]) -2
             p = calc_p.sf(t, dof)
             ### homoscedasticity: tou bunsan
