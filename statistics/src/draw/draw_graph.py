@@ -93,7 +93,7 @@ class DrawGraph:
         elif mode == "paired-ttest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.1, ** p < 0.05)"
         elif mode == "unpaired-ttest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) * len(data.keys()) + " for total, * p < 0.1, ** p < 0.05)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total, * p < 0.1, ** p < 0.05)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
@@ -144,6 +144,12 @@ if __name__ == '__main__':
     else:
         d = DrawGraph()
         if args[1] == "unpaired-ttest":
+            # for welch's test
+            # followed this website for sample: http://www.geisya.or.jp/~mwm48961/statistics/ttest_question2.htm
+            # data = {'HamburgerA':  [15.3, 14.9, 14.5, 14.4, 14.0, 13.9, 14.1, 14.7, 15.3, 14.6],
+            #         'HamburgerB' : [13.9, 14.2, 14.1, 14.3, 14.1, 13.7, 14.7, 13.9, 14.1, 13.8, 14.3]}
+            
+            # for student's test
             # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap4/sec1.html
             data = {'HamburgerA':  [70, 75, 70, 85, 90, 70, 80, 75],
                     'HamburgerB' : [85, 80, 95, 70, 80, 75, 80, 90]}
