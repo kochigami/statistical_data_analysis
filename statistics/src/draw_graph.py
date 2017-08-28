@@ -5,7 +5,6 @@ import math
 import numpy as np
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)) + '/t_test')
 from t_test import TTEST
 
 class DrawGraph:
@@ -99,7 +98,6 @@ class DrawGraph:
         plt.ylabel(ylabel)
         
         if (mode == "paired-ttest" or mode == "unpaired-ttest") and p is None:
-            # FIXME: calculate p value
             t_test = TTEST()
             if mode == "paired-ttest":
                 p = t_test.paired_ttest(data)
