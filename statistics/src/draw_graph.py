@@ -90,7 +90,7 @@ class DrawGraph:
         elif mode == "paired-ttest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.1, ** p < 0.05)"
         elif mode == "unpaired-ttest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total, * p < 0.1, ** p < 0.05)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total (" + str((data.keys())[0]) + ": " +  str(len(data[(data.keys())[0]])) + ", " + str((data.keys())[1]) + ": " + str(len(data[(data.keys())[1]])) + "),\n * p < 0.1, ** p < 0.05)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
