@@ -106,7 +106,9 @@ class DrawGraph:
             add p value and mark
             """
             if p < 0.05:
-                input_word = "**" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
+                #input_word = "**" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
+                print p
+                input_word = "**" + " (p = " + str(round (p * 100000.0) * 0.00001) + " )"
                 plt.text(1.3, max_y_data * 0.75, input_word)
             elif p < 0.1:
                 input_word = "*" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
