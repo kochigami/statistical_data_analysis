@@ -35,9 +35,23 @@ class DrawGraph:
         max_y_data: max y value for scale
         """
         y_data = []
+        tmp=0
         for i in range(len(data.keys())):
-            y_data.append(np.mean(data[(data.keys())[i]]))
-        max_y_data = math.ceil(max(y_data))
+            tmp=0
+            for j in range(len(data[(data.keys())[i]])):
+                print "test: "
+                print data[(data.keys())[i]][j]
+                #print data[((data.keys())[i])[j]]
+                if data[(data.keys())[i]][j] == 1:
+                    tmp += 1
+            print tmp
+            y_data.append(tmp)
+            #y_data.append(np.mean(data[(data.keys())[i]]))
+        tmp_list = []    
+        for i in range(len(data.keys())):
+            tmp_list.append(len((data.keys())[i]))
+        #max_y_data = math.ceil(max(len(data.keys())))
+        max_y_data = math.ceil(max(tmp_list))
         """
         y_error: calculate sample_error as list [err_0, err_1]
         left: list of x value for each bar, now it is just empty
@@ -46,7 +60,10 @@ class DrawGraph:
         """
         y_error = []
         for i in range(len(data.keys())):
-            y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+            #y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+            y_error.append((len((data.keys())[i]) * np.std(data[(data.keys())[i]], ddof=False)))
+        print "y_error: "
+        print y_error
         left = np.array([])
         """
         left: list of x value (the number of order) for each bar
