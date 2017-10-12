@@ -1,18 +1,31 @@
 # T検定
 
-## 前提
+## サンプル
+```cd src/sample_t_test.py```
 
-- 各組のサンプル数は同じ
+## 前提
 - 各条件の平均値の差を比較する
+- 前提：各組のサンプル数は同じ
 
 ## 1. 対応のあるt検定
 
 - 条件A, Bの比較をする時に、各々の条件を同じ人が試している時に用いる
+- sample:
+```python sample_t_test.py 3```
+![](sample_fig/sample3.png)
+
+```python sample_t_test.py 4```
+![](sample_fig/sample4.png)
 
 ## 2. 対応のないt検定
 
 - 条件A, Bの比較をする時に、各々の条件を別の人が試している時に用いる
+- sample:
+```python sample_t_test.py 1```
+![](sample_fig/sample1.png)
 
+```python sample_t_test.py 2```
+![](sample_fig/sample2.png)
 
 # 分散分析
 
