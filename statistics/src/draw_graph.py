@@ -7,12 +7,12 @@ from t_test import TTEST
 
 class DrawGraph:
     """
-       if mode is paired-ttest or unpaired-ttest, data is like this.
+       if test_mode is paired-ttest or unpaired-ttest, data is like this.
        data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
                'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
               Be sure that string list is like ([category1, category2]).
 
-       if mode is anova, data is like this.
+       if test_mode is anova, data is like this.
        data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
                'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
                'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
@@ -22,10 +22,11 @@ class DrawGraph:
        xlabel: string.
        ylabel: string.
        tight_layout: bool. if execute tight_layout, set True.
-       mode: string. paired-ttest, unpaired-ttest, anova
+       test_mode: string. paired-ttest, unpaired-ttest, anova
+       graph_mode: string. average, total
        p: float. if mode is paired-ttest or unpaired-ttest, it is required.
     """
-    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, mode="paired-ttest", p=None):
+    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, test_mode="paired-ttest", graph_mode="average", p=None):
         """
         fig: make figure instance
         """
@@ -35,9 +36,21 @@ class DrawGraph:
         max_y_data: max y value for scale
         """
         y_data = []
-        for i in range(len(data.keys())):
-            y_data.append(np.mean(data[(data.keys())[i]]))
-        max_y_data = math.ceil(max(y_data))
+        if graph_mode == "average":
+            for i in range(len(data.keys())):
+                y_data.append(np.mean(data[(data.keys())[i]]))
+            max_y_data = math.ceil(max(y_data))
+        else:
+            for i in range(len(data.keys())):
+                tmp = 0
+                for j in range(len(data[(data.keys())[i]])):
+                    tmp += data[(data.keys())[i]][j]
+                y_data.append(tmp)
+            y_sum_data = []
+            for i in range(len(data.keys())):
+                y_sum_data.append(len(data[(data.keys())[i]]))
+            max_y_data = math.ceil(max(y_sum_data))
+
         """
         y_error: calculate sample_error as list [err_0, err_1]
         left: list of x value for each bar, now it is just empty
@@ -45,8 +58,13 @@ class DrawGraph:
         not Unbiased standard deviation (ddof=True)
         """
         y_error = []
-        for i in range(len(data.keys())):
-            y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+        if graph_mode == "average":
+            for i in range(len(data.keys())):
+                y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+        else:
+            for i in range(len(data.keys())):
+                y_error.append((len((data.keys())[i]) * np.std(data[(data.keys())[i]], ddof=False)))
+
         left = np.array([])
         """
         left: list of x value (the number of order) for each bar
@@ -85,19 +103,19 @@ class DrawGraph:
         """
         add title, label
         """
-        if mode == "anova":
+        if test_mode == "anova":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type)"
-        elif mode == "paired-ttest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.1, ** p < 0.05)"
-        elif mode == "unpaired-ttest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total (" + str((data.keys())[0]) + ": " +  str(len(data[(data.keys())[0]])) + ", " + str((data.keys())[1]) + ": " + str(len(data[(data.keys())[1]])) + "),\n * p < 0.1, ** p < 0.05)"
+        elif test_mode == "paired-ttest":
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
+        elif test_mode == "unpaired-ttest":
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total (" + str((data.keys())[0]) + ": " +  str(len(data[(data.keys())[0]])) + ", " + str((data.keys())[1]) + ": " + str(len(data[(data.keys())[1]])) + "),\n * p < 0.05, ** p < 0.01)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         
-        if (mode == "paired-ttest" or mode == "unpaired-ttest") and p is None:
+        if (test_mode == "paired-ttest" or test_mode == "unpaired-ttest") and p is None:
             t_test = TTEST()
-            if mode == "paired-ttest":
+            if test_mode == "paired-ttest":
                 p = t_test.paired_ttest(data)
             else:
                 p = t_test.unpaired_ttest(data)
@@ -105,14 +123,14 @@ class DrawGraph:
             """
             add p value and mark
             """
-            if p < 0.05:
-                input_word = "**" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
+            if p < 0.01:
+                input_word = "**" + " (p = " + str(round (p * 100000.0) * 0.00001) + " )"
                 plt.text(1.3, max_y_data * 0.75, input_word)
-            elif p < 0.1:
-                input_word = "*" + " (p = " + str(round (p * 1000.0) * 0.001) + " )"
+            elif p < 0.05:
+                input_word = "*" + " (p = " + str(round (p * 100000.0) * 0.00001) + " )"
                 plt.text(1.3, max_y_data * 0.75, input_word)
             else:
-                input_word = " p = " + str(round (p * 1000.0) * 0.001)
+                input_word = " p = " + str(round (p * 100000.0) * 0.00001)
                 plt.text(1.3, max_y_data * 0.75, input_word)
             plt.text(1.0, max_y_data * 0.65, "|--------------------------------------------|")
         
