@@ -41,12 +41,12 @@ class DrawTable:
         # bbox: float list. [left, bottom, width, height]. adjustment to fit table inside plot area
         # % left: right is +, left is -. bottom: up is +, down is -, width/ height: size ratio 
         # loc: table location relative to plot area
-        table = ax.table(cellText=data_list,
-                         cellLoc='center',
-                         rowLabels=rows,
-                         colLabels=columns,
-                         bbox=[0.11, 0.0, 1.0, 0.7],
-                         loc="center left")
+        ax.table(cellText=data_list,
+                 cellLoc='center',
+                 rowLabels=rows,
+                 colLabels=columns,
+                 bbox=[0.11, 0.0, 1.0, 0.7],
+                 loc="center left")
         # set x, y axis display off 
         ax.axis("off")
         # show a table
