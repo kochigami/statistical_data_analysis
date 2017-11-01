@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 import numpy as np
 import math
 
@@ -11,12 +12,12 @@ class OneWayAnova:
     mode: string. between or within.
     '''
     def one_way_anova(self, data, mode="between"):
-        # sample num should be same in each category
+        # if mode is within test, sample num should be same in each category
         if mode == "within":
             for i in range(len(data.keys()) - 1):
                 if len(data[(data.keys())[i]]) != len(data[(data.keys())[i+1]]):
                     print "Be sure that sample num of each category is same."
-                    return False
+                    sys.exit()
 
         if mode == "between":
             # calculate total average
