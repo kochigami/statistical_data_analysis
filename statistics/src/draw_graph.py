@@ -22,11 +22,10 @@ class DrawGraph:
        xlabel: string.
        ylabel: string.
        tight_layout: bool. if execute tight_layout, set True.
-       test_mode: string. paired-ttest, unpaired-ttest, anova
-       graph_mode: string. average, total
+       test_mode: string. paired-ttest, unpaired-ttest, within-anova, between-anova
        p: float. if mode is paired-ttest or unpaired-ttest, it is required.
     """
-    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, test_mode="paired-ttest", graph_mode="average", p=None):
+    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, test_mode="paired-ttest", p=None):
         """
         fig: make figure instance
         """
@@ -36,20 +35,9 @@ class DrawGraph:
         max_y_data: max y value for scale
         """
         y_data = []
-        if graph_mode == "average":
-            for i in range(len(data.keys())):
-                y_data.append(np.mean(data[(data.keys())[i]]))
-            max_y_data = math.ceil(max(y_data))
-        else:
-            for i in range(len(data.keys())):
-                tmp = 0
-                for j in range(len(data[(data.keys())[i]])):
-                    tmp += data[(data.keys())[i]][j]
-                y_data.append(tmp)
-            y_sum_data = []
-            for i in range(len(data.keys())):
-                y_sum_data.append(len(data[(data.keys())[i]]))
-            max_y_data = math.ceil(max(y_sum_data))
+        for i in range(len(data.keys())):
+            y_data.append(np.mean(data[(data.keys())[i]]))
+        max_y_data = math.ceil(max(y_data))
 
         """
         y_error: calculate sample_error as list [err_0, err_1]
@@ -58,12 +46,8 @@ class DrawGraph:
         not Unbiased standard deviation (ddof=True)
         """
         y_error = []
-        if graph_mode == "average":
-            for i in range(len(data.keys())):
-                y_error.append(np.std(data[(data.keys())[i]], ddof=False))
-        else:
-            for i in range(len(data.keys())):
-                y_error.append((len((data.keys())[i]) * np.std(data[(data.keys())[i]], ddof=False)))
+        for i in range(len(data.keys())):
+            y_error.append(np.std(data[(data.keys())[i]], ddof=False))
 
         left = np.array([])
         """
@@ -103,8 +87,10 @@ class DrawGraph:
         """
         add title, label
         """
-        if test_mode == "anova":
+        if test_mode == "within-anova":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type)"
+        elif test_mode == "between-anova":
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + ", " + str(len(data[(data.keys())[1]])) + ", " + str(len(data[(data.keys())[2]])) + " respectively)"
         elif test_mode == "paired-ttest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
         elif test_mode == "unpaired-ttest":
