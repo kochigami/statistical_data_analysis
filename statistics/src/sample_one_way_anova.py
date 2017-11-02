@@ -9,9 +9,7 @@ if __name__ == '__main__':
     args = sys.argv
     if len(args) is not 2:
         print "python sample_one_way_anova.py <sample_type>"
-        print "please choose sample type: "
-        print "between: welch's test and unpaired-ttest"
-        print "within: student's test and unpaired-ttest"
+        print "please choose sample type: between or within"
         sys.exit()
 
     draw_table = DrawTable()
