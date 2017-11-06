@@ -1,6 +1,8 @@
 # T検定
 
 ## 説明
+- parametric検定
+- 距離尺度
 - 各条件の平均値の差を比較する
 - 前提：対応ありの場合、各組のサンプル数は同じ
 
@@ -26,6 +28,7 @@
 
 # 分散分析
 - parametric検定
+- 距離尺度
 
 ## 1. 一元配置
 
@@ -67,3 +70,30 @@ src/sample_one_way_anova.py
 ## 2. 二元配置
 
 - 分析対象の要因が2つで、その2つを組み合わせて分析を行う時に用いる
+
+# U検定
+
+## 説明
+- non parametric検定
+- 順序尺度（フェイススケールなど）
+- 2群間比較
+
+## サンプル
+```src/sample_u_test.py```
+
+## 1. 対応のないU検定
+- sample
+```python sample_t_test.py 2```
+![](sample_fig/sample9.png)
+
+## 2. 対応のあるU検定
+- sample
+```python sample_t_test.py 1```
+![](sample_fig/sample8.png)
+
+# H検定
+
+## 説明
+- non parametric検定
+- 順序尺度（フェイススケールなど）
+- 3群間比較
