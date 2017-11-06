@@ -68,6 +68,7 @@ class UTEST:
         """
         data = {'Children':  [20, 18, 15, 13, 10, 6],
                 'Adults': [17, 16, 12, 9, 8, 6, 4, 2]}
+        # https://kusuri-jouhou.com/statistics/mann.html
         # use mannwhitneyu() from scipy
         # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mannwhitneyu.html
         # however, alternative keyword cannnot be used

@@ -78,6 +78,19 @@ src/sample_one_way_anova.py
 - 順序尺度（フェイススケールなど）
 - 2群間比較
 
+## サンプル
+```src/sample_u_test.py```
+
+## 1. 対応のないU検定
+- sample
+```python sample_t_test.py 2```
+![](sample_fig/sample9.png)
+
+## 2. 対応のあるU検定
+- sample
+```python sample_t_test.py 1```
+![](sample_fig/sample8.png)
+
 # H検定
 
 ## 説明
