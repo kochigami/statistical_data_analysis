@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from t_test import TTEST
+from u_test import UTEST
 
 class DrawGraph:
     """
@@ -17,13 +18,17 @@ class DrawGraph:
                'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
                'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
                'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+    
+       if test_mode is utest, data is like this.
+       data = {'Children':  [20, 18, 15, 13, 10, 6],                           
+               'Adults': [17, 16, 12, 9, 8, 6, 4, 2]}
 
        title: string.
        xlabel: string.
        ylabel: string.
        tight_layout: bool. if execute tight_layout, set True.
-       test_mode: string. paired-ttest, unpaired-ttest, within-anova, between-anova
-       p: float. if mode is paired-ttest or unpaired-ttest, it is required.
+       test_mode: string. paired-ttest, unpaired-ttest, within-anova, between-anova, utest
+       p: float. if mode is paired-ttest, unpaired-ttest or utest, it is required.
     """
     def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, test_mode="paired-ttest", p=None):
         """
@@ -93,7 +98,7 @@ class DrawGraph:
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + ", " + str(len(data[(data.keys())[1]])) + ", " + str(len(data[(data.keys())[2]])) + " respectively)"
         elif test_mode == "paired-ttest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
-        elif test_mode == "unpaired-ttest":
+        elif test_mode == "unpaired-ttest" or test_mode=="utest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total (" + str((data.keys())[0]) + ": " +  str(len(data[(data.keys())[0]])) + ", " + str((data.keys())[1]) + ": " + str(len(data[(data.keys())[1]])) + "),\n * p < 0.05, ** p < 0.01)"
         plt.title(new_title)
         plt.xlabel(xlabel)
@@ -105,6 +110,9 @@ class DrawGraph:
                 p = t_test.paired_ttest(data)
             else:
                 p = t_test.unpaired_ttest(data)
+        elif test_mode == "utest" and p is None:
+            u_test = UTEST()
+            p = u_test.mann_whitney_utest(data)
         if p:
             """
             add p value and mark
