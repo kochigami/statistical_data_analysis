@@ -12,9 +12,10 @@ class ChiSquaredTestDrawGraph:
     xlabel: string.
     ylabel: string.
     tight_layout: bool. if execute tight_layout, set True.
+    mode: string. paried or unpaired
     p: float.
     """
-    def draw_graph(self, data, label, title, xlabel, ylabel, tight_layout=False, p=None):
+    def draw_graph(self, data, label, title, xlabel, ylabel, tight_layout=False, mode="paired", p=None):
         """
         fig: make figure instance
         """
@@ -61,9 +62,12 @@ class ChiSquaredTestDrawGraph:
             # x, y, displaying y value, width position, height position (va="top": bottom of (x, y))
             plt.text(left[i] - 0.02, y_data1[i] / 2.0, (round (y_data1[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
 
-        plt.text(left[0] - 0.02, y_data1[i] - (y_data2[0] / 2.0), (round (y_data2[0] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
-        # avoid overlapping with legend
-        plt.text(left[1] - 0.1, y_data1[1] - (y_data2[1] / 2.0), (round (y_data2[1] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+        plt.text(left[0] - 0.02, y_data1[0] + (y_data2[0] / 2.0), (round (y_data2[0] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+        if y_data1[1] + y_data2[1] * 0.5 > 80.0:
+            # avoid overlapping with legend
+            plt.text(left[1] - 0.1, y_data1[1] + (y_data2[1] / 2.0), (round (y_data2[1] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+        else:
+            plt.text(left[1] - 0.02, y_data1[1] + (y_data2[1] / 2.0), (round (y_data2[1] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
         """
         add x label in each bar
         """
@@ -71,7 +75,10 @@ class ChiSquaredTestDrawGraph:
         """
         add title, label
         """
-        new_title = title + "\n(N = " + str(data[0][0] + data[0][1] + data[1][0] + data[1][1]) + " for total (" + str(label[0]) + ": " +  str(data[0][0] + data[0][1]) + ", " + str(label[1]) + ": " + str(data[1][0] + data[1][1]) + "),\n * p < 0.05, ** p < 0.01)"
+        if mode == "unpaired":
+            new_title = title + "\n(N = " + str(data[0][0] + data[0][1] + data[1][0] + data[1][1]) + " for total (" + str(label[0]) + ": " +  str(data[0][0] + data[0][1]) + ", " + str(label[1]) + ": " + str(data[1][0] + data[1][1]) + "),\n * p < 0.05, ** p < 0.01)"
+        elif mode == "paired":
+            new_title = title + "\n(N = " + str(data[0][0] + data[0][1]) + " for each type, * p < 0.05, ** p < 0.01)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

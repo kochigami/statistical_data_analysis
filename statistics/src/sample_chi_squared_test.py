@@ -14,7 +14,12 @@ if __name__ == '__main__':
         print "python sample_chi_squared_test.py"
     else:
         d = ChiSquaredTestDrawGraph()
-        data = np.array([[1625, 5],[1022, 11]])
-        d.draw_graph(data, ["Condition1", "Condition2"], "test", "x", "y", tight_layout=True)
+        # Q2
+        # data = np.array([[26, 27],[7, 10]])
+        # Q3 children
+        data = np.array([[43, 28],[19, 52]])
+        # Q3 adults
+        #data = np.array([[8, 12],[11, 9]])
+        d.draw_graph(data, ["Condition1", "Condition2"], "test", "x", "y", tight_layout=True, mode="paired")
         # TODO
         # draw table        
