@@ -97,3 +97,14 @@ src/sample_one_way_anova.py
 - non parametric検定
 - 順序尺度（フェイススケールなど）
 - 3群間比較
+
+# カイ二乗検定
+
+## 説明
+- non parametric検定
+- 名義尺度（人数など）
+
+## サンプル
+- sample
+```python sample_chi_squared_test.py```
+![](sample_fig/sample10.png)
