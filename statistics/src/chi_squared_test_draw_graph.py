@@ -59,9 +59,11 @@ class ChiSquaredTestDrawGraph:
         ax = plt.gca()
         for i in range(len(y_data1)):
             # x, y, displaying y value, width position, height position (va="top": bottom of (x, y))
-            plt.text(left[i] - 0.1, y_data1[i] / 2.0, (round (y_data1[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
-        for i in range(len(y_data2)):
-            plt.text(left[i] - 0.1, y_data1[i] - (y_data2[i] / 2.0), (round (y_data2[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+            plt.text(left[i] - 0.02, y_data1[i] / 2.0, (round (y_data1[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+
+        plt.text(left[0] - 0.02, y_data1[i] - (y_data2[0] / 2.0), (round (y_data2[0] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
+        # avoid overlapping with legend
+        plt.text(left[1] - 0.1, y_data1[1] - (y_data2[1] / 2.0), (round (y_data2[1] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
         """
         add x label in each bar
         """
