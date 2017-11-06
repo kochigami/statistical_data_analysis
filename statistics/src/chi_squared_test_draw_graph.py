@@ -23,10 +23,10 @@ class ChiSquaredTestDrawGraph:
         y_data: calculate sample_data_average as list [ave_0, ave_1, ave_2]
         max_y_data: max y value for scale
         """
-        y_data1 = np.array([data[0][0], data[1][0]])
-        y_data2 = np.array([data[0][1], data[1][1]])
+        y_data1 = np.array([(data[0][0] / float(data[0][0] + data[0][1])) * 100.0, (data[1][0] / float(data[1][0] + data[1][1])) * 100.0])
+        y_data2 = np.array([(data[0][1] / float(data[0][0] + data[0][1])) * 100.0, (data[1][1] / float(data[1][0] + data[1][1])) * 100.0])
         
-        max_y_data = math.ceil(max(y_data1+y_data2))
+        max_y_data = 100
 
         left = np.array([])
         """
@@ -58,9 +58,10 @@ class ChiSquaredTestDrawGraph:
         """
         ax = plt.gca()
         for i in range(len(y_data1)):
-            ann = ax.annotate(str((round (y_data1[i] * 100.0)) * 0.01), xy=(left[i] - 0.15, y_data1[i] / 2.0), fontsize=28)
+            # x, y, displaying y value, width position, height position (va="top": bottom of (x, y))
+            plt.text(left[i] - 0.1, y_data1[i] / 2.0, (round (y_data1[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
         for i in range(len(y_data2)):
-            ann = ax.annotate(str((round (y_data2[i] * 100.0)) * 0.01), xy=(left[i] - 0.15, (y_data2[i] / 2.0) + y_data1[i]), fontsize=28)
+            plt.text(left[i] - 0.1, y_data1[i] - (y_data2[i] / 2.0), (round (y_data2[i] * 100.0)) * 0.01, ha='center', va='top', fontsize=28)
         """
         add x label in each bar
         """
