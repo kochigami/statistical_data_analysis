@@ -17,9 +17,9 @@ if __name__ == '__main__':
         # Q2
         # data = np.array([[26, 27],[7, 10]])
         # Q2 children
-        data = np.array([[43, 28],[19, 52]])
+        # data = np.array([[43, 28],[19, 52]])
         # Q2 adults
-        # data = np.array([[8, 12],[11, 9]])
+        data = np.array([[8, 12],[11, 9]])
         # Q3 children
         # data = np.array([[4, 7],[4, 10]])
         # Q3 adults
@@ -35,8 +35,9 @@ if __name__ == '__main__':
         # data = np.array([[16, 14],[12, 14]])
 
         # data = np.array([[9, 20],[15, 12]])
-        data = np.array([[15, 12],[11, 15]])
-        
-        d.draw_graph(data, ["Condition1", "Condition2"], "test", "x", "y", tight_layout=True, mode="unpaired")
+        # data = np.array([[15, 12],[11, 15]])
+
+        # d.draw_graph(data, ["Touch", "Speak"], "The ratio of children who touched or spoke to the robot \n on their own accord", "condition", "percentage", tight_layout=True, mode="paired")
+        d.draw_graph(data, ["Touch", "Speak"], "The ratio of adults who touched or spoke to the robot \n on their own accord", "condition", "percentage", tight_layout=True, mode="paired")
         # TODO
         # draw table        
