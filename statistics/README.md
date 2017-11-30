@@ -1,110 +1,78 @@
-# T検定
+# 2標本検定
 
-## 説明
-- parametric検定
-- 距離尺度
-- 各条件の平均値の差を比較する
-- 前提：対応ありの場合、各組のサンプル数は同じ
+## 同じ被験者に体験前後でアンケート (対応有り)
+
+### Yes/ No 形式 (名義尺度)：マクネマーの検定
+### グレード形式 (順位尺度)：ウィルコクソンの符号付き順位和検定
+
+
+## 同じ被験者のふれ合いについて、計量尺度に基づくデータ取得 (対応有り)
+
+### ロボット1, ロボット2とのふれ合い時間の比較 (計量尺度)：対応のあるt検定
+
+
+## 条件1、条件2ごとにアンケート (対応無し)
+
+### Yes/ No 形式 (名義尺度)：
+
+- 前向き研究 => フィッシャーの正確検定
+- 後ろ向き研究 => カイ2乗検定 (クラメールの連関計数)
+
+％ 前向き研究：条件1 10人、条件2 10人と初めに決めて、体験後にアンケート(Yes, No)。Yes, Noの人数が求まるので分布を比較する。
+％ 横断研究：総数だけ初めに決めて、体験後にアンケート(Yes, No)。Yes, Noの人数、条件ごとの人数が求まるので分布を比較する。
+
+### グレード形式 (順位尺度)：ウィルコクソンの2標本検定/ ウィルコクソンの順位和検定/ マン・ホイットニィのU検定
+
+
+## 条件1、条件2ごとに、計量尺度に基づくデータ取得 (対応無し)
+
+### 条件ごとのふれ合い時間の比較 (計量尺度)：対応のないt検定
 
 ## サンプル
-```src/sample_t_test.py```
 
-## 1. 対応のないt検定
+- 対応のあるU検定
+```python sample_t_test.py 1```
+![](sample_fig/sample8.png)
 
-- 条件A, Bの比較をする時に、各々の条件を別の人が試している時に用いる
-- sample:
+- 対応のあるt検定
+
+```python sample_t_test.py 3```
+![](sample_fig/sample3.png)
+
+- カイ二乗検定
+```python sample_chi_squared_test.py```
+![](sample_fig/sample10.png)
+
+- 対応のないU検定
+```python sample_t_test.py 2```
+![](sample_fig/sample9.png)
+
+- 対応のないt検定
 ```python sample_t_test.py 1```
 ![](sample_fig/sample1.png)
 
 ```python sample_t_test.py 2```
 ![](sample_fig/sample2.png)
 
-## 2. 対応のあるt検定
 
-- 条件A, Bの比較をする時に、各々の条件を同じ人が試している時に用いる
-- sample:
-```python sample_t_test.py 3```
-![](sample_fig/sample3.png)
+# 多標本検定
 
-# 分散分析
-- parametric検定
-- 距離尺度
+## 分散分析
 
-## 1. 一元配置
+### 一元配置
+### 二元配置
 
-### 説明
-- 分析対象の要因が1つで、その1つが3つ以上の水準に分かれている時に用いる
-- 前提：被験者内計画の場合、各条件のサンプル数は同じ
+## サンプル
 
-#### 前提
-- 1. normality: 正規分布
-- 2. equality of variance: ２つの母集団の分散が等しいこと (F検定(ハートレイ検定)を用いる)
-- 3. independence: 標本が母集団から無作為に抽出されること
-- 4. 被験者内計画のみ：分散共分散行列の等質性をチェックする必要がある
-(モークリー(Mauchly) の球面性の検定)
-- 5. 被験者内計画のみ：各カテゴリのサンプル数が同じことが前提
-
-% 要因ごとのデータ数に偏りがある場合はnon-parametric検定を用いる
-
-### サンプル
-```
-src/sample_one_way_anova.py
-```
-
-### one-way factrial ANOVA (一元配置要因分散分析、被験者間計画)
-- sample:
+- one-way factrial ANOVA (一元配置要因分散分析、被験者間計画)
 ```python sample_t_test.py between```
 ![](sample_fig/sample4.png)
 ![](sample_fig/sample5.png)
 
-### one-way repeated measures ANOVA (一元配置反復測定分散分析、被験者内計画)
-- sample:
+- one-way repeated measures ANOVA (一元配置反復測定分散分析、被験者内計画)
 ```python sample_t_test.py within```
 ![](sample_fig/sample6.png)
 ![](sample_fig/sample7.png)
 
-### 参考サイト
-[R言語で統計解析入門](http://monge.tec.fukuoka-u.ac.jp/r_analysis/test_anova03.html)
-[一元配置分散分析](https://ultrabem.jimdo.com/statistics/mean/anova1/)
 
-## 2. 二元配置
 
-- 分析対象の要因が2つで、その2つを組み合わせて分析を行う時に用いる
-
-# U検定
-
-## 説明
-- non parametric検定
-- 順序尺度（フェイススケールなど）
-- 2群間比較
-
-## サンプル
-```src/sample_u_test.py```
-
-## 1. 対応のないU検定
-- sample
-```python sample_t_test.py 2```
-![](sample_fig/sample9.png)
-
-## 2. 対応のあるU検定
-- sample
-```python sample_t_test.py 1```
-![](sample_fig/sample8.png)
-
-# H検定
-
-## 説明
-- non parametric検定
-- 順序尺度（フェイススケールなど）
-- 3群間比較
-
-# カイ二乗検定
-
-## 説明
-- non parametric検定
-- 名義尺度（人数など）
-
-## サンプル
-- sample
-```python sample_chi_squared_test.py```
-![](sample_fig/sample10.png)
