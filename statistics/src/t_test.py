@@ -23,8 +23,10 @@ class TTEST:
         student's test: http://kogolab.chillout.jp/elearn/hamburger/chap5/sec3.html
         """
         # calculate t & p value
-        if len(data[(data.keys())[0]]) == len(data[(data.keys())[1]]):
-            t, p = stats.ttest_rel(data[(data.keys())[0]], data[(data.keys())[1]])
+        x = data[(data.keys())[0]]
+        y = data[(data.keys())[1]]
+        if len(x) == len(y):
+            t, p = stats.ttest_rel(x, y)
             print ("p value = %(p)s" %locals() )
             return p
         else:
@@ -46,15 +48,22 @@ class TTEST:
         student's test: http://kogolab.chillout.jp/elearn/hamburger/chap4/sec3.html
         welch's test: http://hs-www.hyogo-dai.ac.jp/%7Ekawano/HStat/?2015%2F13th%2FWelch%27s_Test
         """
-        dfx = len(data[(data.keys())[0]]) - 1
-        dfy = len(data[(data.keys())[1]]) - 1
-        s_x = (1.0 / (len(data[(data.keys())[0]]) - 1.0)) * np.var(data[(data.keys())[0]])
-        s_y = (1.0 / (len(data[(data.keys())[1]]) - 1.0)) * np.var(data[(data.keys())[1]])
+        x = data[(data.keys())[0]]
+        y = data[(data.keys())[1]]
+        nx = len(data[(data.keys())[0]])
+        ny = len(data[(data.keys())[1]])
+        dfx = nx - 1.0
+        dfy = ny - 1.0
+        # https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.var.html
+        # var = mean(abs(x - x.mean())**2).
+        s_x = (1.0 / dfx) * np.var(x)
+        s_y = (1.0 / dfy) * np.var(y)
         if s_x > s_y:
             # Usually, f value should be greater than 1.0,
             # I reverse s_x and s_y upside down
-            # in order to let stats.f.cdf return p value less than 0.05 for example
-            # % If I use s_x / s_y instead of s_y / s_x, it returns 0.96 instead of 0.03
+            # in order to let stats.f.cdf return p value less than 0.05
+            # % for example:
+            # % If I use s_x / s_y instead of s_y / s_x, it returns 0.96 instead of 0.04
             # % but I need the value less than 0.05.
             f = s_y / s_x
             p_value = stats.f.cdf(f, dfx, dfy)
@@ -71,30 +80,30 @@ class TTEST:
         # calculate t & p value
         if p_value < 0.05:
             # welch's test
-            diff_average = np.average(data[(data.keys())[0]]) - np.average(data[(data.keys())[1]])
+            diff_average = np.average(x) - np.average(y)
             sample_variance_1 = 0.0
-            for i in range(len(data[(data.keys())[0]])):
-                sample_variance_1 += pow(((data[(data.keys())[0]])[i] - np.average(data[(data.keys())[0]])), 2.0)
-            sample_variance_1 = (1.0 / (len(data[(data.keys())[0]]) - 1)) * sample_variance_1
+            for i in range(nx):
+                sample_variance_1 += pow((x[i] - np.average(x)), 2.0)
+            sample_variance_1 = (1.0 / dfx) * sample_variance_1
 
             sample_variance_2 = 0.0
-            for i in range(len(data[(data.keys())[1]])):
-                sample_variance_2 += pow(((data[(data.keys())[1]])[i] - np.average(data[(data.keys())[1]])), 2.0)
-            sample_variance_2 = (1.0 / (len(data[(data.keys())[1]]) - 1)) * sample_variance_2
+            for i in range(ny):
+                sample_variance_2 += pow((y[i] - np.average(y)), 2.0)
+            sample_variance_2 = (1.0 / dfy) * sample_variance_2
 
-            t = abs(diff_average / math.sqrt((sample_variance_1 / len(data[(data.keys())[0]])) + (sample_variance_2 / len(data[(data.keys())[1]]))))
-            dof = pow((sample_variance_1 / len(data[(data.keys())[0]])) + (sample_variance_2 / len(data[(data.keys())[1]])) , 2.0) / ((pow(sample_variance_1 / len(data[(data.keys())[0]]), 2.0) / (len(data[(data.keys())[0]]) - 1.0)) + ((pow(sample_variance_2 / len(data[(data.keys())[1]]), 2.0) / (len(data[(data.keys())[1]]) - 1.0))))
+            t = abs(diff_average / math.sqrt((sample_variance_1 / nx) + (sample_variance_2 / ny)))
+            dof = pow((sample_variance_1 / nx) + (sample_variance_2 / ny), 2.0) / ((pow(sample_variance_1 / nx, 2.0) / dfx) + ((pow(sample_variance_2 / ny, 2.0) / dfy)))
             dof = math.ceil(dof)
             p = calc_p.sf(t, dof)
             ### heteroscedasticity: hi tou bunsan
             print ("t-test with heteroscedasticity")
         else:
             # student's test
-            diff_average = np.average(data[(data.keys())[0]]) - np.average(data[(data.keys())[1]])
-            diff_variance = (np.var(data[(data.keys())[0]]) * len(data[(data.keys())[0]]) + np.var(data[(data.keys())[1]]) * len(data[(data.keys())[1]])) / (len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]) -2)
-            diff_error = math.sqrt (diff_variance * ((1.0 / len(data[(data.keys())[0]]) + (1.0 / len(data[(data.keys())[1]])))))
+            diff_average = np.average(x) - np.average(y)
+            diff_variance = (np.var(x) * nx + np.var(y) * ny) / (nx + ny -2)
+            diff_error = math.sqrt (diff_variance * (1.0 / nx + 1.0 / ny))
             t = abs(diff_average / diff_error)
-            dof = len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]) -2
+            dof = nx + ny - 2
             p = calc_p.sf(t, dof)
             ### homoscedasticity: tou bunsan
             print ("t-test with homoscedasticity")
