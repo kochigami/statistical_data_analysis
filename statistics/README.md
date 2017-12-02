@@ -3,7 +3,7 @@
 ## 同じ被験者に体験前後でアンケート (対応有り)
 
 ### Yes/ No 形式 (名義尺度)：マクネマーの検定
-### グレード形式 (順位尺度)：ウィルコクソンの符号付き順位和検定
+### グレード形式 (順位尺度)：ウィルコクソンの符号付き順位検定
 
 
 ## 同じ被験者のふれ合いについて、計量尺度に基づくデータ取得 (対応有り)
@@ -30,8 +30,8 @@
 
 ## サンプル
 
-- 対応のあるU検定
-```python sample_t_test.py 1```
+- 対応のある順位尺度検定
+```python sample_u_test.py 1```
 ![](sample_fig/sample8.png)
 
 - 対応のあるt検定
@@ -44,7 +44,7 @@
 ![](sample_fig/sample10.png)
 
 - 対応のないU検定
-```python sample_t_test.py 2```
+```python sample_u_test.py 2```
 ![](sample_fig/sample9.png)
 
 - 対応のないt検定

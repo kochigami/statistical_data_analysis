@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from t_test import TTEST
-from u_test import UTEST
+from test_of_ordinal_scale import UTEST
 
 class DrawGraph:
     """
