@@ -12,14 +12,18 @@ class UTEST:
                 'Cusine_B': [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
         # https://kusuri-jouhou.com/statistics/fugou.html
        """
-        if len(data[(data.keys())[0]]) != len(data[(data.keys())[1]]):
+        x = data[(data.keys())[0]]
+        y = data[(data.keys())[1]]
+        # note: nx == ny
+        nx = len(data[(data.keys())[0]])
+        if len(x) != len(y):
             print "Please check the contents of your data."
             print "The number of data type should be two."
             sys.exit()
         else:
             diff = []
-            for i in range(len(data[(data.keys())[0]])):
-                diff.append(data[(data.keys())[0]][i] - data[(data.keys())[1]][i])         
+            for i in range(nx):
+                diff.append(x[i] - y[i])
             count_plus = 0
             count_minus = 0
             for i in range(len(diff)):
