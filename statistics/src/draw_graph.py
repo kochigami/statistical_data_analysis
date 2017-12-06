@@ -3,8 +3,10 @@
 import matplotlib.pyplot as plt
 import math
 import numpy as np
-from t_test import TTEST
-from test_of_ordinal_scale import UTEST
+from paired_two_sample_test_of_interval_and_ratio_scale import PairedTwoSampleTestOfIntervalAndRatioScale
+from unpaired_two_sample_test_of_interval_and_ratio_scale import UnpairedTwoSampleTestOfIntervalAndRatioScale
+from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
+from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 
 class DrawGraph:
     """
@@ -109,17 +111,19 @@ class DrawGraph:
         plt.ylabel(ylabel)
         
         if (test_mode == "paired-ttest" or test_mode == "unpaired-ttest") and p is None:
-            t_test = TTEST()
             if test_mode == "paired-ttest":
-                p = t_test.paired_ttest(data)
+                paired_two_sample_test_of_interval_and_ratio_scale = PairedTwoSampleTestOfIntervalAndRatioScale()
+                p = paired_two_sample_test_of_interval_and_ratio_scale.test(data)
             else:
-                p = t_test.unpaired_ttest(data)
+                unpaired_two_sample_test_of_interval_and_ratio_scale = UnpairedTwoSampleTestOfIntervalAndRatioScale()
+                p = unpaired_two_sample_test_of_interval_and_ratio_scale.test(data)
         elif (test_mode == "unpaired-utest" or test_mode == "paired-utest") and p is None:
-            u_test = UTEST()
             if test_mode == "paired-utest":
-                p = u_test.paired_utest(data)
+                paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
+                p = paired_two_sample_test_of_ordinal_scale.test(data)
             else:
-                p = u_test.unpaired_utest(data)
+                unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
+                p = unpaired_two_sample_test_of_ordinal_scale.test(data)
         if p:
             """
             add p value and mark
