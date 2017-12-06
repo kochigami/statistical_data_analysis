@@ -9,7 +9,7 @@ class ChiSquaredTest:
         """
         """
         # check component type is 2
-        if len(data[0]) != 2 and len(data[1]) != 2: 
+        if len(data) != 2 and len(data[0]) != 2 and len(data[1]) != 2: 
             print "Please check the component num of your data."
             print "The number of data type should be two."
             sys.exit()
