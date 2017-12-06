@@ -5,8 +5,8 @@ import sys
 import itertools
 import math
 
-class UTEST:
-    def paired_utest(self, data):
+class PairedTwoSampleTestOfOrdinalScale:
+    def test(self, data):
         """
         data = {'Cusine_A': [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
                 'Cusine_B': [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
@@ -83,21 +83,3 @@ class UTEST:
                 # multiply 2.0 for two-side test
                 p = stats.norm.sf(abs(z)) * 2.0
             return p
-
-    def unpaired_utest(self, data):
-        """
-        data = {'Children':  [20, 18, 15, 13, 10, 6],
-                'Adults': [17, 16, 12, 9, 8, 6, 4, 2]}
-        # https://kusuri-jouhou.com/statistics/mann.html
-        # use mannwhitneyu() from scipy
-        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mannwhitneyu.html
-        # however, alternative keyword cannnot be used
-        # TypeError: mannwhitneyu() got an unexpected keyword argument 'alternative'
-        """
-        if len(data.keys()) != 2:
-            print "Please check the contents of your data."
-            print "The number of data type should be two."
-            sys.exit()
-        result = stats.mannwhitneyu(data[(data.keys())[0]], data[(data.keys())[1]], use_continuity=True)
-        # return pvalue
-        return result[1]
