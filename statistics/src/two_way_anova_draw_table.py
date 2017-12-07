@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from two_way_anova import TwoWayAnova
 
 
-class DrawTable:
+class TwoWayAnovaDrawTable:
     '''
     draw_table: function for draw Analysis variance of table by matplotlib.
     data_list:

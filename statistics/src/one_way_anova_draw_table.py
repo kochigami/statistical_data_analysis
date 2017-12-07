@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from one_way_anova import OneWayAnova
 
 
-class DrawTable:
+class OneWayAnovaDrawTable:
     '''
     draw_table: function for draw Analysis variance of table by matplotlib.
     data_list:
