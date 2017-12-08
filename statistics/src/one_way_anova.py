@@ -20,6 +20,15 @@ class OneWayAnova:
                     sys.exit()
 
         if mode == "between":
+            """
+                   | sum of squares |     dof     |    mean squares    |          F            |      
+            ------------------------------------------------------------------------------------
+            gunkan | ss_between     | between_dof | mean_square_between| ms_between/ ms_within |
+            gunnai | ss_within      | within_dof  | mean_square_within |                       |
+            -------|----------------------------------------------------------------------------
+            total  | ss_b+ss_w      | b_dof+w_dof | 
+            """
+            
             # calculate total average
             total_average = 0.0
             total_sample_num = 0.0
@@ -34,19 +43,21 @@ class OneWayAnova:
             for i in range(len(data.keys())):
                 average_per_group.append(np.mean(data[(data.keys())[i]]))
 
-            # calculate sum of squares
+            # calculate ss_total (sum of squares per total samples)
             ss_total = 0.0
             for i in range(len(data.keys())):
                 for j in range(len(data[(data.keys())[i]])):
                     ss_total += pow(((data[(data.keys())[i]])[j] - total_average), 2.0)
 
+            # calculate ss_between (sum of squares per category)
             ss_between = 0.0
             for i in range(len(data.keys())):
                 ss_between += pow((average_per_group[i] - total_average), 2.0) * len(data[(data.keys())[i]])
 
+            # calculate ss_within (sum of squares per category)
             ss_within = ss_total - ss_between
 
-            # calculate dof (group type & sample number of each type)
+            # calculate dof
             between_dof = len(data.keys()) - 1
             total_dof = total_sample_num - 1
             within_dof = total_dof - between_dof
@@ -64,7 +75,17 @@ class OneWayAnova:
             return answer_list
 
         elif mode == "within":
-            # total
+            """
+                   | sum of squares |   dof       |     mean squares    |                   F                    |       
+            ------------------------------------------------------------------------------------------------------
+            youin  | ss_between     | between_dof | mean_square_between | mean_square_between/ mean_square_error |
+            subject| ss_subject     | subject_dof | mean_square_subject |                                        |
+            error  | ss_error       | error_dof   | mean_square_error   |                                        |
+            ------------------------------------------------------------------------------------------------------
+            Total  | ss_b+s+e       | b+s+e_dof   | 
+            """
+            
+            # calculate total
             total_S = 0.0
             total_sample_num = 0.0
             for i in range(len(data.keys())):

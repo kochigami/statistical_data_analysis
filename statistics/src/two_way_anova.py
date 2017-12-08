@@ -21,16 +21,36 @@ class TwoWayAnova:
                     print "Be sure that sample num of each category is same."
                     return False
         if mode == "between":            
+
+            """
+                         | ss         |   dof           |   ms     |         F        |       
+            -------------------------------------------------------------------------
+            youin1       | ss_1       | category1_dof   | ms_1     | ms_1/ ms_error   |
+            youin2       | ss_2       | category2_dof   | ms_2     | ms_2/ ms_error   |
+            youin1xyouin2| ss_1x2     | category1x2_dof | ms_1x2   | ms_1x2/ ms_error |
+            error        | ss_error   |     error_dof   | ms_error |                  |
+            -------------------------------------------------------------------------
+            Total        |ss_1+2+1x2+e| 1+2+1x2+e_dof   | 
+            """
+
+            """
+                           | youin2-A | youin2-B | youin2-C |   Total  |       
+            ------------------------------------------------------------
+            youin1-A       |  130     |    340   |  340     |    810   |
+            youin1-B       |  140     |     56   |  125     |    321   |
+            ------------------------------------------------------------
+            Total          |  270     |    396   |  465     |   1131   |
+            """
+
             total_ss = 0.0
             total_sum = 0.0
-            total_num = 0
+
             # total ss
             # total sum
             for i in range(len(data.keys())):
                 for j in range(len(data[(data.keys()[i])])):
                     total_ss += pow((data[(data.keys()[i])])[j], 2.0)
-                    total_sum += (data[(data.keys()[i])])[j]
-                    total_num += 1
+                    total_sum += (data[(data.keys()[i])])[j] ##
 
             category1_sum = []
             category1_num = []
@@ -79,9 +99,12 @@ class TwoWayAnova:
                 category1x2_preparation += pow(sum(data[(data.keys())[i]]), 2.0) / float(len(data[(data.keys())[i]]))
             
             # calculate x (correction term)
-            x = 0.0
+            x = 0.0                
+            total_num = 0
             for i in range(len(data.keys())):
                 x += sum(data[(data.keys())[i]])
+                total_num += len(data[(data.keys())[i]])
+
             x = pow(x, 2.0) / float(total_num)
 
             ss_1 = category1_preparation - x
