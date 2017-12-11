@@ -11,15 +11,15 @@ class OneWayAnova:
             'French' :  [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75]}
     mode: string. between or within.
     '''
-    def one_way_anova(self, data, mode="between"):
+    def one_way_anova(self, data, mode="one-factor-repeated"):
         # if mode is within test, sample num should be same in each category
-        if mode == "within":
+        if mode == "one-factor-factorical":
             for i in range(len(data.keys()) - 1):
                 if len(data[(data.keys())[i]]) != len(data[(data.keys())[i+1]]):
                     print "Be sure that sample num of each category is same."
                     sys.exit()
 
-        if mode == "between":
+        if mode == "one-factor-repeated":
             """
                    | sum of squares |     dof     |    mean squares    |          F            |      
             ------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ class OneWayAnova:
                            [math.ceil((ss_between + ss_within) * 100.0) * 0.01, int(between_dof + within_dof),'--', '--']]
             return answer_list
 
-        elif mode == "within":
+        elif mode == "one-factor-factorical":
             """
                    | sum of squares |   dof       |     mean squares    |                   F                    |       
             ------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ class OneWayAnova:
             return answer_list
 
         else:
-            print "Please choose mode 'between' or 'within'."
+            print "Please choose mode 'one-factor-repeated' or 'one-factor-factorical'."
             return False
 
 if __name__ == '__main__':
