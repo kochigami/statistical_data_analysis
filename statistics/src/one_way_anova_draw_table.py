@@ -11,7 +11,7 @@ class OneWayAnovaDrawTable:
     data_list:
     mode: string. between or within. choose one based on your test.
     '''
-    def draw_table(self, data_list, mode="one-factor-repeated"):
+    def draw_table(self, data_list, mode="one-factor-repeated", threshold=0.05, comparison_mode="holm"):
         # set column
         columns = ("Sum of Squares", "Dof", "Mean Square", "F") 
         # set row based on your test type
@@ -28,10 +28,7 @@ class OneWayAnovaDrawTable:
 
         # FIXME: calculate anova
         one_way_anova_class = OneWayAnova()
-        if mode == "one-factor-repeated":
-            data_list = one_way_anova_class.one_way_anova(data_list)
-        elif mode == "one-factor-factorical":
-            data_list = one_way_anova_class.one_way_anova(data_list, mode="one-factor-factorical")
+        data_list = one_way_anova_class.one_way_anova(data_list, mode, threshold, comparison_mode)
 
         # set information for table
         # cellText: data text inside each cell
