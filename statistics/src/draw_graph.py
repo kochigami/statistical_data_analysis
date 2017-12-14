@@ -101,7 +101,10 @@ class DrawGraph:
         if test_mode == "within-anova":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type)"
         elif test_mode == "between-anova":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + ", " + str(len(data[(data.keys())[1]])) + ", " + str(len(data[(data.keys())[2]])) + " respectively)"
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]))
+            for i in range(1, len(data.keys())):
+                new_title += ", " + str(len(data[(data.keys())[i]])) 
+            new_title += " respectively)"
         elif test_mode == "paired-ttest":
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
         elif test_mode == "unpaired-ttest" or test_mode=="paired-utest" or test_mode=="unpaired-utest":

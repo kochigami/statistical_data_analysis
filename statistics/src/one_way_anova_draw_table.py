@@ -5,19 +5,19 @@ import matplotlib.pyplot as plt
 from one_way_anova import OneWayAnova
 
 
-class DrawTable:
+class OneWayAnovaDrawTable:
     '''
     draw_table: function for draw Analysis variance of table by matplotlib.
     data_list:
     mode: string. between or within. choose one based on your test.
     '''
-    def draw_table(self, data_list, mode="between"):
+    def draw_table(self, data_list, mode="one-factor-repeated", threshold=0.05, comparison_mode="holm"):
         # set column
-        columns = ("Sum of Squares", "Dof", "Mean Square", "F") 
+        columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
-        if mode == "between":
+        if mode == "one-factor-repeated":
             rows = ["Between Groups", "Within Groups", "Total"]
-        elif mode == "within":
+        elif mode == "one-factor-factorical":
             rows = ["Between Groups", "Subject", "Error", "Total"]
         else:
             print "Please choose mode 'between' or 'within'."
@@ -28,10 +28,7 @@ class DrawTable:
 
         # FIXME: calculate anova
         one_way_anova_class = OneWayAnova()
-        if mode == "between":
-            data_list = one_way_anova_class.one_way_anova(data_list)
-        elif mode == "within":
-            data_list = one_way_anova_class.one_way_anova(data_list, mode="within")
+        data_list = one_way_anova_class.one_way_anova(data_list, mode, threshold, comparison_mode)
 
         # set information for table
         # cellText: data text inside each cell

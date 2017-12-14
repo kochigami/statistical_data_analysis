@@ -5,22 +5,20 @@ import matplotlib.pyplot as plt
 from two_way_anova import TwoWayAnova
 
 
-class DrawTable:
+class TwoWayAnovaDrawTable:
     '''
     draw_table: function for draw Analysis variance of table by matplotlib.
     data_list:
     mode: string. between or within. choose one based on your test.
     '''
-    def draw_table(self, data_list, label_1, label_2, mode="between"):
+    def draw_table(self, data_list, label_1, label_2, mode="two-factor-repeated"):
         # set column
-        columns = ("Sum of Squares", "Dof", "Mean Square", "F") 
+        columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
-        if mode == "between":
+        if mode == "two-factor-repeated":
             rows = ["Factor1", "Factor2", "Interaction", "Others", "Total"]
-        elif mode == "within":
-            rows = ["Subject", "Factor1", "Subject x Factor1", "Factor2", "Subject x Factor2", "Interaction", "Subject x Interaction", "Total"]
         else:
-            print "Please choose mode 'between' or 'within'."
+            print "Please choose mode."
             return False
 
         # initialization for draw table
@@ -28,10 +26,8 @@ class DrawTable:
 
         # FIXME: calculate anova
         two_way_anova_class = TwoWayAnova()
-        if mode == "between":
+        if mode == "two-factor-repeated":
             data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2)
-        elif mode == "within":
-            data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2, mode="within")
 
         # set information for table
         # cellText: data text inside each cell
