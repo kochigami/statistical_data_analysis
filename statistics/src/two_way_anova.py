@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 import numpy as np
 import math
+from scipy.stats import t as calc_p
+from scipy.stats import f as calc_f
+# referenced as calc_p because of the error below:
+# File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
+# p = t.sf(t_value, dof)
+# UnboundLocalError: local variable 't' referenced before assignment
+# t test
+from collections import OrderedDict
 
 class TwoWayAnova:
     '''
@@ -119,17 +128,174 @@ class TwoWayAnova:
             ms_1x2 = ss_1x2 / float(category1x2_dof)
             ms_e = ss_e / float(error_dof)
 
-            # calculate F value
+            # calculate F
             f_1 = ms_1 / ms_e
             f_2 = ms_2 / ms_e
             f_1x2 = ms_1x2 / ms_e
-            
-            answer_list = [[math.ceil(ss_1 * 100.0) * 0.01, int(category1_dof), math.ceil(ms_1 * 100.0) * 0.01, math.ceil(f_1 * 100.0) * 0.01],
-                           [math.ceil(ss_2 * 100.0) * 0.01, int(category2_dof), math.ceil(ms_2 * 100.0) * 0.01, math.ceil(f_2 * 100.0) * 0.01],
-                           [math.ceil(ss_1x2 * 100.0) * 0.01, int(category1x2_dof), math.ceil(ms_1x2 * 100.0) * 0.01, math.ceil(f_1x2 * 100.0) * 0.01],
-                           [math.ceil(ss_e * 100.0) * 0.01, int(error_dof), math.ceil(ms_e * 100.0) * 0.01, '--'], 
-                           [math.ceil(ss_t * 100.0) * 0.01, int(category1_dof + category2_dof + category1x2_dof + error_dof),'--', '--']]
+
+            # calculate p
+            p_1 = calc_f.sf(f_1, category1_dof, error_dof)
+            p_2 = calc_f.sf(f_2, category2_dof, error_dof)
+            p_1x2 = calc_f.sf(f_1x2, category1x2_dof, error_dof)
+
+            # multiple comparison
+            if p_1x2 < 0.05:
+                # simple major effect
+                # 1. label_A
+                self.evaluate_simple_main_effect(data, label_A, label_B)
+                # 2. label_B
+                self.evaluate_simple_main_effect(data, label_B, label_A)
+
+            elif p_1 < 0.05:
+               self.evaluate_main_effect(data, label_A, ms_1, category1_dof)
+
+            elif p_2 < 0.05:
+                self.evaluate_main_effect(data, label_B, ms_2, category2_dof)
+
+            answer_list = [[math.ceil(ss_1 * 100.0) * 0.01, int(category1_dof), math.ceil(ms_1 * 100.0) * 0.01, math.ceil(f_1 * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
+                           [math.ceil(ss_2 * 100.0) * 0.01, int(category2_dof), math.ceil(ms_2 * 100.0) * 0.01, math.ceil(f_2 * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
+                           [math.ceil(ss_1x2 * 100.0) * 0.01, int(category1x2_dof), math.ceil(ms_1x2 * 100.0) * 0.01, math.ceil(f_1x2 * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
+                           [math.ceil(ss_e * 100.0) * 0.01, int(error_dof), math.ceil(ms_e * 100.0) * 0.01, '--', '--'], 
+                           [math.ceil(ss_t * 100.0) * 0.01, int(category1_dof + category2_dof + category1x2_dof + error_dof),'--', '--', '--']]
             return answer_list
+
+    def evaluate_main_effect(self, data, label, ms, dof):
+        if len(label) > 2:
+            data_tmp = OrderedDict()
+            for i in range(len(label)):
+                data_tmp_tmp = []
+                for j in range(len(data.keys())):
+                    if label[i] in (data.keys())[j]:
+                        data_tmp_tmp += data[(data.keys())[j]]
+                data_tmp[label[i]] = data_tmp_tmp
+            self.comparison(data_tmp, ms, dof)
+
+    def evaluate_simple_main_effect(self, data, focused_label, dependent_label):
+        ## focused_label (label_A)
+        ## dependent_label (labelB)
+        if len(dependent_label) > 2:
+            for i in range(len(focused_label)):
+                data_tmp = OrderedDict()
+                data_focused_label = OrderedDict()
+                data_tmp_tmp = []
+                for j in range(len(dependent_label)):
+                    for k in range(j+1, len(dependent_label)):
+                        average = []
+                        # choose pair
+                        for l in range(len(data.keys())):
+                            if focused_label[i] in (data.keys())[l] and dependent_label[j] in (data.keys())[l]:
+                                data_tmp[focused_label[i] + "+" + dependent_label[j]] = data[(data.keys())[l]]
+                            if focused_label[i] in (data.keys())[l] and dependent_label[k] in (data.keys())[l]:
+                                data_tmp[focused_label[i] + "+" + dependent_label[k]] = data[(data.keys())[l]]
+                            if focused_label[i] in (data.keys())[l]:
+                                data_tmp_tmp += data[(data.keys())[l]]
+                        data_focused_label[focused_label[i]] = data_tmp_tmp
+                        print data_focused_label
+
+                        for l in range(len(data_focused_label)):
+                            average.append(sum(data_focused_label[(data_focused_label.keys())[l]]) / len(data_focused_label[(data_focused_label.keys())[l]]))
+                        
+                        whole_sum = 0.0
+                        whole_num = 0.0
+                        whole_average = 0.0
+                        for l in range(len(data_tmp)):
+                            whole_sum += sum(data_tmp[(data_tmp.keys())[l]])
+                            whole_num += len(data_tmp[(data_tmp.keys())[l]])
+                        whole_average = whole_sum / whole_num
+
+                        ms = 0.0
+                        for l in range(len(average)):
+                            ms += pow((average[l] - whole_average), 2.0) * len(data_focused_label[(data_focused_label.keys())[l]])
+                        dof = len(dependent_label) - 1.0
+                        ms /= dof
+                        self.comparison(data_tmp, ms, dof)
+    
+    def comparison(self, data, mean_square_between, between_dof, threshold=0.05, mode="holm"):
+        """
+        if data.keys() = [A, B, C, D]
+        order of comparison:
+        1. A vs B
+        2. A vs C
+        3. A vs D
+        4. B vs C
+        5. B vs D
+        6. C vs D
+        order of result:
+        [1, 2, 3, 4, 5, 6]
+        """
+        average_per_group = []
+        sample_num_per_group = []
+        pair_of_keys = [] 
+        t_per_group = []
+        p_per_group = []
+        modified_pair_of_keys = []
+        modified_p_per_group = []
+        modified_threshold = []
+        results = []
+
+        for i in range(len(data.keys())):
+            average_per_group.append(np.mean(data[(data.keys())[i]]))
+            sample_num_per_group.append(len(data[(data.keys())[i]]))
+        
+        for i in range(len(data.keys())):
+            for j in range(i+1, len(data.keys())):
+                pair_of_keys.append((data.keys())[i] + " + " + (data.keys())[j])
+                t_per_group.append(abs(average_per_group[i] - average_per_group[j]) / math.sqrt(mean_square_between * ((1.0 / sample_num_per_group[i]) + (1.0 / sample_num_per_group[j]))))
+        for i in range(len(t_per_group)):
+            p_per_group.append(calc_p.sf(t_per_group[i], between_dof))
+
+        for i in range(len(t_per_group)):
+            if mode == "bonferroni":
+                modified_threshold.append(threshold / len(t_per_group))
+            elif mode == "holm":
+                modified_threshold.append(threshold / (len(t_per_group) - i))
+            else:
+                print "Please choose bonferroni or holm."
+                sys.exit()
+
+        if mode == "holm":
+            modified_p_per_group = sorted(p_per_group)
+            for i in range(len(t_per_group)):
+                for j in range(len(t_per_group)):
+                    if modified_p_per_group[i] == p_per_group[j]:
+                        modified_pair_of_keys.append(pair_of_keys[j])
+
+        for i in range(len(t_per_group)):
+            if mode == "bonferroni":
+                if modified_threshold[i] > p_per_group[i]:
+                    results.append("o ")
+                else:
+                    results.append("x ")
+            if mode == "holm":
+                if modified_threshold[i] > modified_p_per_group[i]:
+                    results.append("o ")
+                else:
+                    results.append("x ")
+                break
+
+        if mode == "bonferroni":
+            print "pair of comparison: " + str(pair_of_keys)
+        elif mode == "holm":
+            print "pair of comparison: " + str(modified_pair_of_keys)
+        
+        print "threshold: " + str(modified_threshold)
+        
+        if mode == "bonferroni":
+            print "p list: " + str(p_per_group)
+        elif mode == "holm":
+            print "modified p list: " + str(modified_p_per_group)
+        
+        print "comparison: " + str(results)
+        average_per_group = []
+        sample_num_per_group = []
+        pair_of_keys = [] 
+        t_per_group = []
+        p_per_group = []
+        modified_pair_of_keys = []
+        modified_p_per_group = []
+        modified_threshold = []
+        results = []
+
 
 if __name__ == '__main__':
     pass

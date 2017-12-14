@@ -13,7 +13,7 @@ class TwoWayAnovaDrawTable:
     '''
     def draw_table(self, data_list, label_1, label_2, mode="two-factor-repeated"):
         # set column
-        columns = ("Sum of Squares", "Dof", "Mean Square", "F") 
+        columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
         if mode == "two-factor-repeated":
             rows = ["Factor1", "Factor2", "Interaction", "Others", "Total"]

@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import math
 from scipy.stats import t as calc_p
+from scipy.stats import f as calc_f
 # referenced as calc_p because of the error below:
 # File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
 # p = t.sf(t_value, dof)
@@ -75,9 +76,12 @@ class OneWayAnova:
             # calculate F
             F = mean_square_between / mean_square_within
 
-            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01],
-                           [math.ceil(ss_within * 100.0) * 0.01, int(within_dof), math.ceil(mean_square_within * 100.0) * 0.01, '--'], 
-                           [math.ceil((ss_between + ss_within) * 100.0) * 0.01, int(between_dof + within_dof),'--', '--']]
+            # calculate p
+            p = calc_f.sf(F, between_dof, within_dof)
+
+            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01, math.ceil(p * 1000.0) * 0.001],
+                           [math.ceil(ss_within * 100.0) * 0.01, int(within_dof), math.ceil(mean_square_within * 100.0) * 0.01, '--', '--'], 
+                           [math.ceil((ss_between + ss_within) * 100.0) * 0.01, int(between_dof + within_dof),'--', '--', '--']]
             self.comparison(data, mean_square_between, between_dof, threshold, comparison_mode)
             return answer_list
 
@@ -148,10 +152,13 @@ class OneWayAnova:
             # calculate F
             F = mean_square_between / mean_square_error
 
-            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01],
-                           [math.ceil(ss_subject * 100.0) * 0.01, int(subject_dof), math.ceil(mean_square_subject * 100.0) * 0.01, '--'],
-                           [math.ceil(ss_error * 100.0) * 0.01, int(error_dof), math.ceil(mean_square_error * 100.0) * 0.01, '--'],
-                           [math.ceil(ss_total * 100.0) * 0.01, int(between_dof + subject_dof + error_dof),'--', '--']]
+            # calculate p
+            p = calc_f.sf(F, between_dof, error_dof)
+ 
+            answer_list = [[math.ceil(ss_between * 100.0) * 0.01, int(between_dof), math.ceil(mean_square_between * 100.0) * 0.01, math.ceil(F * 100.0) * 0.01, math.ceil(p * 1000.0) * 0.001],
+                           [math.ceil(ss_subject * 100.0) * 0.01, int(subject_dof), math.ceil(mean_square_subject * 100.0) * 0.01, '--', '--'],
+                           [math.ceil(ss_error * 100.0) * 0.01, int(error_dof), math.ceil(mean_square_error * 100.0) * 0.01, '--', '--'],
+                           [math.ceil(ss_total * 100.0) * 0.01, int(between_dof + subject_dof + error_dof),'--', '--', '--']]
             self.comparison(data, mean_square_between, between_dof, threshold, comparison_mode)
             return answer_list
 

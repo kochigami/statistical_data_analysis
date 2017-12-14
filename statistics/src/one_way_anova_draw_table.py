@@ -13,7 +13,7 @@ class OneWayAnovaDrawTable:
     '''
     def draw_table(self, data_list, mode="one-factor-repeated", threshold=0.05, comparison_mode="holm"):
         # set column
-        columns = ("Sum of Squares", "Dof", "Mean Square", "F") 
+        columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
         if mode == "one-factor-repeated":
             rows = ["Between Groups", "Within Groups", "Total"]
