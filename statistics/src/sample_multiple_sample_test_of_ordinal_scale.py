@@ -3,7 +3,7 @@
 import sys
 import numpy as np
 from unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
-#from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
+from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
 
 if __name__ == '__main__':
     args = sys.argv
@@ -18,7 +18,7 @@ if __name__ == '__main__':
             unpaired_multiple_sample_test_of_ordinal_scale = UnpairedMultipleSampleTestOfOrdinalScale()
             unpaired_multiple_sample_test_of_ordinal_scale.test(data)
             
-        # elif args[1] == "2":
-        #     data = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 0, 1], [1, 0, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
-        #     paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
-        #     paired_multiple_sample_test_of_nominal_scale.test(data)
+        elif args[1] == "2":
+            data = [[1,2,3,5,4], [5,1,3,2,4], [1,2,3,4,5], [5,1,4,2,3], [5,4,2,3,1], [4,2,1,3,5], [5,4,2,3,1]]
+            paired_multiple_sample_test_of_ordinal_scale = PairedMultipleSampleTestOfOrdinalScale()
+            paired_multiple_sample_test_of_ordinal_scale.test(data)
