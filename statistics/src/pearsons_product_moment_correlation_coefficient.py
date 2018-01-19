@@ -5,6 +5,10 @@ import math
 
 """
 Pearson's product-moment correlation coefficient
+.0 <&= |r| <&= .2　ほとんど相関なし
+.2   < |r| <&= .4　弱い相関あり
+.4   < |r| <&= .7　比較的強い相関あり
+.7   < |r| <&= 1.0 強い相関あり
 """
 
 class PearsonsProductMomentCorrelationCoefficient:
