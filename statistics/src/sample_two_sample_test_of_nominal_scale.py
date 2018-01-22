@@ -27,7 +27,7 @@ if __name__ == '__main__':
         print "4: unpaired test + small data"
     else:
         if args[1] == "1":
-            data = np.array([[1625, 5],[1022, 11]])
+            data = np.array([[18, 36],[7, 29]])
             paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
             paired_two_sample_test_of_nominal_scale.test(data)
 
@@ -37,11 +37,11 @@ if __name__ == '__main__':
             paired_two_sample_test_of_nominal_scale.test(data)
 
         elif args[1] == "3":
-            data = np.array([[1625, 5],[1022, 11]])
+            data = np.array([[52, 8],[48, 42]])
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
             unpaired_two_sample_test_of_nominal_scale.test(data)
 
         elif args[1] == "4":
-            data = np.array([[13, 4], [6, 14]])
+            data = np.array([[1, 12], [4, 6]])
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
             unpaired_two_sample_test_of_nominal_scale.test(data)
