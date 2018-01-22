@@ -2,17 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from scipy import stats
-#import math
-
-def recur_factorial(n):
-   """
-   Function to return the factorial
-   of a number using recursion
-   """
-   if n == 1:
-      return n
-   else:
-      return n * recur_factorial(n-1)
+import math
 
 class FisherTest:   
    def test(self, data):
@@ -36,39 +26,46 @@ class FisherTest:
          sys.exit()
 
       else:
-         odds, p = stats.fisher_exact(data)
-         
-         # a = data[0][0]
-         # b = data[0][1]
-         # c = data[1][0]
-         # d = data[1][1]
-         # n = a+b+c+d
+         a = data[0][0]
+         b = data[0][1]
+         c = data[1][0]
+         d = data[1][1]
+         a_plus_b = a + b
+         b_plus_d = b + d
+         n = a+b+c+d
 
-         # if a+b > 999 or b+c > 999 or a+c > 999 or a+d > 999 or n > 999:
-         #    print "In python, it seems that we can't calculate fact(> 999)."
-         #    sys.exit()
-         # else:
-         #    #bunshi = kai(a+b) * kai(c+d) * kai(a+c) * kai(b+d)
-         #    #bunbo = kai(n) * kai(a) * kai(b) * kai(c) * kai(d)
-         #    #p =  bunshi / bunbo
+         if a+b > 999 or b+c > 999 or a+c > 999 or a+d > 999 or n > 999:
+            print "In python, it seems that we can't calculate fact(> 999)."
+            sys.exit()
+         else:
+            #bunshi = kai(a+b) * kai(c+d) * kai(a+c) * kai(b+d)
+            #bunbo = kai(n) * kai(a) * kai(b) * kai(c) * kai(d)
+            #p =  bunshi / bunbo            
+            p = 0.0
+            for i in range(0, a+1):
+               b = a_plus_b - i
+               d = b_plus_d - b
+               c = n - i - b - d
 
-         #    kai_a_b = recur_factorial(a+b)
-         #    kai_c_d = recur_factorial(c+d)
-         #    kai_a_c = recur_factorial(a+c)
-         #    kai_b_d = recur_factorial(b+d)
-         #    kai_a = recur_factorial(a)
-         #    kai_b = recur_factorial(b)
-         #    kai_c = recur_factorial(c)
-         #    kai_d = recur_factorial(d)
-         #    kai_n = recur_factorial(n)
+               kai_a_b = math.factorial(i+b)
+               kai_c_d = math.factorial(c+d)
+               kai_a_c = math.factorial(i+c)
+               kai_b_d = math.factorial(b+d)
+               kai_a = math.factorial(i)
+               kai_b = math.factorial(b)
+               kai_c = math.factorial(c)
+               kai_d = math.factorial(d)
+               kai_n = math.factorial(n)
+
+               # kai(c+d) / (kai(c) * kai(d))
+               tmp1 = (kai_c_d / float(kai_c)) / kai_d
+               # kai(a+b) / (kai(a) * kai(b))
+               tmp2 = (kai_a_b / float(kai_a)) / kai_b
+               # kai(a+c) * kai(b+d) / kai(n)
+               tmp3 = (kai_a_c / float(kai_n)) * kai_b_d
+               p += tmp1 * tmp2 * tmp3
             
-         #    # kai(c+d) / (kai(c) * kai(d))
-         #    tmp1 = (kai_c_d / float(kai_c)) / kai_d
-         #    # kai(a+b) / (kai(a) * kai(b))
-         #    tmp2 = (kai_a_b / float(kai_a)) / kai_b
-         #    # kai(a+c) * kai(b+d) / kai(n)
-         #    tmp3 = (kai_a_c / float(kai_n)) * kai_b_d
-         #    p = tmp1 * tmp2 * tmp3
             
-         print "p value: " + str(p)
-         return p
+
+            print "p value: " + str(p)
+            return p

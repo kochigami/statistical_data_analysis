@@ -33,13 +33,8 @@ class PairedTwoSampleTestOfNominalScale:
             print "length of data should be four"
             sys.exit()
         else:
-            if (b + c) * 0.5 == 5 or (b + c) * 0.5 < 5:
-                # TODO: use binominal test
-                print "TODO"
-                sys.exit()
-            else:
-                chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
-                p = stats.chi2.cdf(chi2, df=1)
-                p = 1.0 - p
-                print "p value: "+ str(p)
-                return p
+            chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
+            p = stats.chi2.cdf(chi2, df=1)
+            p = 1.0 - p
+            print "p value: "+ str(p)
+            return p
