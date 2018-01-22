@@ -6,21 +6,20 @@ import sys
 
 """
 McNemar Test:
-Followed this link: http://hs-www.hyogo-dai.ac.jp/~kawano/HStat/?2009%2F13th%2FMcNemar_Test
+reference: http://hs-www.hyogo-dai.ac.jp/~kawano/HStat/?2009%2F13th%2FMcNemar_Test
 """
 
 class PairedTwoSampleTestOfNominalScale:
     def test(self, data):
         """
         focus on YES => NO & NO => YES
-        data[0]: number of YES => NO
-        data[1]: number of NO => YES
-        """
-        """
+        number of YES => NO: data[0][1]: b 
+        number of NO => YES: data[1][0]: c 
+        
                        Yes   No   Total
         -------------------------------
-        Condition1     a     b    a+b
-        Condition2     c     d    c+d
+        Yes            a     b    a+b
+        No             c     d    c+d
         -------------------------------
         Total         a+c   b+d   n (= a+b+c+d)
         """
@@ -34,11 +33,13 @@ class PairedTwoSampleTestOfNominalScale:
             print "length of data should be four"
             sys.exit()
         else:
-            if (b + c) * 0.5 > 5:
-                chi2 = pow(b-c, 2.0) / (b+c)
+            if (b + c) * 0.5 == 5 or (b + c) * 0.5 < 5:
+                # TODO: use binominal test
+                print "TODO"
+                sys.exit()
             else:
                 chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
-            p = stats.chi2.cdf(chi2, df=1)
-            p = 1.0 - p
-            print p
-            return p
+                p = stats.chi2.cdf(chi2, df=1)
+                p = 1.0 - p
+                print "p value: "+ str(p)
+                return p
