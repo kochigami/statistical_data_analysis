@@ -21,13 +21,13 @@ class ChiSquaredTestDrawTable:
         # set row based on your test type
         rows = [condition_list[0], condition_list[1]]
         if p < 0.01:
-            data_list = [[data[0][0], data[0][1], str("** (" + str((round(p * 100.0)) * 0.01) + ")")],
+            data_list = [[data[0][0], data[0][1], str("** (" + str((round(p * 10000.0)) * 0.0001) + ")")],
                     [data[1][0], data[1][1], "-"]]
         elif p < 0.05:
-            data_list = [[data[0][0], data[0][1], str("* (" + str((round(p * 100.0)) * 0.01) + ")")],
+            data_list = [[data[0][0], data[0][1], str("* (" + str((round(p * 10000.0)) * 0.0001) + ")")],
                     [data[1][0], data[1][1], "-"]]
         else:
-            data_list = [[data[0][0], data[0][1], str("n.s. (" + str((round(p * 100.0)) * 0.01) + ")")],
+            data_list = [[data[0][0], data[0][1], str("n.s. (" + str((round(p * 10000.0)) * 0.0001) + ")")],
                     [data[1][0], data[1][1], "-"]]
         # initialization for draw table
         fig, ax = plt.subplots()

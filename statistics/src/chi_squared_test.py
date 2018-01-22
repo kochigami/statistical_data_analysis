@@ -19,4 +19,6 @@ class ChiSquaredTest:
             # p: p value
             # dof: 自由度
             # ef: 期待度数
+            print "chi_squared: " + str(squared)
+            print "p_value: " + str(p)
             return p
