@@ -2,16 +2,18 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-import itertools
-import math
+import copy
+
+'''
+signed rank sum test
+'''
 
 class PairedTwoSampleTestOfOrdinalScale:
     def test(self, data):
         """
-        data = {'Cusine_A': [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
-                'Cusine_B': [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
-        # https://kusuri-jouhou.com/statistics/fugou.html
-       """
+        data = {'Product_A': [25, 62, 58, 26, 42, 18, 11, 33, 50, 34]
+                'Product_B': [26, 31, 35, 24, 47, 13, 11, 21, 42, 18]}
+        """
         x = data[(data.keys())[0]]
         y = data[(data.keys())[1]]
         # note: nx == ny
@@ -23,63 +25,54 @@ class PairedTwoSampleTestOfOrdinalScale:
         else:
             diff = []
             for i in range(nx):
-                diff.append(x[i] - y[i])
-            count_plus = 0
-            count_minus = 0
+                if x[i] - y[i] != 0.0:
+                    diff.append(x[i] - y[i])
+
             for i in range(len(diff)):
-                if diff[i] > 0.0:
-                    count_plus += 1
+                for j in range(i+1, len(diff)):
+                    if abs(diff[i]) > abs(diff[j]):
+                        tmp = diff[i]
+                        diff[i] = diff[j]
+                        diff[j] = tmp
+
+            # TODO: fix bug
+            order = []            
+            for i in range(len(diff)):
+                tmp = 1
+                for j in range(i+1, len(diff)):
+                    if len(order) == 0:
+                        if abs(diff[i]) == abs(diff[j]):
+                            tmp +=1
+                            print tmp
+                    elif len(order) > 0 and order[len(order) -1] != diff[j]:
+                        if abs(diff[i]) == abs(diff[j]):
+                            tmp +=1
+                print "hoge"
+                print tmp
+                val = 0.0
+                for k in range(1, tmp):
+                    val += i+k
+                for l in range(1, tmp):
+                    order.append(val / tmp)
+            print diff
+            print order
+            ###
+
+            t_plus = 0.0
+            t_minus = 0.0
+            for i in range(len(diff)):
                 if diff[i] < 0.0:
-                    count_minus += 1
-            # choose smallest one among count_plus and count_minus
-            if count_plus < count_minus or count_plus == count_minus:
-                r = count_plus
-            else:
-                r = count_minus
-            # emit the pair if diff == 0
-            n = count_plus + count_minus
-
-            # if 5 < n < 25 or n == 25, execute below
-            if n < 6:
-                print "n should be more than 5."
-                sys.exit()
-            elif n > 5 and (n < 25 or n == 25):
-                p = 0.0
-                # hypothesis: there is no difference between condition A & B
-                #            = the probability that smallest one (r) appeared is 1/2
-                # so caluculate the probability that the value appears which is smaller than r 
-                # for loop from 0 to r
-                for i in range(0, r+1):
-                    # [0] * 5 = [0, 0, 0, 0, 0]
-                    # one of the initializing list
-                    # list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3))
-                    # >> [('a', 'b', 'c'),
-                    #     ('a', 'b', 'd'),
-                    #     ('a', 'b', 'e'),
-                    #     ('a', 'c', 'd'),
-                    #     ('a', 'c', 'e'),
-                    #     ('a', 'd', 'e'),
-                    #     ('b', 'c', 'd'),
-                    #     ('b', 'c', 'e'),
-                    #     ('b', 'd', 'e'),
-                    #     ('c', 'd', 'e')]
-                    # len(list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3)))
-                    # >> 10
-                    p += len(list(itertools.combinations([0] * n, i))) * pow(0.5, n)
-                    # for two-side test, p value should be doubled
-                    p = p * 2.0
-            # else (n > 25): calculate z
-            elif n > 25:
-            # followed algorithm described in this link:
-            # https://kusuri-jouhou.com/statistics/fugou.html
-                u = n * 0.5
-                theta = math.sqrt(n) * 0.5
-                if r < u:
-                    z = ((r + 0.5) - u) / theta
+                    t_minus += order[i]
                 else:
-                    z = ((r - 0.5) - u) / theta
-
-                # calculate p value from z value
-                # multiply 2.0 for two-side test
-                p = stats.norm.sf(abs(z)) * 2.0
-            return p
+                    t_plus += order[i]
+            print t_minus
+            print t_plus
+            
+            if t_minus < t_plus:
+                t = t_minus
+            else:
+                t = t_plus
+            
+            print "t: " + str(t)
+            print "n: " + str(len(diff))
+            return True
