@@ -1,20 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-from chi_squared_test_draw_graph import ChiSquaredTestDrawGraph
-from chi_squared_test_draw_table import ChiSquaredTestDrawTable
+#from chi_squared_test_draw_graph import ChiSquaredTestDrawGraph
+#from chi_squared_test_draw_table import ChiSquaredTestDrawTable
+from chi_squared_test import ChiSquaredTest
 from fisher_test import FisherTest
 
-"""
-              Yes   No   Total
--------------------------------
-Condition1     a     b    a+b
-Condition2     c     d    c+d
--------------------------------
-Total         a+c   b+d   n (= a+b+c+d)
-
-data: [[a, b], [c, d]]
-"""
 class UnpairedTwoSampleTestOfNominalScale:
     def test(self, data):
         # check data length is 2
@@ -24,14 +15,16 @@ class UnpairedTwoSampleTestOfNominalScale:
             sys.exit()
         else:
             """
-                           Yes   No   Total
-            -------------------------------
-            Condition1     a     b    a+b
-            Condition2     c     d    c+d
-            -------------------------------
-            Total         a+c   b+d   n (= a+b+c+d)
+                            Yes   No   Total
+              -------------------------------
+              Condition1     a     b    a+b
+              Condition2     c     d    c+d
+              -------------------------------
+              Total         a+c   b+d   n (= a+b+c+d)
+
+              data: [[a, b], [c, d]]
             """
-            
+
             a = data[0][0]
             b = data[0][1]
             c = data[1][0]
@@ -52,14 +45,16 @@ class UnpairedTwoSampleTestOfNominalScale:
                 # followd this link: http://aoki2.si.gunma-u.ac.jp/lecture/Cross/Fisher.html
                 fisher_test = FisherTest()
                 p = fisher_test.test(data)
-                print p
                 return p
             else:
                 # use chi-squared test
-                d = ChiSquaredTestDrawGraph()
-                t = ChiSquaredTestDrawTable()
-                d.draw_graph(data, ["Condition1", "Condition2"], "test", "x", "y", tight_layout=True)
-                t.draw_table(data, ["Condition1", "Condition2"], "test")
+                chi_squared_test = ChiSquaredTest()
+                p = chi_squared_test.test(data)
+                return p
+                # d = ChiSquaredTestDrawGraph()
+                # t = ChiSquaredTestDrawTable()
+                # d.draw_graph(data, ["Condition1", "Condition2"], "test", "x", "y", tight_layout=True)
+                # t.draw_table(data, ["Condition1", "Condition2"], "test")
                 
 if __name__ == '__main__':
     pass
