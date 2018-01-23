@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
+from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 from collections import OrderedDict
 
 if __name__ == '__main__':
@@ -15,6 +16,7 @@ if __name__ == '__main__':
         print "4: unpaired-ttest (mann-whitney test)"
     else:
         paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
+        unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
         # if we use normal dict, the order of contents sometimes is decided randomly.
         # ex: should be [A, B, C], but output is [A, C, B]
         data = OrderedDict()
@@ -37,9 +39,8 @@ if __name__ == '__main__':
         elif args[1] == "4":
             data['Children'] = [20, 18, 15, 13, 10, 6]
             data['Adults'] = [17, 16, 12, 9, 8, 6, 4, 2]
-            # TODO: FIX THIS
-            #d.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="unpaired-utest")
-
+            unpaired_two_sample_test_of_ordinal_scale.test(data)
+            
             # if we use OrderedDict, but if we use the initialization below,
             # the order of contents sometimes is still decided randomly.
             # data = {'HamburgerA':  [15.3, 14.9, 14.5, 14.4, 14.0, 13.9, 14.1, 14.7, 15.3, 14.6],
