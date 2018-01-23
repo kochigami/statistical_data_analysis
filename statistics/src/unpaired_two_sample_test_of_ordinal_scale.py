@@ -19,5 +19,5 @@ class UnpairedTwoSampleTestOfOrdinalScale:
             print "The number of data type should be two."
             sys.exit()
         result = stats.mannwhitneyu(data[(data.keys())[0]], data[(data.keys())[1]], use_continuity=True)
-        # return pvalue
+        print "p value: "+ str(result[1])
         return result[1]
