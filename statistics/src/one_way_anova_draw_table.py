@@ -11,16 +11,16 @@ class OneWayAnovaDrawTable:
     data_list:
     mode: string. between or within. choose one based on your test.
     '''
-    def draw_table(self, data_list, mode="one-factor-repeated", threshold=0.05, comparison_mode="holm"):
+    def draw_table(self, data_list, mode="CR", threshold=0.05, comparison_mode="holm"):
         # set column
         columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
-        if mode == "one-factor-repeated":
+        if mode == "CR":
             rows = ["Between Groups", "Within Groups", "Total"]
-        elif mode == "one-factor-factorical":
+        elif mode == "RB":
             rows = ["Between Groups", "Subject", "Error", "Total"]
         else:
-            print "Please choose mode 'between' or 'within'."
+            print "Please choose mode 'CR' or 'RB'."
             return False
 
         # initialization for draw table

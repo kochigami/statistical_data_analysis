@@ -11,9 +11,12 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_multiple_sample_test_of_interval_and_ratio_scale.py <sample_type>"
         print "please choose sample type:"
-        print "1: unpaired & one-way"
-        print "2: unpaired & two-way"
-        print "3: paired & one-way"
+        print "1: one-way anova CR(1)"
+        print "2: one-way anova CR(2)"
+        print "3: one-way anova CR(3)"
+        print "4: one-way anova RB(1)"
+        print "5: one-way anova RB(2)"
+        print "6: two-way anova"
         sys.exit()
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
@@ -45,11 +48,58 @@ if __name__ == '__main__':
         data['HamburgerA'] = [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80]
         data['HamburgerB'] = [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80]
         data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90]
-        
-        one_way_anova_draw_table.draw_table(data, mode="one-factor-repeated")
+        one_way_anova_draw_table.draw_table(data, mode="CR")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
-        
+
     elif args[1] == "2":
+        
+        data['a1'] = [9,7,8,8,12,11,8,13]
+        data['a2'] = [6,5,6,3,6,7,10,9]
+        data['a3'] = [10,13,8,13,12,14,14,16]
+        data['a4'] = [9,11,13,14,16,12,15,14]
+        one_way_anova_draw_table.draw_table(data, mode="CR")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+    
+    elif args[1] == "3":
+        
+        data['a1'] = [9,7,8,8,12,11,8,13]
+        data['a2'] = [5,6,3,6,7,10]
+        data['a3'] = [13,8,13,12,14,16,10]
+        data['a4'] = [11,13,14,16,12]
+        one_way_anova_draw_table.draw_table(data, mode="CR")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+
+    elif args[1] == "4":
+        # factorical & one-way
+        # each person - all conditions (conditionA, conditionB, condiitonC)
+
+        #           condition1    condition2     condition3  
+        # person1    100             110            120
+        # person2    120             130            140   
+        # person3    200             210            130
+        # person4    120             140            160
+        # person5    110              80            150
+
+        # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap6/sec0.html
+        data['HamburgerA'] = [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80]
+        data['HamburgerB'] = [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80]
+        data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]
+        
+        one_way_anova_draw_table.draw_table(data, mode="RB")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
+
+    elif args[1] == "5":
+
+        data['a1'] = [9,7,8,8,12,11,8,13]
+        data['a2'] = [6,5,6,3,6,7,10,9]
+        data['a3'] = [10,13,8,13,12,14,14,16]
+        data['a4'] = [9,11,13,14,16,12,15,14]
+
+        one_way_anova_draw_table.draw_table(data, mode="RB")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
+
+
+    elif args[1] == "6":
         # repeated & two-way
         # each person - each condition 
         # (conditionA-robot1, conditionA-robot2, conditionB-robot1, conditionB-robot2)
@@ -72,24 +122,5 @@ if __name__ == '__main__':
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
-    elif args[1] == "3":
-        # factorical & one-way
-        # each person - all conditions (conditionA, conditionB, condiitonC)
-
-        #           condition1    condition2     condition3  
-        # person1    100             110            120
-        # person2    120             130            140   
-        # person3    200             210            130
-        # person4    120             140            160
-        # person5    110              80            150
-
-        # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap6/sec0.html
-        data['HamburgerA'] = [80, 75, 80, 90, 95, 80, 80, 85, 85, 80, 90, 80, 75, 90, 85, 85, 90, 90, 85, 80]
-        data['HamburgerB'] = [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80]
-        data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]
-
-        one_way_anova_draw_table.draw_table(data, mode="one-factor-factorical")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
-
     else:
-        print "Please select 1, 2, 3"
+        print "Please select 1, 2, 3, 4, 5, 6"
