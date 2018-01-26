@@ -16,7 +16,9 @@ if __name__ == '__main__':
         print "3: one-way anova CR(3)"
         print "4: one-way anova RB(1)"
         print "5: one-way anova RB(2)"
-        print "6: two-way anova"
+        print "6: two-way anova CRFpq(1)"
+        print "7: two-way anova CRFpq(2)"
+        print "8: two-way anova CRFpq(3)"
         sys.exit()
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
@@ -118,6 +120,32 @@ if __name__ == '__main__':
         data['Pepper-Children'] = [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70]
         label_a = ["NAO", "Pepper"]
         label_b = ["Adult", "Children"]
+
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+
+    elif args[1] == "7":
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4,6]
+        data['a2-b2'] = [2,6,3,6,4]
+        data['a2-b3'] = [3,2,3,6,5]
+        data['a2-b4'] = [2,3,3,4,6]
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+
+    elif args[1] == "8":
+        data['a1-b1'] = [6,6,4,8,7,5]
+        data['a1-b2'] = [3,1,2,2]
+        data['a2-b1'] = [5,4,5,4]
+        data['a2-b2'] = [5,2,4,6,3,4]
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2"]
 
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")

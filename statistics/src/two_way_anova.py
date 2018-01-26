@@ -20,10 +20,10 @@ class TwoWayAnova:
             'Pepper-Children': [60, 85, 85, 80, 85, 90, 95, 90, 95, 85, 85, 80, 85, 80, 85]}
     label_A: string list. ex: ["NAO", "Pepper"]
     label_B: string list. ex: ["Adult", "Children"]
-    mode: string. two-factor-repeated.
+    mode: string. CRFpq, SPFpq, RBFpq.
     '''
-    def two_way_anova(self, data, label_A, label_B, mode="two-factor-repeated"):
-        if mode == "two-factor-repeated":            
+    def two_way_anova(self, data, label_A, label_B, mode="CRFpq"):
+        if mode == "CRFpq":
 
             """
                          | ss         |   dof           |   ms     |         F        |       
@@ -45,119 +45,206 @@ class TwoWayAnova:
             Total          |  270     |    396   |  465     |   1131   |
             """
 
-            total_ss = 0.0
-            total_sum = 0.0
-
-            # total ss
-            # total sum
+            is_data_size_equal = True
+            for i in range(len(data.keys())):
+                if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
+                    is_data_size_equal = False
+            ABS = 0.0
             for i in range(len(data.keys())):
                 for j in range(len(data[(data.keys()[i])])):
-                    total_ss += pow((data[(data.keys()[i])])[j], 2.0)
-                    total_sum += (data[(data.keys()[i])])[j] ##
-
-            category1_sum = []
-            category1_num = []
-            category1_sum_tmp = 0.0
-            category1_num_tmp = 0.0
-            # category1 sum
-            for i in range(len(label_A)):
-                for j in range(len(data.keys())):
-                    if label_A[i] in (data.keys())[j]:
-                        category1_sum_tmp += sum(data[(data.keys())[j]])
-                        category1_num_tmp += len(data[(data.keys())[j]])
-                category1_sum.append(category1_sum_tmp)
-                category1_sum_tmp = 0.0
-                category1_num.append(category1_num_tmp)
-                category1_num_tmp = 0
-                    
-            # category2 sum
-            category2_sum = []
-            category2_num = []
-            category2_sum_tmp = 0.0
-            category2_num_tmp = 0.0
-            for i in range(len(label_B)):
-                for j in range(len(data.keys())):
-                    if label_B[i] in (data.keys())[j]:
-                        category2_sum_tmp += sum(data[(data.keys())[j]])
-                        category2_num_tmp += len(data[(data.keys())[j]])
-                category2_sum.append(category2_sum_tmp)
-                category2_sum_tmp = 0.0
-                category2_num.append(category2_num_tmp)
-                category2_num_tmp = 0
-
-            # preparation
-            # category1 preparation
-            category1_preparation = 0.0
-            for i in range(len(category1_sum)):
-                category1_preparation += pow(category1_sum[i], 2.0) / category1_num[i]
-
-            # category2 preparation
-            category2_preparation = 0.0
-            for i in range(len(category2_sum)):
-                category2_preparation += pow(category2_sum[i], 2.0) / category2_num[i]
-
-            # category1x2 preparation
-            category1x2_preparation = 0.0
+                    ABS += pow((data[(data.keys()[i])])[j], 2.0)
+            AB = 0.0
             for i in range(len(data.keys())):
-                category1x2_preparation += pow(sum(data[(data.keys())[i]]), 2.0) / float(len(data[(data.keys())[i]]))
-            
-            # calculate x (correction term)
-            x = 0.0                
-            total_num = 0
-            for i in range(len(data.keys())):
-                x += sum(data[(data.keys())[i]])
-                total_num += len(data[(data.keys())[i]])
+                AB += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
 
-            x = pow(x, 2.0) / float(total_num)
+            p = len(label_A)
+            q = len(label_B)
 
-            ss_1 = category1_preparation - x
-            ss_2 = category2_preparation - x
-            ss_1x2 = category1x2_preparation - x - ss_1 - ss_2
-            ss_e = total_ss - category1x2_preparation
-            ss_t = total_ss - x
-        
-            # calculate sample nums
-            category1_dof = len(label_A) - 1
-            category2_dof = len(label_B) - 1
-            category1x2_dof = (len(label_A) - 1) * (len(label_B) - 1) 
-            error_dof = (total_num - 1) - category1_dof - category2_dof - category1x2_dof
+            A_dof = p - 1
+            B_dof = q - 1
+            AxB_dof = A_dof * B_dof
 
-            # calculate mean square
-            ms_1 = ss_1 / float(category1_dof)
-            ms_2 = ss_2 / float(category2_dof)
-            ms_1x2 = ss_1x2 / float(category1x2_dof)
-            ms_e = ss_e / float(error_dof)
+            if is_data_size_equal:
+                G = 0.0
+                for i in range(len(data.keys())):
+                    for j in range(len(data[(data.keys()[i])])):
+                        G += (data[(data.keys()[i])])[j]
 
-            # calculate F
-            f_1 = ms_1 / ms_e
-            f_2 = ms_2 / ms_e
-            f_1x2 = ms_1x2 / ms_e
+                n = len(data[(data.keys()[0])])
 
-            # calculate p
-            p_1 = calc_f.sf(f_1, category1_dof, error_dof)
-            p_2 = calc_f.sf(f_2, category2_dof, error_dof)
-            p_1x2 = calc_f.sf(f_1x2, category1x2_dof, error_dof)
+                WC_dof = p * q * (n - 1.0)
 
-            # multiple comparison
-            if p_1x2 < 0.05:
-                # simple major effect
-                # 1. label_A
-                self.evaluate_simple_main_effect(data, label_A, label_B)
-                # 2. label_B
-                self.evaluate_simple_main_effect(data, label_B, label_A)
+                X = pow(G, 2.0) / (n * p * q)
 
-            elif p_1 < 0.05:
-               self.evaluate_main_effect(data, label_A, ms_1, category1_dof)
+                A_sum = []
+                A_sum_tmp = 0.0
+                # category1 sum
+                for i in range(len(label_A)):
+                    for j in range(len(data.keys())):
+                        if label_A[i] in (data.keys())[j]:
+                            A_sum_tmp += sum(data[(data.keys())[j]])
+                    A_sum.append(A_sum_tmp)
+                    A_sum_tmp = 0.0
 
-            elif p_2 < 0.05:
-                self.evaluate_main_effect(data, label_B, ms_2, category2_dof)
+                A = 0.0
+                for i in range(len(A_sum)):
+                    A += pow(A_sum[i], 2.0) / (n * q)
 
-            answer_list = [[math.ceil(ss_1 * 100.0) * 0.01, int(category1_dof), math.ceil(ms_1 * 100.0) * 0.01, math.ceil(f_1 * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
-                           [math.ceil(ss_2 * 100.0) * 0.01, int(category2_dof), math.ceil(ms_2 * 100.0) * 0.01, math.ceil(f_2 * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
-                           [math.ceil(ss_1x2 * 100.0) * 0.01, int(category1x2_dof), math.ceil(ms_1x2 * 100.0) * 0.01, math.ceil(f_1x2 * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
-                           [math.ceil(ss_e * 100.0) * 0.01, int(error_dof), math.ceil(ms_e * 100.0) * 0.01, '--', '--'], 
-                           [math.ceil(ss_t * 100.0) * 0.01, int(category1_dof + category2_dof + category1x2_dof + error_dof),'--', '--', '--']]
-            return answer_list
+                # category2 sum
+                B_sum = []
+                B_sum_tmp = 0.0
+                for i in range(len(label_B)):
+                    for j in range(len(data.keys())):
+                        if label_B[i] in (data.keys())[j]:
+                            B_sum_tmp += sum(data[(data.keys())[j]])
+                    B_sum.append(B_sum_tmp)
+                    B_sum_tmp = 0.0
+
+                B = 0.0
+                for i in range(len(B_sum)):
+                    B += pow(B_sum[i], 2.0) / (n * p)
+
+                SSa = A - X
+                SSb = B - X
+                SSaxb = AB - A - B + X
+                SSwc = ABS - AB
+                SSt = ABS - X
+
+                MSwc = SSwc / WC_dof
+                MSa = SSa / A_dof
+                MSb = SSb / B_dof
+                MSaxb = SSaxb / AxB_dof
+
+                Fa = MSa / MSwc
+                Fb = MSb / MSwc
+                Faxb = MSaxb / MSwc
+
+                # calculate p
+                p_1 = calc_f.sf(Fa, A_dof, WC_dof)
+                p_2 = calc_f.sf(Fb, B_dof, WC_dof)
+                p_1x2 = calc_f.sf(Faxb, AxB_dof, WC_dof)
+
+                # multiple comparison
+                if p_1x2 < 0.05:
+                    # simple major effect
+                    # 1. label_A
+                    self.evaluate_simple_main_effect(data, label_A, label_B)
+                    # 2. label_B
+                    self.evaluate_simple_main_effect(data, label_B, label_A)
+
+                elif p_1 < 0.05:
+                    self.evaluate_main_effect(data, label_A, ms_1, category1_dof)
+
+                elif p_2 < 0.05:
+                    self.evaluate_main_effect(data, label_B, ms_2, category2_dof)
+
+                answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
+                               [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
+                               [math.ceil(SSaxb * 100.0) * 0.01, int(AxB_dof), math.ceil(MSaxb * 100.0) * 0.01, math.ceil(Faxb * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
+                               [math.ceil(SSwc * 100.0) * 0.01, int(WC_dof), math.ceil(MSwc * 100.0) * 0.01, '--', '--'],
+                               [math.ceil(SSt * 100.0) * 0.01, int(A_dof + B_dof + AxB_dof + WC_dof),'--', '--', '--']]
+                return answer_list
+
+            else:
+                G = 0.0
+                unweighted_mean = []
+                for i in range(len(data.keys())):
+                    unweighted_mean.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
+
+                G = sum(unweighted_mean)
+
+                A_sum_tmp = 0.0
+                A_num_tmp = 0.0
+                A_sum = []
+                for j in range(len(label_A)):
+                    for i in range(len(data.keys())):
+                        if label_A[j] in (data.keys())[i]:
+                            A_sum_tmp += unweighted_mean[i]
+                            A_num_tmp += 1
+                    A_sum_tmp = A_sum_tmp / A_num_tmp
+                    A_sum.append(A_sum_tmp)
+                    A_sum_tmp = 0.0
+                    A_num_tmp = 0.0
+
+                B_sum_tmp = 0.0
+                B_num_tmp = 0.0
+                B_sum = []
+                for j in range(len(label_B)):
+                    for i in range(len(data.keys())):
+                        if label_B[j] in (data.keys())[i]:
+                            B_sum_tmp += unweighted_mean[i]
+                            B_num_tmp += 1
+                    B_sum_tmp = B_sum_tmp / B_num_tmp
+                    B_sum.append(B_sum_tmp)
+                    B_sum_tmp = 0.0
+                    B_num_tmp = 0.0
+
+                N = 0
+                for i in range(len(data.keys())):
+                    N += len(data[(data.keys())[i]])
+                WC_dof = N - p * q
+
+                X = pow(G, 2.0) / (p * q)
+
+                A = 0.0
+                for i in range(len(A_sum)):
+                    A += pow(A_sum[i], 2.0)
+                A *= q
+
+                B = 0.0
+                for i in range(len(B_sum)):
+                    B += pow(B_sum[i], 2.0)
+                B *= p
+
+                AB_modified = 0.0
+                for i in range(len(unweighted_mean)):
+                    AB_modified += pow(unweighted_mean[i], 2.0)
+
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    tmp += 1.0 / len(data[(data.keys())[i]])
+                n = p * q / tmp
+
+                SSa = n * float(A - X)
+                SSb = n * float(B - X)
+                SSaxb = n * float(AB_modified - A - B + X)
+                SSwc = ABS - float(AB)
+                SSt = SSa + SSb + SSaxb + SSwc
+
+                MSwc = SSwc / WC_dof
+                MSa = SSa / A_dof
+                MSb = SSb / B_dof
+                MSaxb = SSaxb / AxB_dof
+
+                Fa = MSa / MSwc
+                Fb = MSb / MSwc
+                Faxb = MSaxb / MSwc
+
+                # calculate p
+                p_1 = calc_f.sf(Fa, A_dof, WC_dof)
+                p_2 = calc_f.sf(Fb, B_dof, WC_dof)
+                p_1x2 = calc_f.sf(Faxb, AxB_dof, WC_dof)
+
+                # multiple comparison
+                if p_1x2 < 0.05:
+                    # simple major effect
+                    # 1. label_A
+                    self.evaluate_simple_main_effect(data, label_A, label_B)
+                    # 2. label_B
+                    self.evaluate_simple_main_effect(data, label_B, label_A)
+
+                elif p_1 < 0.05:
+                    self.evaluate_main_effect(data, label_A, MSa, A_dof)
+
+                elif p_2 < 0.05:
+                    self.evaluate_main_effect(data, label_B, MSb, B_dof)
+
+                answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
+                               [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
+                               [math.ceil(SSaxb * 100.0) * 0.01, int(AxB_dof), math.ceil(MSaxb * 100.0) * 0.01, math.ceil(Faxb * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
+                               [math.ceil(SSwc * 100.0) * 0.01, int(WC_dof), math.ceil(MSwc * 100.0) * 0.01, '--', '--'],
+                               [math.ceil(SSt * 100.0) * 0.01, int(A_dof + B_dof + AxB_dof + WC_dof),'--', '--', '--']]
+                return answer_list
 
     def evaluate_main_effect(self, data, label, ms, dof):
         if len(label) > 2:
