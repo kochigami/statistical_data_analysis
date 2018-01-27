@@ -146,12 +146,12 @@ class TwoWayAnova:
                 return answer_list
 
             else:
-                G = 0.0
+                G_dash = 0.0
                 unweighted_mean = []
                 for i in range(len(data.keys())):
                     unweighted_mean.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
 
-                G = sum(unweighted_mean)
+                G_dash = sum(unweighted_mean)
 
                 A_sum_tmp = 0.0
                 A_num_tmp = 0.0
@@ -184,30 +184,30 @@ class TwoWayAnova:
                     N += len(data[(data.keys())[i]])
                 WC_dof = N - p * q
 
-                X = pow(G, 2.0) / (p * q)
+                X_dash = pow(G_dash, 2.0) / (p * q)
 
-                A = 0.0
+                A_dash = 0.0
                 for i in range(len(A_sum)):
-                    A += pow(A_sum[i], 2.0)
-                A *= q
+                    A_dash += pow(A_sum[i], 2.0)
+                A_dash *= q
 
-                B = 0.0
+                B_dash = 0.0
                 for i in range(len(B_sum)):
-                    B += pow(B_sum[i], 2.0)
-                B *= p
+                    B_dash += pow(B_sum[i], 2.0)
+                B_dash *= p
 
-                AB_modified = 0.0
+                AB_dash = 0.0
                 for i in range(len(unweighted_mean)):
-                    AB_modified += pow(unweighted_mean[i], 2.0)
+                    AB_dash += pow(unweighted_mean[i], 2.0)
 
                 tmp = 0.0
                 for i in range(len(data.keys())):
                     tmp += 1.0 / len(data[(data.keys())[i]])
-                n = p * q / tmp
+                n_tilde = p * q / tmp
 
-                SSa = n * float(A - X)
-                SSb = n * float(B - X)
-                SSaxb = n * float(AB_modified - A - B + X)
+                SSa = n_tilde * float(A_dash - X_dash)
+                SSb = n_tilde * float(B_dash - X_dash)
+                SSaxb = n_tilde * float(AB_dash - A_dash - B_dash + X_dash)
                 SSwc = ABS - float(AB)
                 SSt = SSa + SSb + SSaxb + SSwc
 
@@ -244,6 +244,231 @@ class TwoWayAnova:
                                [math.ceil(SSaxb * 100.0) * 0.01, int(AxB_dof), math.ceil(MSaxb * 100.0) * 0.01, math.ceil(Faxb * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
                                [math.ceil(SSwc * 100.0) * 0.01, int(WC_dof), math.ceil(MSwc * 100.0) * 0.01, '--', '--'],
                                [math.ceil(SSt * 100.0) * 0.01, int(A_dof + B_dof + AxB_dof + WC_dof),'--', '--', '--']]
+                return answer_list
+
+        elif mode == "SPFpq":
+            # same as CRFpq & size is equal #
+            is_data_size_equal = True
+            for i in range(len(data.keys())):
+                if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
+                    is_data_size_equal = False
+            ABS = 0.0
+            for i in range(len(data.keys())):
+                for j in range(len(data[(data.keys()[i])])):
+                    ABS += pow((data[(data.keys()[i])])[j], 2.0)
+            AB = 0.0
+            for i in range(len(data.keys())):
+                AB += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
+
+            p = len(label_A)
+            q = len(label_B)
+
+            A_dof = p - 1
+            B_dof = q - 1
+            AxB_dof = A_dof * B_dof
+
+            AS = 0.0
+            Sij = []
+            n_j = []
+            for j in range(len(label_A)):
+                for i in range(len(data.keys())):
+                    if label_A[j] in (data.keys())[i]:
+                        n_j.append(len(data[(data.keys())[i]]))
+                        break
+
+            tmp = [[] for i in range(len(n_j))]
+            for i in range(len(label_A)):
+                tmp[i] = [0 for s in range(n_j[i])]
+                for j in range(n_j[i]):
+                    for k in range(len(data.keys())):
+                        if label_A[i] in (data.keys())[k]:
+                            tmp[i][j] += data[(data.keys())[k]][j]
+                    Sij.append(tmp[i][j])
+
+            for i in range(len(Sij)):
+                AS += pow(Sij[i], 2.0) / q
+
+            if is_data_size_equal:
+                G = 0.0
+                for i in range(len(data.keys())):
+                    for j in range(len(data[(data.keys()[i])])):
+                        G += (data[(data.keys()[i])])[j]
+
+                n = len(data[(data.keys()[0])])
+
+                WC_dof = p * q * (n - 1.0)
+
+                X = pow(G, 2.0) / (n * p * q)
+
+                A_sum = []
+                A_sum_tmp = 0.0
+                # category1 sum
+                for i in range(len(label_A)):
+                    for j in range(len(data.keys())):
+                        if label_A[i] in (data.keys())[j]:
+                            A_sum_tmp += sum(data[(data.keys())[j]])
+                    A_sum.append(A_sum_tmp)
+                    A_sum_tmp = 0.0
+
+                A = 0.0
+                for i in range(len(A_sum)):
+                    A += pow(A_sum[i], 2.0) / (n * q)
+
+                # category2 sum
+                B_sum = []
+                B_sum_tmp = 0.0
+                for i in range(len(label_B)):
+                    for j in range(len(data.keys())):
+                        if label_B[i] in (data.keys())[j]:
+                            B_sum_tmp += sum(data[(data.keys())[j]])
+                    B_sum.append(B_sum_tmp)
+                    B_sum_tmp = 0.0
+
+                B = 0.0
+                for i in range(len(B_sum)):
+                    B += pow(B_sum[i], 2.0) / (n * p)
+                # same as CRFpq & size is equal #
+                                
+                # same as CRFpq & size is equal #
+                SSa = A - X
+                SSb = B - X
+                SSaxb = AB - A - B + X
+                SSt = ABS - X
+                # same as CRFpq & size is equal #
+
+                SSsa = AS - A
+                SSbxsa = ABS - AB - AS + A
+    
+                SA_dof = p * (n - 1)
+                BxSA_dof = p * (q - 1) * (n - 1)
+
+                # same as CRFpq & size is equal #
+                MSa = SSa / A_dof
+                MSb = SSb / B_dof
+                MSaxb = SSaxb / AxB_dof
+                # same as CRFpq & size is equal #
+                MSsa = SSsa / SA_dof
+                MSbxsa = SSbxsa / BxSA_dof
+
+                Fa = MSa / MSsa
+                Fb = MSb / MSbxsa
+                Faxb = MSaxb / MSbxsa
+
+                # calculate p
+                p_1 = calc_f.sf(Fa, A_dof, BxSA_dof)
+                p_2 = calc_f.sf(Fb, B_dof, BxSA_dof)
+                p_1x2 = calc_f.sf(Faxb, AxB_dof, BxSA_dof)
+
+                answer_list = [[math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
+                               [math.ceil(SSsa *100.0) *0.01, int(SA_dof), math.ceil(MSsa *100.0) *0.01, '--', '--'],
+                               [math.ceil(SSb *100.0) *0.01, int(B_dof), math.ceil(MSb *100.0) *0.01, math.ceil(Fb *100.0) *0.01, math.ceil(p_2 *1000.0) *0.001],
+                               [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
+                               [math.ceil(SSbxsa *100.0) *0.01, int(BxSA_dof), math.ceil(MSbxsa *100.0) *0.01, '--', '--'],
+                               [math.ceil((SSa + SSsa + SSb + SSaxb + SSbxsa) *100.0) * 0.01, int(n * p * q - 1),'--', '--', '--']]
+                return answer_list
+
+            else:
+                A_sum_tmp = 0.0
+                A_sum = []
+                for j in range(len(label_A)):
+                    for i in range(len(data.keys())):
+                        if label_A[j] in (data.keys())[i]:
+                            A_sum_tmp += sum(data[(data.keys())[i]])
+                    A_sum.append(A_sum_tmp)
+                    A_sum_tmp = 0.0
+
+                A = 0.0
+                for i in range(len(A_sum)):
+                    A += pow(A_sum[i], 2.0) / (n_j[i] * q)
+
+                # same 
+                G_dash = 0.0
+                unweighted_mean = []
+                for i in range(len(data.keys())):
+                    unweighted_mean.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
+
+                A_sum_tmp = 0.0
+                A_sum = []
+                A_num_tmp = 0.0
+                for j in range(len(label_A)):
+                    for i in range(len(data.keys())):
+                        if label_A[j] in (data.keys())[i]:
+                            A_sum_tmp += unweighted_mean[i]
+                            A_num_tmp += 1.0
+                    A_sum_tmp = A_sum_tmp / A_num_tmp
+                    A_sum.append(A_sum_tmp)
+                    A_sum_tmp = 0.0
+                    A_num_tmp = 0.0
+
+                B_sum_tmp = 0.0
+                B_num_tmp = 0.0
+                B_sum = []
+                for j in range(len(label_B)):
+                    for i in range(len(data.keys())):
+                        if label_B[j] in (data.keys())[i]:
+                            B_sum_tmp += unweighted_mean[i]
+                            B_num_tmp += 1
+                    B_sum_tmp = B_sum_tmp / B_num_tmp
+                    B_sum.append(B_sum_tmp)
+                    B_sum_tmp = 0.0
+                    B_num_tmp = 0.0
+
+                G_dash = sum(unweighted_mean)
+                X_dash = pow(G_dash, 2.0) / (p * q)
+
+                A_dash = 0.0
+                for i in range(len(A_sum)):
+                    A_dash += pow(A_sum[i], 2.0)
+                A_dash *= q
+
+                B_dash = 0.0
+                for i in range(len(B_sum)):
+                    B_dash += pow(B_sum[i], 2.0)
+                B_dash *= p
+                
+                AB_dash = 0.0
+                for i in range(len(unweighted_mean)):
+                    AB_dash += pow(unweighted_mean[i], 2.0)
+                # same
+                tmp = 0.0
+                for i in range(len(n_j)):
+                    tmp += 1.0 / n_j[i]
+                n_tilde = p / tmp
+
+                # same
+                SSsa = AS - A
+                SSbxsa = ABS - AB - AS + A
+                # same
+                SSa = n_tilde * (A_dash - X_dash)
+                SSb = n_tilde * (B_dash - X_dash)
+                SSaxb = n_tilde * (AB_dash - A_dash - B_dash + X_dash)
+
+                N = sum(n_j) 
+                SA_dof = N - p
+                BxSA_dof = (N - p) * (q - 1)
+
+                MSsa = SSsa / SA_dof
+                MSa = SSa / A_dof
+                MSb = SSb / B_dof
+                MSaxb = SSaxb / AxB_dof
+                MSbxsa = SSbxsa / BxSA_dof
+
+                Fa = MSa / MSsa
+                Fb = MSb / MSbxsa
+                Faxb = MSaxb / MSbxsa
+
+                # calculate p
+                p_1 = calc_f.sf(Fa, A_dof, BxSA_dof)
+                p_2 = calc_f.sf(Fb, B_dof, BxSA_dof)
+                p_1x2 = calc_f.sf(Faxb, AxB_dof, BxSA_dof)
+
+                answer_list = [[math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
+                               [math.ceil(SSsa *100.0) *0.01, int(SA_dof), math.ceil(MSsa *100.0) *0.01, '--', '--'],
+                               [math.ceil(SSb *100.0) *0.01, int(B_dof), math.ceil(MSb *100.0) *0.01, math.ceil(Fb *100.0) *0.01, math.ceil(p_2 *1000.0) *0.001],
+                               [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
+                               [math.ceil(SSbxsa *100.0) *0.01, int(BxSA_dof), math.ceil(MSbxsa *100.0) *0.01, '--', '--'],
+                               [math.ceil((SSa + SSsa + SSb + SSaxb + SSbxsa) *100.0) * 0.01, int(A_dof + SA_dof + B_dof + AxB_dof + BxSA_dof),'--', '--', '--']]
+                print answer_list
                 return answer_list
 
     def evaluate_main_effect(self, data, label, ms, dof):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+from two_way_anova import TwoWayAnova
 from one_way_anova_draw_table import OneWayAnovaDrawTable
 from two_way_anova_draw_table import TwoWayAnovaDrawTable
 from draw_graph import DrawGraph
@@ -19,10 +20,13 @@ if __name__ == '__main__':
         print "6: two-way anova CRFpq(1)"
         print "7: two-way anova CRFpq(2)"
         print "8: two-way anova CRFpq(3)"
+        print "9: two-way anova SPFpq(1)"
+        print "10: two-way anova SPFpq(2)"
         sys.exit()
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
     two_way_anova_draw_table = TwoWayAnovaDrawTable()
+    two_way_anova = TwoWayAnova()
     draw_graph = DrawGraph()
     # if we use normal dict, the order of contents sometimes is decided randomly.
     # ex: should be [A, B, C], but output is [A, C, B]
@@ -150,5 +154,34 @@ if __name__ == '__main__':
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
+    elif args[1] == "9":
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4,6]
+        data['a2-b2'] = [2,6,3,6,4]
+        data['a2-b3'] = [3,2,3,6,5]
+        data['a2-b4'] = [2,3,3,4,6]
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
+        #two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        #draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+
+    elif args[1] == "10":
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4]
+        data['a2-b2'] = [2,6,3,6]
+        data['a2-b3'] = [3,2,3,6]
+        data['a2-b4'] = [2,3,3,4]
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+
+        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
+
     else:
-        print "Please select 1, 2, 3, 4, 5, 6"
+        print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
