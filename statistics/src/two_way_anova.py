@@ -11,6 +11,9 @@ from scipy.stats import f as calc_f
 # UnboundLocalError: local variable 't' referenced before assignment
 # t test
 from collections import OrderedDict
+from CRFpq import CRF_pq
+from SPFpq import SPF_pq
+from RBFpq import RBF_pq
 
 class TwoWayAnova:
     '''
@@ -20,10 +23,10 @@ class TwoWayAnova:
             'Pepper-Children': [60, 85, 85, 80, 85, 90, 95, 90, 95, 85, 85, 80, 85, 80, 85]}
     label_A: string list. ex: ["NAO", "Pepper"]
     label_B: string list. ex: ["Adult", "Children"]
-    mode: string. two-factor-repeated.
+    mode: string. CRFpq, SPFpq, RBFpq.
     '''
-    def two_way_anova(self, data, label_A, label_B, mode="two-factor-repeated"):
-        if mode == "two-factor-repeated":            
+    def two_way_anova(self, data, label_A, label_B, mode="CRFpq"):
+        if mode == "CRFpq":
 
             """
                          | ss         |   dof           |   ms     |         F        |       
@@ -44,99 +47,19 @@ class TwoWayAnova:
             ------------------------------------------------------------
             Total          |  270     |    396   |  465     |   1131   |
             """
-
-            total_ss = 0.0
-            total_sum = 0.0
-
-            # total ss
-            # total sum
+            crf_pq = CRF_pq()
+            is_data_size_equal = True
             for i in range(len(data.keys())):
-                for j in range(len(data[(data.keys()[i])])):
-                    total_ss += pow((data[(data.keys()[i])])[j], 2.0)
-                    total_sum += (data[(data.keys()[i])])[j] ##
+                if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
+                    is_data_size_equal = False
 
-            category1_sum = []
-            category1_num = []
-            category1_sum_tmp = 0.0
-            category1_num_tmp = 0.0
-            # category1 sum
-            for i in range(len(label_A)):
-                for j in range(len(data.keys())):
-                    if label_A[i] in (data.keys())[j]:
-                        category1_sum_tmp += sum(data[(data.keys())[j]])
-                        category1_num_tmp += len(data[(data.keys())[j]])
-                category1_sum.append(category1_sum_tmp)
-                category1_sum_tmp = 0.0
-                category1_num.append(category1_num_tmp)
-                category1_num_tmp = 0
-                    
-            # category2 sum
-            category2_sum = []
-            category2_num = []
-            category2_sum_tmp = 0.0
-            category2_num_tmp = 0.0
-            for i in range(len(label_B)):
-                for j in range(len(data.keys())):
-                    if label_B[i] in (data.keys())[j]:
-                        category2_sum_tmp += sum(data[(data.keys())[j]])
-                        category2_num_tmp += len(data[(data.keys())[j]])
-                category2_sum.append(category2_sum_tmp)
-                category2_sum_tmp = 0.0
-                category2_num.append(category2_num_tmp)
-                category2_num_tmp = 0
-
-            # preparation
-            # category1 preparation
-            category1_preparation = 0.0
-            for i in range(len(category1_sum)):
-                category1_preparation += pow(category1_sum[i], 2.0) / category1_num[i]
-
-            # category2 preparation
-            category2_preparation = 0.0
-            for i in range(len(category2_sum)):
-                category2_preparation += pow(category2_sum[i], 2.0) / category2_num[i]
-
-            # category1x2 preparation
-            category1x2_preparation = 0.0
-            for i in range(len(data.keys())):
-                category1x2_preparation += pow(sum(data[(data.keys())[i]]), 2.0) / float(len(data[(data.keys())[i]]))
-            
-            # calculate x (correction term)
-            x = 0.0                
-            total_num = 0
-            for i in range(len(data.keys())):
-                x += sum(data[(data.keys())[i]])
-                total_num += len(data[(data.keys())[i]])
-
-            x = pow(x, 2.0) / float(total_num)
-
-            ss_1 = category1_preparation - x
-            ss_2 = category2_preparation - x
-            ss_1x2 = category1x2_preparation - x - ss_1 - ss_2
-            ss_e = total_ss - category1x2_preparation
-            ss_t = total_ss - x
-        
-            # calculate sample nums
-            category1_dof = len(label_A) - 1
-            category2_dof = len(label_B) - 1
-            category1x2_dof = (len(label_A) - 1) * (len(label_B) - 1) 
-            error_dof = (total_num - 1) - category1_dof - category2_dof - category1x2_dof
-
-            # calculate mean square
-            ms_1 = ss_1 / float(category1_dof)
-            ms_2 = ss_2 / float(category2_dof)
-            ms_1x2 = ss_1x2 / float(category1x2_dof)
-            ms_e = ss_e / float(error_dof)
-
-            # calculate F
-            f_1 = ms_1 / ms_e
-            f_2 = ms_2 / ms_e
-            f_1x2 = ms_1x2 / ms_e
-
-            # calculate p
-            p_1 = calc_f.sf(f_1, category1_dof, error_dof)
-            p_2 = calc_f.sf(f_2, category2_dof, error_dof)
-            p_1x2 = calc_f.sf(f_1x2, category1x2_dof, error_dof)
+            if is_data_size_equal:
+                SSa, SSb, SSaxb, SSwc, SSt, A_dof, B_dof, AxB_dof, WC_dof, MSa, MSb, MSaxb, MSwc, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
+                crf_pq.test(data, label_A, label_B, mode="equal")
+                
+            else:
+                SSa, SSb, SSaxb, SSwc, SSt, A_dof, B_dof, AxB_dof, WC_dof, MSa, MSb, MSaxb, MSwc, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
+                crf_pq.test(data, label_A, label_B, mode="notequal")
 
             # multiple comparison
             if p_1x2 < 0.05:
@@ -147,16 +70,55 @@ class TwoWayAnova:
                 self.evaluate_simple_main_effect(data, label_B, label_A)
 
             elif p_1 < 0.05:
-               self.evaluate_main_effect(data, label_A, ms_1, category1_dof)
-
+                self.evaluate_main_effect(data, label_A, MSa, A_dof)
+                
             elif p_2 < 0.05:
-                self.evaluate_main_effect(data, label_B, ms_2, category2_dof)
+                self.evaluate_main_effect(data, label_B, MSb, B_dof)
 
-            answer_list = [[math.ceil(ss_1 * 100.0) * 0.01, int(category1_dof), math.ceil(ms_1 * 100.0) * 0.01, math.ceil(f_1 * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
-                           [math.ceil(ss_2 * 100.0) * 0.01, int(category2_dof), math.ceil(ms_2 * 100.0) * 0.01, math.ceil(f_2 * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
-                           [math.ceil(ss_1x2 * 100.0) * 0.01, int(category1x2_dof), math.ceil(ms_1x2 * 100.0) * 0.01, math.ceil(f_1x2 * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
-                           [math.ceil(ss_e * 100.0) * 0.01, int(error_dof), math.ceil(ms_e * 100.0) * 0.01, '--', '--'], 
-                           [math.ceil(ss_t * 100.0) * 0.01, int(category1_dof + category2_dof + category1x2_dof + error_dof),'--', '--', '--']]
+            answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
+                           [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
+                           [math.ceil(SSaxb * 100.0) * 0.01, int(AxB_dof), math.ceil(MSaxb * 100.0) * 0.01, math.ceil(Faxb * 100.0) * 0.01, math.ceil(p_1x2 * 1000.0) * 0.001],
+                           [math.ceil(SSwc * 100.0) * 0.01, int(WC_dof), math.ceil(MSwc * 100.0) * 0.01, '--', '--'],
+                           [math.ceil(SSt * 100.0) * 0.01, int(A_dof + B_dof + AxB_dof + WC_dof),'--', '--', '--']]
+            print answer_list
+            return answer_list
+
+        elif mode == "SPFpq":
+            spf_pq = SPF_pq()
+            # same as CRFpq & size is equal #
+            is_data_size_equal = True
+            for i in range(len(data.keys())):
+                if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
+                    is_data_size_equal = False
+
+            if is_data_size_equal:
+                SSa, SSsa, SSb, SSaxb, SSbxsa, A_dof, SA_dof, B_dof, AxB_dof, BxSA_dof, MSa, MSsa, MSb, MSaxb, MSbxsa, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
+                spf_pq.test(data, label_A, label_B, mode="equal")
+            else:
+                SSa, SSsa, SSb, SSaxb, SSbxsa, A_dof, SA_dof, B_dof, AxB_dof, BxSA_dof, MSa, MSsa, MSb, MSaxb, MSbxsa, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
+                spf_pq.test(data, label_A, label_B, mode="notequal")
+
+            answer_list = [[math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
+                           [math.ceil(SSsa *100.0) *0.01, int(SA_dof), math.ceil(MSsa *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSb *100.0) *0.01, int(B_dof), math.ceil(MSb *100.0) *0.01, math.ceil(Fb *100.0) *0.01, math.ceil(p_2 *1000.0) *0.001],
+                           [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
+                           [math.ceil(SSbxsa *100.0) *0.01, int(BxSA_dof), math.ceil(MSbxsa *100.0) *0.01, '--', '--'],
+                           [math.ceil((SSa + SSsa + SSb + SSaxb + SSbxsa) *100.0) * 0.01, int(A_dof + SA_dof + B_dof + AxB_dof + BxSA_dof),'--', '--', '--']]
+            print answer_list
+            return answer_list
+
+        elif mode == "RBFpq":
+            rbf_pq = RBF_pq()
+            SSs, SSa, SSaxs, SSb, SSbxs, SSaxb, SSaxbxs, SSt, S_dof, A_dof, AxS_dof, B_dof, BxS_dof, AxB_dof, AxBxS_dof, T_dof, MSs, MSa, MSaxs, MSb, MSbxs, MSaxb, MSaxbxs, Fa, Fb, Faxb, p_1, p_2, p_1x2 = rbf_pq.test(data, label_A, label_B)
+            answer_list = [[math.ceil(SSs *100.0) *0.01, int(S_dof), math.ceil(MSs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
+                           [math.ceil(SSaxs *100.0) *0.01, int(AxS_dof), math.ceil(MSaxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSb *100.0) *0.01, int(B_dof), math.ceil(MSb *100.0) *0.01, math.ceil(Fb *100.0) *0.01, math.ceil(p_2 *1000.0) *0.001],
+                           [math.ceil(SSbxs *100.0) *0.01, int(BxS_dof), math.ceil(MSbxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
+                           [math.ceil(SSaxbxs *100.0) *0.01, int(AxBxS_dof), math.ceil(MSaxbxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSt *100.0) * 0.01, int(T_dof),'--', '--', '--']]
+            print answer_list
             return answer_list
 
     def evaluate_main_effect(self, data, label, ms, dof):
