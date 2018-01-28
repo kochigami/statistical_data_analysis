@@ -13,6 +13,7 @@ from scipy.stats import f as calc_f
 from collections import OrderedDict
 from CRFpq import CRF_pq
 from SPFpq import SPF_pq
+from RBFpq import RBF_pq
 
 class TwoWayAnova:
     '''
@@ -103,6 +104,20 @@ class TwoWayAnova:
                            [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
                            [math.ceil(SSbxsa *100.0) *0.01, int(BxSA_dof), math.ceil(MSbxsa *100.0) *0.01, '--', '--'],
                            [math.ceil((SSa + SSsa + SSb + SSaxb + SSbxsa) *100.0) * 0.01, int(A_dof + SA_dof + B_dof + AxB_dof + BxSA_dof),'--', '--', '--']]
+            print answer_list
+            return answer_list
+
+        elif mode == "RBFpq":
+            rbf_pq = RBF_pq()
+            SSs, SSa, SSaxs, SSb, SSbxs, SSaxb, SSaxbxs, SSt, S_dof, A_dof, AxS_dof, B_dof, BxS_dof, AxB_dof, AxBxS_dof, T_dof, MSs, MSa, MSaxs, MSb, MSbxs, MSaxb, MSaxbxs, Fa, Fb, Faxb, p_1, p_2, p_1x2 = rbf_pq.test(data, label_A, label_B)
+            answer_list = [[math.ceil(SSs *100.0) *0.01, int(S_dof), math.ceil(MSs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
+                           [math.ceil(SSaxs *100.0) *0.01, int(AxS_dof), math.ceil(MSaxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSb *100.0) *0.01, int(B_dof), math.ceil(MSb *100.0) *0.01, math.ceil(Fb *100.0) *0.01, math.ceil(p_2 *1000.0) *0.001],
+                           [math.ceil(SSbxs *100.0) *0.01, int(BxS_dof), math.ceil(MSbxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSaxb *100.0) *0.01, int(AxB_dof), math.ceil(MSaxb *100.0) *0.01, math.ceil(Faxb *100.0) *0.01, math.ceil(p_1x2 *1000.0) *0.001],
+                           [math.ceil(SSaxbxs *100.0) *0.01, int(AxBxS_dof), math.ceil(MSaxbxs *100.0) *0.01, '--', '--'],
+                           [math.ceil(SSt *100.0) * 0.01, int(T_dof),'--', '--', '--']]
             print answer_list
             return answer_list
 

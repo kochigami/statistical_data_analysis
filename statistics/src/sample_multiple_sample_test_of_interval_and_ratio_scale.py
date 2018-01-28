@@ -22,6 +22,7 @@ if __name__ == '__main__':
         print "8: two-way anova CRFpq(3)"
         print "9: two-way anova SPFpq(1)"
         print "10: two-way anova SPFpq(2)"
+        print "11: two-way anova RBFpq"
         sys.exit()
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
@@ -183,5 +184,19 @@ if __name__ == '__main__':
 
         two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
 
+    elif args[1] == "11":
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4,6]
+        data['a2-b2'] = [2,6,3,6,4]
+        data['a2-b3'] = [3,2,3,6,5]
+        data['a2-b4'] = [2,3,3,4,6]
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+
+        two_way_anova.two_way_anova(data, label_a, label_b, mode="RBFpq")
+
     else:
-        print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+        print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
