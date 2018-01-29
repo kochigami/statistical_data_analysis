@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from two_way_anova import TwoWayAnova
 from one_way_anova_draw_table import OneWayAnovaDrawTable
 from two_way_anova_draw_table import TwoWayAnovaDrawTable
 from draw_graph import DrawGraph
@@ -27,7 +26,6 @@ if __name__ == '__main__':
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
     two_way_anova_draw_table = TwoWayAnovaDrawTable()
-    two_way_anova = TwoWayAnova()
     draw_graph = DrawGraph()
     # if we use normal dict, the order of contents sometimes is decided randomly.
     # ex: should be [A, B, C], but output is [A, C, B]
@@ -126,7 +124,7 @@ if __name__ == '__main__':
         label_a = ["NAO", "Pepper"]
         label_b = ["Adult", "Children"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "7":
@@ -141,7 +139,7 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "8":
@@ -152,7 +150,7 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "9":
@@ -166,9 +164,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4,6]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
-        #two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
-        #draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "10":
         data['a1-b1'] = [3,3,1,3,5]
@@ -181,8 +178,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "11":
         data['a1-b1'] = [3,3,1,3,5]
@@ -195,8 +192,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4,6]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="RBFpq")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="RBFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
 
     else:
         print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"

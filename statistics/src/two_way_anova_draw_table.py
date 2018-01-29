@@ -9,14 +9,18 @@ class TwoWayAnovaDrawTable:
     '''
     draw_table: function for draw Analysis variance of table by matplotlib.
     data_list:
-    mode: string. between or within. choose one based on your test.
+    mode: string. CRFpq, SPFpq, RBFpq. choose one based on your test.
     '''
-    def draw_table(self, data_list, label_1, label_2, mode="two-factor-repeated"):
+    def draw_table(self, data_list, label_1, label_2, mode="CRFpq"):
         # set column
         columns = ("Sum of Squares", "Dof", "Mean Square", "F", "P") 
         # set row based on your test type
-        if mode == "two-factor-repeated":
-            rows = ["Factor1", "Factor2", "Interaction", "Others", "Total"]
+        if mode == "CRFpq":
+            rows = ["Factor1", "Factor2", "Factor1 x Factor2", "Others", "Total"]
+        elif mode == "SPFpq":
+            rows = ["Factor1", "Subject(Factor1)", "Factor2", "Factor1 x Factor2", "Factor2 x Subject(Factor1)", "Total"]
+        elif mode == "RBFpq":
+            rows = ["Subject", "Factor1", "Factor1 x Subject", "Factor2", "Factor2 x Subject", "Factor1 x Factor2", "Factor1 x Factor2 x Subject", "Total"]
         else:
             print "Please choose mode."
             return False
@@ -26,8 +30,12 @@ class TwoWayAnovaDrawTable:
 
         # FIXME: calculate anova
         two_way_anova_class = TwoWayAnova()
-        if mode == "two-factor-repeated":
-            data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2)
+        if mode == "CRFpq":
+            data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2, mode="CRFpq")
+        elif mode == "SPFpq":
+            data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2, mode="SPFpq")
+        elif mode == "RBFpq":
+            data_list = two_way_anova_class.two_way_anova(data_list, label_1, label_2, mode="RBFpq")
 
         # set information for table
         # cellText: data text inside each cell
