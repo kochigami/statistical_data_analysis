@@ -9,12 +9,13 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_multiple_sample_test_of_nominal_scale.py <sample_type>"
         print "please choose sample type: "
-        print "1: unpaired test"
-        print "2: paired test"
+        print "1: unpaired test (chi-square test)"
+        print "2: paired test (Cochran's Q test)"
     else:
         if args[1] == "1":
             '''
-                   CandidateA  CandidateB  CandidateC  Total
+            刺激条件を変えて，複数の単語を記憶する．自由再生実験した時に，一番最初に再生された単語のリストでの位置を調べる．
+                        First      Middle      End      Total
             ---------------------------------------------------
             Audition    12          10          8        30
             Vision      5           5           20       30     
@@ -32,6 +33,7 @@ if __name__ == '__main__':
             
         elif args[1] == "2":
             '''
+            20人の有権者に，A, B, C候補のそれぞれを支持するかどうかを尋ねる．
                    CandidateA  CandidateB  CandidateC  Total (sum_row)
             ---------------------------------------------------
             Subject1      1           1           1        3

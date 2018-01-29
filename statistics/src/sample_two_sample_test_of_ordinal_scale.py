@@ -10,10 +10,10 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_u_test.py <sample_type>"
         print "please choose sample type: "
-        print "1: paired, signed test"
-        print "2: paired, z test"
-        print "3: paired, signed rank test"
-        print "4: unpaired, mann-whitney test"
+        print "1: paired test (signed test + small data)"
+        print "2: paired test (signed test + big data)"
+        print "3: paired test (signed rank sum test)"
+        print "4: unpaired test (mann-whitney test)"
     else:
         paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
         unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
@@ -23,6 +23,7 @@ if __name__ == '__main__':
         if args[1] == "1":
             '''
             ref: https://kusuri-jouhou.com/statistics/fugou.html
+            12人にA, B両方の料理を食べてもらい，5点満点で採点してもらう．
             Subject | CusineA | CusineB | 
             -----------------------------
             1           5         3               
@@ -43,7 +44,10 @@ if __name__ == '__main__':
             paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
 
         elif args[1] == "2":
-            # ref: https://kusuri-jouhou.com/statistics/fugou.html
+            '''
+            ref: https://kusuri-jouhou.com/statistics/fugou.html
+            30人にA, B両方の料理を食べてもらい，5点満点で採点してもらう．
+            '''
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 2, 5, 3, 2, 3, 5, 4, 2, 3, 5, 4, 1, 2, 3, 2, 3, 5, 2, 3, 3, 5]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 1, 2, 3, 4, 3, 2, 3,
  5, 2, 3, 3, 3, 2, 2, 4, 1, 4, 4, 5, 4, 4]
@@ -51,6 +55,7 @@ if __name__ == '__main__':
 
         elif args[1] == "3":
             '''
+            10人の人に，A, B両方の商品を過去３ヶ月で使用した回数を尋ねる．
             Subject | ProductA | ProductB | a_i - b_i ||a_i - b_i| order
             ----------------------------------------------------------
             1           25         26         -1          1          
@@ -70,6 +75,9 @@ if __name__ == '__main__':
             paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_rank_sum_test")
 
         elif args[1] == "4":
+            '''
+            ラット 20匹に24時間ご飯をあげない．21匹には48時間あげない．その後学習を行わせ，学習基準に到達するまでの試行回数を調べる．
+            '''
             data['24hour'] = [13, 14, 24, 28, 29, 35, 59, 83, 84, 89, 94, 97, 98, 117, 118, 128, 131, 175, 200, 200]
             data['48hour'] = [10, 12, 13, 16, 18, 21, 28, 28, 39, 40, 47, 57, 58, 62, 68, 69, 70, 82, 95, 111, 127]
             unpaired_two_sample_test_of_ordinal_scale.test(data)

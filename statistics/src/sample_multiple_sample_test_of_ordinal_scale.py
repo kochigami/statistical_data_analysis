@@ -12,7 +12,7 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_multiple_sample_test_of_ordinal_scale.py <sample_type>"
         print "please choose sample type: "
-        print "1: unpaired test ()"
+        print "1: unpaired test (Kruskal-Wallis test)"
         print "2: paired test (Friedman test)"
     else:
         if args[1] == "1":

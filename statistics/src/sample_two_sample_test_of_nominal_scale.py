@@ -21,12 +21,14 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_two_sample_test_of_nominal_scale.py <sample_type>"
         print "please choose sample type: "
-        print "1: paired test"
-        print "2: unpaired test + big data"
-        print "3: unpaired test + small data"
+        print "1: paired test (McNemar test)"
+        print "2: unpaired test + big data (chi-square test)"
+        print "3: unpaired test + small data (Fisher's exact test)"
     else:
         if args[1] == "1":
             '''
+            講演会の前後で，ある質問に対して賛成か・反対かを尋ねる．
+            賛成率に変化があったか調べる．
                           Subject  Before Lecture  After Lecture
              ---------------------------------------------------
               a group  |     1            1              1     
@@ -68,6 +70,7 @@ if __name__ == '__main__':
 
         elif args[1] == "2":
             '''
+            病気の患者，健常者のうち，喫煙者と非喫煙者の分布を調べる．
                            Smoker Non-Smoker Total
              -------------------------------------
              Illness         52       8       60
@@ -83,6 +86,8 @@ if __name__ == '__main__':
 
         elif args[1] == "3":
             '''
+            児童の問題行動に対し，先生・カウンセラーのそれぞれで，
+            非社会的行動・反社会的行動のどちらを重要視しているか分布を調べる．
                            Non-social Antisocial  Total
              ------------------------------------------
              Teacher         1          12         13
