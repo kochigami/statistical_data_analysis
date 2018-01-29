@@ -27,6 +27,8 @@ class PairedMultipleSampleTestOfNominalScale:
         --------------------------------------------------
         Total         2           5           8       15
         (sum_column)
+
+        1: agree 0: disagree
         """
         sum_row = []
         sum_column = [0 for i in range(len(data[0]))]
@@ -36,9 +38,14 @@ class PairedMultipleSampleTestOfNominalScale:
             for j in range(len(data[i])):
                 sum_column[j] += data[i][j]
         k = len(sum_column)
+        # in this example, k is 3
 
-        if 1 == 0:
-            # TODO: check data length
+        is_data_size_equal = True
+        for i in range(len(data)):
+            if len(data[0]) != len(data[i]):
+                is_data_size_equal = False
+        if is_data_size_equal == False:
+            print "Please check your data again. Data have to be same size per each subject."
             sys.exit()
         else:
             q_tmp1 = 0.0
@@ -48,7 +55,7 @@ class PairedMultipleSampleTestOfNominalScale:
                 q_tmp1 += sum_column[i] * sum_column[i]
                 q_tmp2 += sum_column[i]
                 
-            q = (k - 1.0) * abs(k * q_tmp1 - q_tmp2 * q_tmp2)
+            q = (k - 1.0) * abs(k * q_tmp1 - pow(q_tmp2, 2.0))
 
             q_tmp3 = 0.0
             for j in range(len(sum_row)):

@@ -30,8 +30,13 @@ class UnpairedMultipleSampleTestOfNominalScale:
                 sum_column[j] += data[i][j]
         N = sum(sum_row)
 
-        if 1 == 0:
-            # TODO: check data length
+        is_data_size_equal = True
+        for i in range(len(data)):
+            if len(data[0]) != len(data[i]):
+                is_data_size_equal = False
+
+        if is_data_size_equal == False:
+            print "Please check your data again. Data should be equal size per each condition."
             sys.exit()
         else:
             chi_squared = 0.0

@@ -12,6 +12,8 @@ reference: http://hs-www.hyogo-dai.ac.jp/~kawano/HStat/?2009%2F13th%2FMcNemar_Te
 class PairedTwoSampleTestOfNominalScale:
     def test(self, data):
         """
+        data = [[a, b], [c, d]]
+
         focus on YES => NO & NO => YES
         number of YES => NO: data[0][1]: b 
         number of NO => YES: data[1][0]: c 
