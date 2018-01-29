@@ -15,16 +15,14 @@ class UnpairedTwoSampleTestOfNominalScale:
             sys.exit()
         else:
             """
+            data = [[a, b], [c, d]]
                             Yes   No   Total
               -------------------------------
               Condition1     a     b    a+b
               Condition2     c     d    c+d
               -------------------------------
               Total         a+c   b+d   n (= a+b+c+d)
-
-              data: [[a, b], [c, d]]
             """
-
             a = data[0][0]
             b = data[0][1]
             c = data[1][0]

@@ -43,6 +43,7 @@ class FisherTest:
             #p =  bunshi / bunbo            
             p = 0.0
             for i in range(0, a+1):
+               # adding p value when i=0, 1, ..., a
                b = a_plus_b - i
                d = b_plus_d - b
                c = n - i - b - d

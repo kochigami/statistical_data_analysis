@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from two_way_anova import TwoWayAnova
 from one_way_anova_draw_table import OneWayAnovaDrawTable
 from two_way_anova_draw_table import TwoWayAnovaDrawTable
 from draw_graph import DrawGraph
@@ -27,7 +26,6 @@ if __name__ == '__main__':
 
     one_way_anova_draw_table = OneWayAnovaDrawTable()
     two_way_anova_draw_table = TwoWayAnovaDrawTable()
-    two_way_anova = TwoWayAnova()
     draw_graph = DrawGraph()
     # if we use normal dict, the order of contents sometimes is decided randomly.
     # ex: should be [A, B, C], but output is [A, C, B]
@@ -59,7 +57,10 @@ if __name__ == '__main__':
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "2":
-        
+        '''
+        別々の人に，20個の単語を4つの条件のどれかを使って覚えてもらう．
+        いくつ覚えられるか．
+        '''
         data['a1'] = [9,7,8,8,12,11,8,13]
         data['a2'] = [6,5,6,3,6,7,10,9]
         data['a3'] = [10,13,8,13,12,14,14,16]
@@ -68,7 +69,10 @@ if __name__ == '__main__':
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
     
     elif args[1] == "3":
-        
+        '''
+        別々の人に，20個の単語を4つの条件のどれかを使って覚えてもらう．
+        いくつ覚えられるか．
+        '''
         data['a1'] = [9,7,8,8,12,11,8,13]
         data['a2'] = [5,6,3,6,7,10]
         data['a3'] = [13,8,13,12,14,16,10]
@@ -96,7 +100,10 @@ if __name__ == '__main__':
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
 
     elif args[1] == "5":
-
+        '''
+        児童をIQに応じてグループ分けし，
+        4つの教授法を国語理解度に注目して評価する．
+        '''
         data['a1'] = [9,7,8,8,12,11,8,13]
         data['a2'] = [6,5,6,3,6,7,10,9]
         data['a3'] = [10,13,8,13,12,14,14,16]
@@ -126,7 +133,7 @@ if __name__ == '__main__':
         label_a = ["NAO", "Pepper"]
         label_b = ["Adult", "Children"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "7":
@@ -141,10 +148,16 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "8":
+        '''
+        条件A:他者のいる条件・他者のいない条件
+        条件B:不安傾向高・不安傾向低
+        
+        児童に課題をやってもらう．成績を評価．
+        '''
         data['a1-b1'] = [6,6,4,8,7,5]
         data['a1-b2'] = [3,1,2,2]
         data['a2-b1'] = [5,4,5,4]
@@ -152,10 +165,14 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2"]
 
-        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "9":
+        '''
+        要因Aには異なる被験者が無作為に割り当てられている．
+        要因Bには同一の被験者が全ての条件を行う or 被験者をブロック化し，そのブロック内の被験者を各条件に無作為に割り当てる．
+        '''
         data['a1-b1'] = [3,3,1,3,5]
         data['a1-b2'] = [4,3,4,5,7]
         data['a1-b3'] = [6,6,6,4,8]
@@ -166,9 +183,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4,6]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
-        #two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="two-factor-repeated")
-        #draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "10":
         data['a1-b1'] = [3,3,1,3,5]
@@ -181,8 +197,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="SPFpq")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
 
     elif args[1] == "11":
         data['a1-b1'] = [3,3,1,3,5]
@@ -195,8 +211,8 @@ if __name__ == '__main__':
         data['a2-b4'] = [2,3,3,4,6]
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
-
-        two_way_anova.two_way_anova(data, label_a, label_b, mode="RBFpq")
+        two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="RBFpq")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
 
     else:
         print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"
