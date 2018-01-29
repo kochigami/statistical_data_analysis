@@ -3,6 +3,10 @@
 from scipy import stats
 import sys
 
+'''
+Mann-Whitney test
+'''
+
 class UnpairedTwoSampleTestOfOrdinalScale:
     def test(self, data):
         """
@@ -19,5 +23,6 @@ class UnpairedTwoSampleTestOfOrdinalScale:
             print "The number of data type should be two."
             sys.exit()
         result = stats.mannwhitneyu(data[(data.keys())[0]], data[(data.keys())[1]], use_continuity=True)
-        print "p value: "+ str(result[1])
+        print "U value: " + str(result[0]) 
+        print "p value: " + str(result[1])
         return result[1]

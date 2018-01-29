@@ -5,6 +5,11 @@ import sys
 import itertools
 import math
 
+'''
+signed rank sum test
+signes test
+'''
+
 class PairedTwoSampleTestOfOrdinalScale:
     def calc_ave(self, order, count, i):
         tmp_sum = 0.0
@@ -13,7 +18,7 @@ class PairedTwoSampleTestOfOrdinalScale:
         for j in range(count):
             order.append(tmp_sum / float(count))
 
-    def test(self, data, mode="signed_rank_test"):
+    def test(self, data, mode="signed_rank_sum_test"):
         '''
         signed rank sum test
         '''
@@ -21,7 +26,7 @@ class PairedTwoSampleTestOfOrdinalScale:
         data = {'Product_A': [25, 62, 58, 26, 42, 18, 11, 33, 50, 34]
                 'Product_B': [26, 31, 35, 24, 47, 13, 11, 21, 42, 18]}
         """
-        if mode == "signed_rank_test":
+        if mode == "signed_rank_sum_test":
             x = data[(data.keys())[0]]
             y = data[(data.keys())[1]]
             # note: nx == ny
@@ -157,8 +162,8 @@ class PairedTwoSampleTestOfOrdinalScale:
                         # len(list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3)))
                         # >> 10
                         p += len(list(itertools.combinations([0] * n, i))) * pow(0.5, n)
-                        # for two-side test, p value should be doubled
-                        p = p * 2.0
+                    # for two-side test, p value should be doubled
+                    p = p * 2.0
                 # else (n > 25): calculate z
                 elif n > 25:
                     # followed algorithm described in this link:
