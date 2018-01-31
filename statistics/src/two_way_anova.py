@@ -61,19 +61,16 @@ class TwoWayAnova:
                 SSa, SSb, SSaxb, SSwc, SSt, A_dof, B_dof, AxB_dof, WC_dof, MSa, MSb, MSaxb, MSwc, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
                 crf_pq.test(data, label_A, label_B, mode="notequal")
 
-            # multiple comparison
+            # sub effect tests
             if p_1x2 < 0.05:
                 # simple major effect
-                ## 1. label_A
                 self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof)
-                ## 2. label_B
-                #self.evaluate_simple_main_effect(data, label_B, label_A)
 
             elif p_1 < 0.05:
-                self.evaluate_main_effect(data, label_A, MSa, A_dof)
+                self.evaluate_main_effect(data, label_A, label_B, MSwc, WC_dof)
                 
             elif p_2 < 0.05:
-                self.evaluate_main_effect(data, label_B, MSb, B_dof)
+                self.evaluate_main_effect(data, label_B, label_A, MSwc, WC_dof)
 
             answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
                            [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
@@ -118,16 +115,33 @@ class TwoWayAnova:
                            [math.ceil(SSt *100.0) * 0.01, int(T_dof),'--', '--', '--']]
             return answer_list
 
-    def evaluate_main_effect(self, data, label, ms, dof):
-        if len(label) > 2:
-            data_tmp = OrderedDict()
-            for i in range(len(label)):
-                data_tmp_tmp = []
+    def evaluate_main_effect(self, data, label_A, label_B, MSwc, WC_dof):
+        if len(label_A) > 2:
+            p = len(label_A)
+            q = len(label_B)
+            n = len(data[(data.keys())[0]]) # caution!! #
+            for i in range(len(label_A)):
+                sum_list = [0 for i in range(len(label_A))]
+                num_list = [0 for i in range(len(label_A))]
+                average_list = [0 for i in range(len(label_A))]
+            for i in range(len(label_A)):
                 for j in range(len(data.keys())):
-                    if label[i] in (data.keys())[j]:
-                        data_tmp_tmp += data[(data.keys())[j]]
-                data_tmp[label[i]] = data_tmp_tmp
-            self.comparison(data_tmp, ms, dof)
+                    if label_A[i] in (data.keys())[j]:
+                        sum_list[i] += sum(data[(data.keys())[j]])
+                        num_list[i] += len(data[(data.keys())[j]])
+
+                average_list[i] = sum_list[i] / float(num_list[i])
+            for i in range(len(average_list)):
+                for j in range(i+1, len(average_list)):
+                    print "a" + str(i) + " - " + "a" + str(j) + "= " + str(abs(average_list[i] - average_list[j]))
+
+            print " "
+            print "Please calculate HSD as follows:"
+            print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+            print "q_threshold: 0.05, dof1: " + str(p-1) + ", dof2: " + str(WC_dof)
+            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * q)))"
+            print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+            print " "
 
     def evaluate_simple_main_effect(self, data, label_A, label_B, MSwc, WC_dof):
         p = len(label_A)
@@ -176,7 +190,6 @@ class TwoWayAnova:
         for i in range(len(label_A)):
             Fba[i] = MSba[i] / MSwc
         
-        # notice!! #
         F_threshold = calc_f.ppf(0.95, (p - 1) * (q - 1), WC_dof)
         
         b_list = []
@@ -189,10 +202,6 @@ class TwoWayAnova:
             if F_threshold < Fba[i]:
                 a_list.append(i)
 
-        # notice!! #
-        #q_threshold (0.05, p, WC_dof)
-        #HSD = q_threshold * math.sqrt(MSwc / n)
-
         for i in range(len(b_list)):
             a_list2 = []
             for j in range(len(average_list)):
@@ -200,12 +209,15 @@ class TwoWayAnova:
                     a_list2.append(average_list[j])
             for k in range(len(a_list2)):
                 for l in range(k+1, len(a_list2)):
-                    #if abs(average_list[k] - average_list[l]) > HSD:
-                    print "ab" + str(k) + str(b_list[i]) + " - " + "ab" + str(l) + str(b_list[i]) + "= " + str(abs(average_list[k] - average_list[l]))
+                    print "a" + str(k) + " b" + str(b_list[i]) + " - " + "a" + str(l) + " b" + str(b_list[i]) + "= " + str(abs(average_list[k] - average_list[l]))
 
-        # notice!! #
-        #q_threshold (0.05, q, WC_dof)
-        #HSD = q_threshold * math.sqrt(MSwc / n)
+        print " "
+        print "Please calculate HSD as follows:"
+        print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+        print "q_threshold: 0.05, dof1: " + str(p) + ", dof2: " + str(WC_dof)
+        print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+        print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print " "
 
         for i in range(len(a_list)):
             b_list2 = []
@@ -214,47 +226,15 @@ class TwoWayAnova:
                     b_list2.append(average_list[j])
             for k in range(len(b_list2)):
                 for l in range(k+1, len(b_list2)):
-                    #if abs(average_list[k] - average_list[l]) > HSD:
-                    print "ab" + str(a_list[i]) + str(k) + " - " + "ab" + str(a_list[i]) + str(l) +"= " + str(abs(average_list[k] - average_list[l]))
-
-        # ## focused_label (label_A)
-        # ## dependent_label (labelB)
-        # if len(dependent_label) > 2:
-        #     for i in range(len(focused_label)):
-        #         data_tmp = OrderedDict()
-        #         data_focused_label = OrderedDict()
-        #         data_tmp_tmp = []
-        #         for j in range(len(dependent_label)):
-        #             for k in range(j+1, len(dependent_label)):
-        #                 average = []
-        #                 # choose pair
-        #                 for l in range(len(data.keys())):
-        #                     if focused_label[i] in (data.keys())[l] and dependent_label[j] in (data.keys())[l]:
-        #                         data_tmp[focused_label[i] + "+" + dependent_label[j]] = data[(data.keys())[l]]
-        #                     if focused_label[i] in (data.keys())[l] and dependent_label[k] in (data.keys())[l]:
-        #                         data_tmp[focused_label[i] + "+" + dependent_label[k]] = data[(data.keys())[l]]
-        #                     if focused_label[i] in (data.keys())[l]:
-        #                         data_tmp_tmp += data[(data.keys())[l]]
-        #                 data_focused_label[focused_label[i]] = data_tmp_tmp
-        #                 print data_focused_label
-
-        #                 for l in range(len(data_focused_label)):
-        #                     average.append(sum(data_focused_label[(data_focused_label.keys())[l]]) / len(data_focused_label[(data_focused_label.keys())[l]]))
-                        
-        #                 whole_sum = 0.0
-        #                 whole_num = 0.0
-        #                 whole_average = 0.0
-        #                 for l in range(len(data_tmp)):
-        #                     whole_sum += sum(data_tmp[(data_tmp.keys())[l]])
-        #                     whole_num += len(data_tmp[(data_tmp.keys())[l]])
-        #                 whole_average = whole_sum / whole_num
-
-        #                 ms = 0.0
-        #                 for l in range(len(average)):
-        #                     ms += pow((average[l] - whole_average), 2.0) * len(data_focused_label[(data_focused_label.keys())[l]])
-        #                 dof = len(dependent_label) - 1.0
-        #                 ms /= dof
-        #                 self.comparison(data_tmp, ms, dof)
+                    print "a" + str(a_list[i]) + " b" + str(k) + " - " + "a" + str(a_list[i]) + " b" + str(l) +"= " + str(abs(average_list[k] - average_list[l]))
+        
+        print " "
+        print "Please calculate HSD as follows:"
+        print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+        print "q_threshold: 0.05, dof1: " + str(q) + ", dof2: " + str(WC_dof)
+        print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+        print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print " "
     
     def comparison(self, data, mean_square_between, between_dof, threshold=0.05, mode="holm"):
         """
