@@ -64,10 +64,10 @@ class TwoWayAnova:
             # multiple comparison
             if p_1x2 < 0.05:
                 # simple major effect
-                # 1. label_A
-                self.evaluate_simple_main_effect(data, label_A, label_B)
-                # 2. label_B
-                self.evaluate_simple_main_effect(data, label_B, label_A)
+                ## 1. label_A
+                self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof)
+                ## 2. label_B
+                #self.evaluate_simple_main_effect(data, label_B, label_A)
 
             elif p_1 < 0.05:
                 self.evaluate_main_effect(data, label_A, MSa, A_dof)
@@ -129,45 +129,132 @@ class TwoWayAnova:
                 data_tmp[label[i]] = data_tmp_tmp
             self.comparison(data_tmp, ms, dof)
 
-    def evaluate_simple_main_effect(self, data, focused_label, dependent_label):
-        ## focused_label (label_A)
-        ## dependent_label (labelB)
-        if len(dependent_label) > 2:
-            for i in range(len(focused_label)):
-                data_tmp = OrderedDict()
-                data_focused_label = OrderedDict()
-                data_tmp_tmp = []
-                for j in range(len(dependent_label)):
-                    for k in range(j+1, len(dependent_label)):
-                        average = []
-                        # choose pair
-                        for l in range(len(data.keys())):
-                            if focused_label[i] in (data.keys())[l] and dependent_label[j] in (data.keys())[l]:
-                                data_tmp[focused_label[i] + "+" + dependent_label[j]] = data[(data.keys())[l]]
-                            if focused_label[i] in (data.keys())[l] and dependent_label[k] in (data.keys())[l]:
-                                data_tmp[focused_label[i] + "+" + dependent_label[k]] = data[(data.keys())[l]]
-                            if focused_label[i] in (data.keys())[l]:
-                                data_tmp_tmp += data[(data.keys())[l]]
-                        data_focused_label[focused_label[i]] = data_tmp_tmp
-                        print data_focused_label
+    def evaluate_simple_main_effect(self, data, label_A, label_B, MSwc, WC_dof):
+        p = len(label_A)
+        q = len(label_B)
+        n = len(data[(data.keys())[0]]) # caution!! #
+        average_list = []
+        for i in range(len(data)):
+            average_list.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
 
-                        for l in range(len(data_focused_label)):
-                            average.append(sum(data_focused_label[(data_focused_label.keys())[l]]) / len(data_focused_label[(data_focused_label.keys())[l]]))
+        for i in range(len(label_A)):
+            SSba = [0 for i in range(len(label_A))]
+            MSba = [0 for i in range(len(label_A))]
+            Fba = [0 for i in range(len(label_A))]
+        for i in range(len(label_B)):
+            SSab = [0 for i in range(len(label_B))]
+            MSab = [0 for i in range(len(label_B))]
+            Fab = [0 for i in range(len(label_B))]
+
+        for i in range(len(label_B)):
+            AB_jk_squared = 0.0
+            AB_jk = 0.0
+            for j in range(len(average_list)):
+                if label_B[i] in (data.keys())[j]:
+                    AB_jk += average_list[j]
+                    AB_jk_squared += pow(average_list[j], 2.0)                  
+            SSab[i] = n * (AB_jk_squared - pow(AB_jk, 2.0) / p)
+
+        for i in range(len(label_A)):
+            BA_jk_squared = 0.0
+            BA_jk = 0.0
+            for j in range(len(average_list)):
+                if label_A[i] in (data.keys())[j]:
+                    BA_jk += average_list[j]
+                    BA_jk_squared += pow(average_list[j], 2.0)                  
+            SSba[i] = n * (BA_jk_squared - pow(BA_jk, 2.0) / q) 
+
+        for i in range(len(label_B)):
+            MSab[i] = SSab[i] / (p - 1.0)
+
+        for i in range(len(label_A)):
+            MSba[i] = SSba[i] / (q - 1.0)
+
+        for i in range(len(label_B)):
+            Fab[i] = MSab[i] / MSwc
+
+        for i in range(len(label_A)):
+            Fba[i] = MSba[i] / MSwc
+        
+        # notice!! #
+        F_threshold = calc_f.ppf(0.95, (p - 1) * (q - 1), WC_dof)
+        
+        b_list = []
+        for i in range(len(label_B)):
+            if F_threshold < Fab[i]:
+                b_list.append(i)
+
+        a_list = []
+        for i in range(len(label_A)):
+            if F_threshold < Fba[i]:
+                a_list.append(i)
+
+        # notice!! #
+        #q_threshold (0.05, p, WC_dof)
+        #HSD = q_threshold * math.sqrt(MSwc / n)
+
+        for i in range(len(b_list)):
+            a_list2 = []
+            for j in range(len(average_list)):
+                if label_B[i] in (data.keys())[j]:
+                    a_list2.append(average_list[j])
+            for k in range(len(a_list2)):
+                for l in range(k+1, len(a_list2)):
+                    #if abs(average_list[k] - average_list[l]) > HSD:
+                    print "ab" + str(k) + str(b_list[i]) + " - " + "ab" + str(l) + str(b_list[i]) + "= " + str(abs(average_list[k] - average_list[l]))
+
+        # notice!! #
+        #q_threshold (0.05, q, WC_dof)
+        #HSD = q_threshold * math.sqrt(MSwc / n)
+
+        for i in range(len(a_list)):
+            b_list2 = []
+            for j in range(len(average_list)):
+                if label_A[i] in (data.keys())[j]:
+                    b_list2.append(average_list[j])
+            for k in range(len(b_list2)):
+                for l in range(k+1, len(b_list2)):
+                    #if abs(average_list[k] - average_list[l]) > HSD:
+                    print "ab" + str(a_list[i]) + str(k) + " - " + "ab" + str(a_list[i]) + str(l) +"= " + str(abs(average_list[k] - average_list[l]))
+
+        # ## focused_label (label_A)
+        # ## dependent_label (labelB)
+        # if len(dependent_label) > 2:
+        #     for i in range(len(focused_label)):
+        #         data_tmp = OrderedDict()
+        #         data_focused_label = OrderedDict()
+        #         data_tmp_tmp = []
+        #         for j in range(len(dependent_label)):
+        #             for k in range(j+1, len(dependent_label)):
+        #                 average = []
+        #                 # choose pair
+        #                 for l in range(len(data.keys())):
+        #                     if focused_label[i] in (data.keys())[l] and dependent_label[j] in (data.keys())[l]:
+        #                         data_tmp[focused_label[i] + "+" + dependent_label[j]] = data[(data.keys())[l]]
+        #                     if focused_label[i] in (data.keys())[l] and dependent_label[k] in (data.keys())[l]:
+        #                         data_tmp[focused_label[i] + "+" + dependent_label[k]] = data[(data.keys())[l]]
+        #                     if focused_label[i] in (data.keys())[l]:
+        #                         data_tmp_tmp += data[(data.keys())[l]]
+        #                 data_focused_label[focused_label[i]] = data_tmp_tmp
+        #                 print data_focused_label
+
+        #                 for l in range(len(data_focused_label)):
+        #                     average.append(sum(data_focused_label[(data_focused_label.keys())[l]]) / len(data_focused_label[(data_focused_label.keys())[l]]))
                         
-                        whole_sum = 0.0
-                        whole_num = 0.0
-                        whole_average = 0.0
-                        for l in range(len(data_tmp)):
-                            whole_sum += sum(data_tmp[(data_tmp.keys())[l]])
-                            whole_num += len(data_tmp[(data_tmp.keys())[l]])
-                        whole_average = whole_sum / whole_num
+        #                 whole_sum = 0.0
+        #                 whole_num = 0.0
+        #                 whole_average = 0.0
+        #                 for l in range(len(data_tmp)):
+        #                     whole_sum += sum(data_tmp[(data_tmp.keys())[l]])
+        #                     whole_num += len(data_tmp[(data_tmp.keys())[l]])
+        #                 whole_average = whole_sum / whole_num
 
-                        ms = 0.0
-                        for l in range(len(average)):
-                            ms += pow((average[l] - whole_average), 2.0) * len(data_focused_label[(data_focused_label.keys())[l]])
-                        dof = len(dependent_label) - 1.0
-                        ms /= dof
-                        self.comparison(data_tmp, ms, dof)
+        #                 ms = 0.0
+        #                 for l in range(len(average)):
+        #                     ms += pow((average[l] - whole_average), 2.0) * len(data_focused_label[(data_focused_label.keys())[l]])
+        #                 dof = len(dependent_label) - 1.0
+        #                 ms /= dof
+        #                 self.comparison(data_tmp, ms, dof)
     
     def comparison(self, data, mean_square_between, between_dof, threshold=0.05, mode="holm"):
         """
