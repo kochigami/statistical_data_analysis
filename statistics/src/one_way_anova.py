@@ -167,73 +167,43 @@ class OneWayAnova:
         4. B vs C
         5. B vs D
         6. C vs D
-        order of result:
-        [1, 2, 3, 4, 5, 6]
         """
-        average_per_group = []
-        sample_num_per_group = []
-        pair_of_keys = [] 
-        t_per_group = []
-        p_per_group = []
-        modified_pair_of_keys = []
-        modified_p_per_group = []
-        modified_threshold = []
-        results = []
-
+        average = []
+        num = []
         for i in range(len(data.keys())):
-            average_per_group.append(np.mean(data[(data.keys())[i]]))
-            sample_num_per_group.append(len(data[(data.keys())[i]]))
+            average.append(np.mean(data[(data.keys())[i]]))
+            num.append(len(data[(data.keys())[i]]))
         
+        pairs = {}
+        dof = {}
         for i in range(len(data.keys())):
             for j in range(i+1, len(data.keys())):
-                pair_of_keys.append((data.keys())[i] + " + " + (data.keys())[j])
-                t_per_group.append(abs(average_per_group[i] - average_per_group[j]) / math.sqrt(mean_square_between * ((1.0 / sample_num_per_group[i]) + (1.0 / sample_num_per_group[j]))))
-        for i in range(len(t_per_group)):
-            p_per_group.append(calc_p.sf(t_per_group[i], between_dof))
+                pairs[str((data.keys())[i]) + " + " + str((data.keys())[j])] = abs(average[i] - average[j]) / math.sqrt(mean_square_between * ((1.0 / num[i]) + (1.0 / num[j])))
+                dof[str((data.keys())[i]) + " + " + str((data.keys())[j])] = num[i] + num[j] -2
+        p = {}
+        for i in range(len(pairs.keys())):
+            for j in range(i+1, len(data.keys())):
+                p[str((data.keys())[i]) + " + " + str((data.keys())[j])] = calc_p.sf(pairs[(pairs.keys())[i]], dof[(pairs.keys())[i]])
 
-        for i in range(len(t_per_group)):
+        modified_threshold = []
+        for i in range(len(pairs.keys())):
             if mode == "bonferroni":
-                modified_threshold.append(threshold / len(t_per_group))
+                modified_threshold.append(threshold / len(pairs.keys()))
             elif mode == "holm":
-                modified_threshold.append(threshold / (len(t_per_group) - i))
+                modified_threshold.append(threshold / (len(pairs.keys()) - i))
             else:
                 print "Please choose bonferroni or holm."
                 sys.exit()
 
-        if mode == "holm":
-            modified_p_per_group = sorted(p_per_group)
-            for i in range(len(t_per_group)):
-                for j in range(len(t_per_group)):
-                    if modified_p_per_group[i] == p_per_group[j]:
-                        modified_pair_of_keys.append(pair_of_keys[j])
+        tmp = 0
+        for i, j in sorted(p.items(), key=lambda x: x[1]):
+            if j < modified_threshold[tmp]:
+                print("key: " + str(i) + " t: " + str(pairs[i]) + " p: " + str(j) + " threshold: " + str(modified_threshold[tmp]) + " O")
+            else:
+                print("key: " + str(i) + " t: " + str(pairs[i]) + " p: " + str(j) + " threshold: " + str(modified_threshold[tmp]) + " X")
+            tmp += 1
 
-        for i in range(len(t_per_group)):
-            if mode == "bonferroni":
-                if modified_threshold[i] > p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-            if mode == "holm":
-                if modified_threshold[i] > modified_p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-                break
-
-        if mode == "bonferroni":
-            print "pair of comparison: " + str(pair_of_keys)
-        elif mode == "holm":
-            print "pair of comparison: " + str(modified_pair_of_keys)
-        
-        print "threshold: " + str(modified_threshold)
-        
-        if mode == "bonferroni":
-            print "p list: " + str(p_per_group)
-        elif mode == "holm":
-            print "modified p list: " + str(modified_p_per_group)
-            print "Note: "
-        
-        print "comparison: " + str(results)
+        print "Note that if holm, test finishes once p value is larger than threshold p."
 
 if __name__ == '__main__':
     pass
