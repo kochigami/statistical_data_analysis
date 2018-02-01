@@ -10,6 +10,7 @@ from scipy.stats import f as calc_f
 # p = t.sf(t_value, dof)
 # UnboundLocalError: local variable 't' referenced before assignment
 # t test
+import operator
 
 class OneWayAnova:
     '''
@@ -196,11 +197,15 @@ class OneWayAnova:
                 sys.exit()
 
         tmp = 0
-        for i, j in sorted(p.items(), key=lambda x: x[1]):
+        # ref: https://docs.python.org/2/howto/sorting.html (Operator Module Functions)
+        for i, j in sorted(p.items(), key=operator.itemgetter(1)):
             if j < modified_threshold[tmp]:
                 print("key: " + str(i) + " t: " + str(pairs[i]) + " p: " + str(j) + " threshold: " + str(modified_threshold[tmp]) + " O")
             else:
                 print("key: " + str(i) + " t: " + str(pairs[i]) + " p: " + str(j) + " threshold: " + str(modified_threshold[tmp]) + " X")
+                if mode == "holm":
+                    print "test ends here."
+                    break
             tmp += 1
 
         print "Note that if holm, test finishes once p value is larger than threshold p."
