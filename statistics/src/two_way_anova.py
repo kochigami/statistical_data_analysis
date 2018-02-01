@@ -64,13 +64,13 @@ class TwoWayAnova:
             # sub effect tests
             if p_1x2 < 0.05:
                 # simple major effect
-                self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof)
+                self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
 
             elif p_1 < 0.05:
-                self.evaluate_main_effect(data, label_A, label_B, MSwc, WC_dof)
+                self.evaluate_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
                 
             elif p_2 < 0.05:
-                self.evaluate_main_effect(data, label_B, label_A, MSwc, WC_dof)
+                self.evaluate_main_effect(data, label_B, label_A, MSwc, WC_dof, is_data_size_equal)
 
             answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
                            [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
@@ -115,11 +115,17 @@ class TwoWayAnova:
                            [math.ceil(SSt *100.0) * 0.01, int(T_dof),'--', '--', '--']]
             return answer_list
 
-    def evaluate_main_effect(self, data, label_A, label_B, MSwc, WC_dof):
+    def evaluate_main_effect(self, data, label_A, label_B, MSwc, WC_dof, is_data_size_equal):
         if len(label_A) > 2:
             p = len(label_A)
             q = len(label_B)
-            n = len(data[(data.keys())[0]]) # caution!! #
+            if is_data_size_equal:
+                n = len(data[(data.keys())[0]])
+            else:
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    tmp += 1.0 / len(data[(data.keys())[i]])
+                n = p * q / tmp  # = n_tilde #
             for i in range(len(label_A)):
                 sum_list = [0 for i in range(len(label_A))]
                 num_list = [0 for i in range(len(label_A))]
@@ -143,10 +149,16 @@ class TwoWayAnova:
             print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
             print " "
 
-    def evaluate_simple_main_effect(self, data, label_A, label_B, MSwc, WC_dof):
+    def evaluate_simple_main_effect(self, data, label_A, label_B, MSwc, WC_dof, is_data_size_equal):
         p = len(label_A)
         q = len(label_B)
-        n = len(data[(data.keys())[0]]) # caution!! #
+        if is_data_size_equal:
+            n = len(data[(data.keys())[0]])
+        else:
+            tmp = 0.0
+            for i in range(len(data.keys())):
+                tmp += 1.0 / len(data[(data.keys())[i]])
+            n = p * q / tmp  # = n_tilde #
         average_list = []
         for i in range(len(data)):
             average_list.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
