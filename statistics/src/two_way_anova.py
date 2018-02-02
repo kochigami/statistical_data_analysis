@@ -63,13 +63,15 @@ class TwoWayAnova:
 
             # sub effect tests
             if p_1x2 < 0.05:
-                # simple major effect
+                print "simple major effect"
                 self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
 
-            elif p_1 < 0.05:
+            if p_1 < 0.05:
+                print "major effect (factor1)"
                 self.evaluate_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
                 
-            elif p_2 < 0.05:
+            if p_2 < 0.05:
+                print "major effect (factor2)"
                 self.evaluate_main_effect(data, label_B, label_A, MSwc, WC_dof, is_data_size_equal)
 
             answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
@@ -126,20 +128,21 @@ class TwoWayAnova:
                 for i in range(len(data.keys())):
                     tmp += 1.0 / len(data[(data.keys())[i]])
                 n = p * q / tmp  # = n_tilde #
+            average_list = {}
+            new_average_list = {}
+            for i in range(len(data)):
+                average_list[(data.keys())[i]] = sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]]))
+            sum_list = [0 for i in range(len(label_A))]
+            num_list = [0 for i in range(len(label_A))]
             for i in range(len(label_A)):
-                sum_list = [0 for i in range(len(label_A))]
-                num_list = [0 for i in range(len(label_A))]
-                average_list = [0 for i in range(len(label_A))]
-            for i in range(len(label_A)):
-                for j in range(len(data.keys())):
-                    if label_A[i] in (data.keys())[j]:
-                        sum_list[i] += sum(data[(data.keys())[j]])
-                        num_list[i] += len(data[(data.keys())[j]])
-
-                average_list[i] = sum_list[i] / float(num_list[i])
-            for i in range(len(average_list)):
-                for j in range(i+1, len(average_list)):
-                    print "a" + str(i) + " - " + "a" + str(j) + "= " + str(abs(average_list[i] - average_list[j]))
+                for j in range(len(average_list.keys())):
+                    if label_A[i] in (average_list.keys())[j]:
+                        sum_list[i] += average_list[(average_list.keys())[j]]
+                        num_list[i] += 1
+                new_average_list[label_A[i]] = sum_list[i] / float(num_list[i])
+            for i in range(len(new_average_list)):
+                for j in range(i+1, len(new_average_list)):
+                    print "a" + str(i+1) + " - " + "a" + str(j+1) + "= " + str(abs(new_average_list[(new_average_list.keys())[i]] - new_average_list[(new_average_list.keys())[j]]))
 
             print " "
             print "Please calculate HSD as follows:"
@@ -159,9 +162,9 @@ class TwoWayAnova:
             for i in range(len(data.keys())):
                 tmp += 1.0 / len(data[(data.keys())[i]])
             n = p * q / tmp  # = n_tilde #
-        average_list = []
+        average_list = {}
         for i in range(len(data)):
-            average_list.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
+            average_list[(data.keys())[i]] = sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]]))
 
         for i in range(len(label_A)):
             SSba = [0 for i in range(len(label_A))]
@@ -175,19 +178,19 @@ class TwoWayAnova:
         for i in range(len(label_B)):
             AB_jk_squared = 0.0
             AB_jk = 0.0
-            for j in range(len(average_list)):
-                if label_B[i] in (data.keys())[j]:
-                    AB_jk += average_list[j]
-                    AB_jk_squared += pow(average_list[j], 2.0)                  
+            for j in range(len(average_list.keys())):
+                if label_B[i] in (average_list.keys())[j]:
+                    AB_jk += average_list[(average_list.keys())[j]]
+                    AB_jk_squared += pow(average_list[(average_list.keys())[j]], 2.0)                  
             SSab[i] = n * (AB_jk_squared - pow(AB_jk, 2.0) / p)
 
         for i in range(len(label_A)):
             BA_jk_squared = 0.0
             BA_jk = 0.0
-            for j in range(len(average_list)):
-                if label_A[i] in (data.keys())[j]:
-                    BA_jk += average_list[j]
-                    BA_jk_squared += pow(average_list[j], 2.0)                  
+            for j in range(len(average_list.keys())):
+                if label_A[i] in (average_list.keys())[j]:
+                    BA_jk += average_list[(average_list.keys())[j]]
+                    BA_jk_squared += pow(average_list[(average_list.keys())[j]], 2.0)                  
             SSba[i] = n * (BA_jk_squared - pow(BA_jk, 2.0) / q) 
 
         for i in range(len(label_B)):
@@ -202,13 +205,13 @@ class TwoWayAnova:
         for i in range(len(label_A)):
             Fba[i] = MSba[i] / MSwc
         
-        F_threshold = calc_f.ppf(0.95, (p - 1) * (q - 1), WC_dof)
-        
+        F_threshold = calc_f.ppf(0.95, p - 1, WC_dof)
         b_list = []
         for i in range(len(label_B)):
             if F_threshold < Fab[i]:
                 b_list.append(i)
 
+        F_threshold = calc_f.ppf(0.95, q - 1, WC_dof)
         a_list = []
         for i in range(len(label_A)):
             if F_threshold < Fba[i]:
@@ -216,124 +219,37 @@ class TwoWayAnova:
 
         for i in range(len(b_list)):
             a_list2 = []
-            for j in range(len(average_list)):
-                if label_B[i] in (data.keys())[j]:
-                    a_list2.append(average_list[j])
+            for j in range(len(average_list.keys())):
+                if label_B[b_list[i]] in (average_list.keys())[j]:
+                    a_list2.append(average_list[(average_list.keys())[j]])
             for k in range(len(a_list2)):
                 for l in range(k+1, len(a_list2)):
-                    print "a" + str(k) + " b" + str(b_list[i]) + " - " + "a" + str(l) + " b" + str(b_list[i]) + "= " + str(abs(average_list[k] - average_list[l]))
+                    print "a" + str(k+1) + " b" + str(b_list[i]+1) + " - " + "a" + str(l+1) + " b" + str(b_list[i]+1) + "= " + str(abs(a_list2[k] - a_list2[l]))
 
         print " "
         print "Please calculate HSD as follows:"
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
-        print "q_threshold: 0.05, dof1: " + str(p) + ", dof2: " + str(WC_dof)
+        print "q_threshold: 0.05, m: " + str(p) + ", dof2: " + str(WC_dof)
         print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
         print " "
 
         for i in range(len(a_list)):
             b_list2 = []
-            for j in range(len(average_list)):
-                if label_A[i] in (data.keys())[j]:
-                    b_list2.append(average_list[j])
+            for j in range(len(average_list.keys())):
+                if label_A[a_list[i]] in (average_list.keys())[j]:
+                    b_list2.append(average_list[(average_list.keys())[j]])
             for k in range(len(b_list2)):
                 for l in range(k+1, len(b_list2)):
-                    print "a" + str(a_list[i]) + " b" + str(k) + " - " + "a" + str(a_list[i]) + " b" + str(l) +"= " + str(abs(average_list[k] - average_list[l]))
+                    print "a" + str(a_list[i]+1) + " b" + str(k+1) + " - " + "a" + str(a_list[i]+1) + " b" + str(l+1) +"= " + str(abs(b_list2[k] - b_list2[l]))
         
         print " "
         print "Please calculate HSD as follows:"
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
-        print "q_threshold: 0.05, dof1: " + str(q) + ", dof2: " + str(WC_dof)
+        print "q_threshold: 0.05, m: " + str(q) + ", dof2: " + str(WC_dof)
         print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
         print " "
-    
-    def comparison(self, data, mean_square_between, between_dof, threshold=0.05, mode="holm"):
-        """
-        if data.keys() = [A, B, C, D]
-        order of comparison:
-        1. A vs B
-        2. A vs C
-        3. A vs D
-        4. B vs C
-        5. B vs D
-        6. C vs D
-        order of result:
-        [1, 2, 3, 4, 5, 6]
-        """
-        average_per_group = []
-        sample_num_per_group = []
-        pair_of_keys = [] 
-        t_per_group = []
-        p_per_group = []
-        modified_pair_of_keys = []
-        modified_p_per_group = []
-        modified_threshold = []
-        results = []
-
-        for i in range(len(data.keys())):
-            average_per_group.append(np.mean(data[(data.keys())[i]]))
-            sample_num_per_group.append(len(data[(data.keys())[i]]))
-        
-        for i in range(len(data.keys())):
-            for j in range(i+1, len(data.keys())):
-                pair_of_keys.append((data.keys())[i] + " + " + (data.keys())[j])
-                t_per_group.append(abs(average_per_group[i] - average_per_group[j]) / math.sqrt(mean_square_between * ((1.0 / sample_num_per_group[i]) + (1.0 / sample_num_per_group[j]))))
-        for i in range(len(t_per_group)):
-            p_per_group.append(calc_p.sf(t_per_group[i], between_dof))
-
-        for i in range(len(t_per_group)):
-            if mode == "bonferroni":
-                modified_threshold.append(threshold / len(t_per_group))
-            elif mode == "holm":
-                modified_threshold.append(threshold / (len(t_per_group) - i))
-            else:
-                print "Please choose bonferroni or holm."
-                sys.exit()
-
-        if mode == "holm":
-            modified_p_per_group = sorted(p_per_group)
-            for i in range(len(t_per_group)):
-                for j in range(len(t_per_group)):
-                    if modified_p_per_group[i] == p_per_group[j]:
-                        modified_pair_of_keys.append(pair_of_keys[j])
-
-        for i in range(len(t_per_group)):
-            if mode == "bonferroni":
-                if modified_threshold[i] > p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-            if mode == "holm":
-                if modified_threshold[i] > modified_p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-                break
-
-        if mode == "bonferroni":
-            print "pair of comparison: " + str(pair_of_keys)
-        elif mode == "holm":
-            print "pair of comparison: " + str(modified_pair_of_keys)
-        
-        print "threshold: " + str(modified_threshold)
-        
-        if mode == "bonferroni":
-            print "p list: " + str(p_per_group)
-        elif mode == "holm":
-            print "modified p list: " + str(modified_p_per_group)
-        
-        print "comparison: " + str(results)
-        average_per_group = []
-        sample_num_per_group = []
-        pair_of_keys = [] 
-        t_per_group = []
-        p_per_group = []
-        modified_pair_of_keys = []
-        modified_p_per_group = []
-        modified_threshold = []
-        results = []
-
 
 if __name__ == '__main__':
     pass
