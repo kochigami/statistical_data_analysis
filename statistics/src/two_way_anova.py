@@ -61,19 +61,18 @@ class TwoWayAnova:
                 SSa, SSb, SSaxb, SSwc, SSt, A_dof, B_dof, AxB_dof, WC_dof, MSa, MSb, MSaxb, MSwc, Fa, Fb, Faxb, p_1, p_2, p_1x2 = \
                 crf_pq.test(data, label_A, label_B, mode="notequal")
 
-            # multiple comparison
+            # sub effect tests
             if p_1x2 < 0.05:
-                # simple major effect
-                # 1. label_A
-                self.evaluate_simple_main_effect(data, label_A, label_B)
-                # 2. label_B
-                self.evaluate_simple_main_effect(data, label_B, label_A)
+                print "simple major effect"
+                self.evaluate_simple_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
 
-            elif p_1 < 0.05:
-                self.evaluate_main_effect(data, label_A, MSa, A_dof)
+            if p_1 < 0.05:
+                print "major effect (factor1)"
+                self.evaluate_main_effect(data, label_A, label_B, MSwc, WC_dof, is_data_size_equal)
                 
-            elif p_2 < 0.05:
-                self.evaluate_main_effect(data, label_B, MSb, B_dof)
+            if p_2 < 0.05:
+                print "major effect (factor2)"
+                self.evaluate_main_effect(data, label_B, label_A, MSwc, WC_dof, is_data_size_equal)
 
             answer_list = [[math.ceil(SSa * 100.0) * 0.01, int(A_dof), math.ceil(MSa * 100.0) * 0.01, math.ceil(Fa * 100.0) * 0.01, math.ceil(p_1 * 1000.0) * 0.001],
                            [math.ceil(SSb * 100.0) * 0.01, int(B_dof), math.ceil(MSb * 100.0) * 0.01, math.ceil(Fb * 100.0) * 0.01, math.ceil(p_2 * 1000.0) * 0.001],
@@ -118,143 +117,139 @@ class TwoWayAnova:
                            [math.ceil(SSt *100.0) * 0.01, int(T_dof),'--', '--', '--']]
             return answer_list
 
-    def evaluate_main_effect(self, data, label, ms, dof):
-        if len(label) > 2:
-            data_tmp = OrderedDict()
-            for i in range(len(label)):
-                data_tmp_tmp = []
-                for j in range(len(data.keys())):
-                    if label[i] in (data.keys())[j]:
-                        data_tmp_tmp += data[(data.keys())[j]]
-                data_tmp[label[i]] = data_tmp_tmp
-            self.comparison(data_tmp, ms, dof)
-
-    def evaluate_simple_main_effect(self, data, focused_label, dependent_label):
-        ## focused_label (label_A)
-        ## dependent_label (labelB)
-        if len(dependent_label) > 2:
-            for i in range(len(focused_label)):
-                data_tmp = OrderedDict()
-                data_focused_label = OrderedDict()
-                data_tmp_tmp = []
-                for j in range(len(dependent_label)):
-                    for k in range(j+1, len(dependent_label)):
-                        average = []
-                        # choose pair
-                        for l in range(len(data.keys())):
-                            if focused_label[i] in (data.keys())[l] and dependent_label[j] in (data.keys())[l]:
-                                data_tmp[focused_label[i] + "+" + dependent_label[j]] = data[(data.keys())[l]]
-                            if focused_label[i] in (data.keys())[l] and dependent_label[k] in (data.keys())[l]:
-                                data_tmp[focused_label[i] + "+" + dependent_label[k]] = data[(data.keys())[l]]
-                            if focused_label[i] in (data.keys())[l]:
-                                data_tmp_tmp += data[(data.keys())[l]]
-                        data_focused_label[focused_label[i]] = data_tmp_tmp
-                        print data_focused_label
-
-                        for l in range(len(data_focused_label)):
-                            average.append(sum(data_focused_label[(data_focused_label.keys())[l]]) / len(data_focused_label[(data_focused_label.keys())[l]]))
-                        
-                        whole_sum = 0.0
-                        whole_num = 0.0
-                        whole_average = 0.0
-                        for l in range(len(data_tmp)):
-                            whole_sum += sum(data_tmp[(data_tmp.keys())[l]])
-                            whole_num += len(data_tmp[(data_tmp.keys())[l]])
-                        whole_average = whole_sum / whole_num
-
-                        ms = 0.0
-                        for l in range(len(average)):
-                            ms += pow((average[l] - whole_average), 2.0) * len(data_focused_label[(data_focused_label.keys())[l]])
-                        dof = len(dependent_label) - 1.0
-                        ms /= dof
-                        self.comparison(data_tmp, ms, dof)
-    
-    def comparison(self, data, mean_square_between, between_dof, threshold=0.05, mode="holm"):
-        """
-        if data.keys() = [A, B, C, D]
-        order of comparison:
-        1. A vs B
-        2. A vs C
-        3. A vs D
-        4. B vs C
-        5. B vs D
-        6. C vs D
-        order of result:
-        [1, 2, 3, 4, 5, 6]
-        """
-        average_per_group = []
-        sample_num_per_group = []
-        pair_of_keys = [] 
-        t_per_group = []
-        p_per_group = []
-        modified_pair_of_keys = []
-        modified_p_per_group = []
-        modified_threshold = []
-        results = []
-
-        for i in range(len(data.keys())):
-            average_per_group.append(np.mean(data[(data.keys())[i]]))
-            sample_num_per_group.append(len(data[(data.keys())[i]]))
-        
-        for i in range(len(data.keys())):
-            for j in range(i+1, len(data.keys())):
-                pair_of_keys.append((data.keys())[i] + " + " + (data.keys())[j])
-                t_per_group.append(abs(average_per_group[i] - average_per_group[j]) / math.sqrt(mean_square_between * ((1.0 / sample_num_per_group[i]) + (1.0 / sample_num_per_group[j]))))
-        for i in range(len(t_per_group)):
-            p_per_group.append(calc_p.sf(t_per_group[i], between_dof))
-
-        for i in range(len(t_per_group)):
-            if mode == "bonferroni":
-                modified_threshold.append(threshold / len(t_per_group))
-            elif mode == "holm":
-                modified_threshold.append(threshold / (len(t_per_group) - i))
+    def evaluate_main_effect(self, data, label_A, label_B, MSwc, WC_dof, is_data_size_equal):
+        if len(label_A) > 2:
+            p = len(label_A)
+            q = len(label_B)
+            if is_data_size_equal:
+                n = len(data[(data.keys())[0]])
             else:
-                print "Please choose bonferroni or holm."
-                sys.exit()
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    tmp += 1.0 / len(data[(data.keys())[i]])
+                n = p * q / tmp  # = n_tilde #
+            average_list = {}
+            new_average_list = {}
+            for i in range(len(data)):
+                average_list[(data.keys())[i]] = sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]]))
+            sum_list = [0 for i in range(len(label_A))]
+            num_list = [0 for i in range(len(label_A))]
+            for i in range(len(label_A)):
+                for j in range(len(average_list.keys())):
+                    if label_A[i] in (average_list.keys())[j]:
+                        sum_list[i] += average_list[(average_list.keys())[j]]
+                        num_list[i] += 1
+                new_average_list[label_A[i]] = sum_list[i] / float(num_list[i])
+            for i in range(len(new_average_list)):
+                for j in range(i+1, len(new_average_list)):
+                    print "a" + str(i+1) + " - " + "a" + str(j+1) + "= " + str(abs(new_average_list[(new_average_list.keys())[i]] - new_average_list[(new_average_list.keys())[j]]))
 
-        if mode == "holm":
-            modified_p_per_group = sorted(p_per_group)
-            for i in range(len(t_per_group)):
-                for j in range(len(t_per_group)):
-                    if modified_p_per_group[i] == p_per_group[j]:
-                        modified_pair_of_keys.append(pair_of_keys[j])
+            print " "
+            print "Please calculate HSD as follows:"
+            print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+            print "q_threshold: 0.05, dof1: " + str(p-1) + ", dof2: " + str(WC_dof)
+            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * q)))"
+            print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+            print " "
 
-        for i in range(len(t_per_group)):
-            if mode == "bonferroni":
-                if modified_threshold[i] > p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-            if mode == "holm":
-                if modified_threshold[i] > modified_p_per_group[i]:
-                    results.append("o ")
-                else:
-                    results.append("x ")
-                break
+    def evaluate_simple_main_effect(self, data, label_A, label_B, MSwc, WC_dof, is_data_size_equal):
+        p = len(label_A)
+        q = len(label_B)
+        if is_data_size_equal:
+            n = len(data[(data.keys())[0]])
+        else:
+            tmp = 0.0
+            for i in range(len(data.keys())):
+                tmp += 1.0 / len(data[(data.keys())[i]])
+            n = p * q / tmp  # = n_tilde #
+        average_list = {}
+        for i in range(len(data)):
+            average_list[(data.keys())[i]] = sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]]))
 
-        if mode == "bonferroni":
-            print "pair of comparison: " + str(pair_of_keys)
-        elif mode == "holm":
-            print "pair of comparison: " + str(modified_pair_of_keys)
+        for i in range(len(label_A)):
+            SSba = [0 for i in range(len(label_A))]
+            MSba = [0 for i in range(len(label_A))]
+            Fba = [0 for i in range(len(label_A))]
+        for i in range(len(label_B)):
+            SSab = [0 for i in range(len(label_B))]
+            MSab = [0 for i in range(len(label_B))]
+            Fab = [0 for i in range(len(label_B))]
+
+        for i in range(len(label_B)):
+            AB_jk_squared = 0.0
+            AB_jk = 0.0
+            for j in range(len(average_list.keys())):
+                if label_B[i] in (average_list.keys())[j]:
+                    AB_jk += average_list[(average_list.keys())[j]]
+                    AB_jk_squared += pow(average_list[(average_list.keys())[j]], 2.0)                  
+            SSab[i] = n * (AB_jk_squared - pow(AB_jk, 2.0) / p)
+
+        for i in range(len(label_A)):
+            BA_jk_squared = 0.0
+            BA_jk = 0.0
+            for j in range(len(average_list.keys())):
+                if label_A[i] in (average_list.keys())[j]:
+                    BA_jk += average_list[(average_list.keys())[j]]
+                    BA_jk_squared += pow(average_list[(average_list.keys())[j]], 2.0)                  
+            SSba[i] = n * (BA_jk_squared - pow(BA_jk, 2.0) / q) 
+
+        for i in range(len(label_B)):
+            MSab[i] = SSab[i] / (p - 1.0)
+
+        for i in range(len(label_A)):
+            MSba[i] = SSba[i] / (q - 1.0)
+
+        for i in range(len(label_B)):
+            Fab[i] = MSab[i] / MSwc
+
+        for i in range(len(label_A)):
+            Fba[i] = MSba[i] / MSwc
         
-        print "threshold: " + str(modified_threshold)
-        
-        if mode == "bonferroni":
-            print "p list: " + str(p_per_group)
-        elif mode == "holm":
-            print "modified p list: " + str(modified_p_per_group)
-        
-        print "comparison: " + str(results)
-        average_per_group = []
-        sample_num_per_group = []
-        pair_of_keys = [] 
-        t_per_group = []
-        p_per_group = []
-        modified_pair_of_keys = []
-        modified_p_per_group = []
-        modified_threshold = []
-        results = []
+        F_threshold = calc_f.ppf(0.95, p - 1, WC_dof)
+        b_list = []
+        for i in range(len(label_B)):
+            if F_threshold < Fab[i]:
+                b_list.append(i)
 
+        F_threshold = calc_f.ppf(0.95, q - 1, WC_dof)
+        a_list = []
+        for i in range(len(label_A)):
+            if F_threshold < Fba[i]:
+                a_list.append(i)
+
+        for i in range(len(b_list)):
+            a_list2 = []
+            for j in range(len(average_list.keys())):
+                if label_B[b_list[i]] in (average_list.keys())[j]:
+                    a_list2.append(average_list[(average_list.keys())[j]])
+            for k in range(len(a_list2)):
+                for l in range(k+1, len(a_list2)):
+                    print "a" + str(k+1) + " b" + str(b_list[i]+1) + " - " + "a" + str(l+1) + " b" + str(b_list[i]+1) + "= " + str(abs(a_list2[k] - a_list2[l]))
+
+        print " "
+        print "Please calculate HSD as follows:"
+        print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+        print "q_threshold: 0.05, m: " + str(p) + ", dof2: " + str(WC_dof)
+        print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+        print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print " "
+
+        for i in range(len(a_list)):
+            b_list2 = []
+            for j in range(len(average_list.keys())):
+                if label_A[a_list[i]] in (average_list.keys())[j]:
+                    b_list2.append(average_list[(average_list.keys())[j]])
+            for k in range(len(b_list2)):
+                for l in range(k+1, len(b_list2)):
+                    print "a" + str(a_list[i]+1) + " b" + str(k+1) + " - " + "a" + str(a_list[i]+1) + " b" + str(l+1) +"= " + str(abs(b_list2[k] - b_list2[l]))
+        
+        print " "
+        print "Please calculate HSD as follows:"
+        print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
+        print "q_threshold: 0.05, m: " + str(q) + ", dof2: " + str(WC_dof)
+        print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+        print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print " "
 
 if __name__ == '__main__':
     pass
