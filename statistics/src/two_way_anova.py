@@ -101,6 +101,10 @@ class TwoWayAnova:
                 print "simple major effect"
                 MSpool = (SSsa + SSbxsa) / float(SA_dof + BxSA_dof)
                 POOL_dof = SA_dof + BxSA_dof
+                print "q1: 0.05, p (see below), SA_dof: " + str(SA_dof)
+                print "q2: 0.05, p (see below), BxSA_dof:" + str(BxSA_dof)
+                print "MSsa: " + str(MSsa) + " MSbxsa: " + str(MSbxsa)
+                print "------"
                 self.evaluate_simple_main_effect(data, label_A, label_B, MSpool, POOL_dof, is_data_size_equal, MSbxsa, BxSA_dof, mode="SPF")
 
             if p_1 < 0.05:
@@ -159,13 +163,13 @@ class TwoWayAnova:
                 for j in range(i+1, len(new_average_list)):
                     print str((new_average_list.keys())[i]) + " - " + str((new_average_list.keys())[j]) + "= " + str(abs(new_average_list[(new_average_list.keys())[i]] - new_average_list[(new_average_list.keys())[j]]))
 
-            print " "
+            print "------"
             print "Please calculate HSD as follows:"
             print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
             print "q_threshold: 0.05, dof1: " + str(p) + ", dof2: " + str(WC_dof)
-            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * q)))"
+            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * q))) % q: df of factor2 if p is df of factor1"
             print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
-            print " "
+            print "------"
 
     def CRF_evaluate_simple_main_effect(self, label_A, label_B, MSwc, WC_dof, is_data_size_equal, p, q, MSab, MSba):
         for i in range(len(label_A)):
@@ -258,41 +262,40 @@ class TwoWayAnova:
             a_list, b_list = self.CRF_evaluate_simple_main_effect(label_A, label_B, MSwc, WC_dof, is_data_size_equal, p, q, MSab, MSba)
         elif mode == "SPF":
             a_list, b_list = self.SPF_evaluate_simple_main_effect(label_A, label_B, MSwc, MSbxsa, WC_dof, BxSA_dof, is_data_size_equal, p, q, MSab, MSba)
-        
+            # MSwc: MSpool, WC_dof: POOL_dof
+
         for i in range(len(b_list)):
-            a_list2 = []
+            a_list2 = {}
             for j in range(len(average_list.keys())):
                 if label_B[b_list[i]] in (average_list.keys())[j]:
-                    a_list2.append(average_list[(average_list.keys())[j]])
-            for k in range(len(a_list2)):
-                for l in range(k+1, len(a_list2)):
-                    print "a" + str(k+1) + " b" + str(b_list[i]+1) + " - " + "a" + str(l+1) + " b" + str(b_list[i]+1) + "= " + str(abs(a_list2[k] - a_list2[l]))
+                    a_list2[(average_list.keys())[j]] = average_list[(average_list.keys())[j]]
+            for k in range(len(a_list2.keys())):
+                for l in range(k+1, len(a_list2.keys())):
+                    print str((a_list2.keys())[k]) + " - " + str((a_list2.keys())[l]) + " = " + str(abs(a_list2[(a_list2.keys())[k]] - a_list2[(a_list2.keys())[l]]))
 
-        print " "
+        print "------"
         print "Please calculate HSD as follows:"
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
         if mode == "CRF":
             print "q_threshold: 0.05, m: " + str(p) + ", WC_dof: " + str(WC_dof)
             print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
         elif mode == "SPF":
-            print "q_threshold: 0.05, m: " + str(p) + ", WC_dof + BxSA_dof: " + str(WC_dof + BxSA_dof)
             print "HSD: q_threshold(*) * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSpool / n))"
-            print "q_threshold(*): " + "(q1 * MSsa + q2 * MSbxsa * (q -1)) / (MSsa + MSbxsa * (q - 1))"
-            print "q1: 0.05, p, SA_dof"
-            print "q2: 0.05, p, BxSA_dof"
+            print "q_threshold(*): " + "(q1 * MSsa + q2 * MSbxsa * (q - 1)) / (MSsa + MSbxsa * (q - 1))"
+            print "p: " + str(p) + " q: " + str(q)
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
-        print " "
+        print "------"
 
         for i in range(len(a_list)):
-            b_list2 = []
+            b_list2 = {}
             for j in range(len(average_list.keys())):
                 if label_A[a_list[i]] in (average_list.keys())[j]:
-                    b_list2.append(average_list[(average_list.keys())[j]])
-            for k in range(len(b_list2)):
-                for l in range(k+1, len(b_list2)):
-                    print "a" + str(a_list[i]+1) + " b" + str(k+1) + " - " + "a" + str(a_list[i]+1) + " b" + str(l+1) +"= " + str(abs(b_list2[k] - b_list2[l]))
+                    b_list2[(average_list.keys())[j]] = average_list[(average_list.keys())[j]]
+            for k in range(len(b_list2.keys())):
+                for l in range(k+1, len(b_list2.keys())):
+                    print str((b_list2.keys())[k]) + " - " + str((b_list2.keys())[l]) + " = " + str(abs(b_list2[(b_list2.keys())[k]] - b_list2[(b_list2.keys())[l]]))
         
-        print " "
+        print "------"
         print "Please calculate HSD as follows:"
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
         if mode == "CRF":
@@ -302,7 +305,7 @@ class TwoWayAnova:
             print "q_threshold: 0.05, m: " + str(q) + ", BxSA_dof: " + str(BxSA_dof)
             print "HSD: q_threshold * " +str(math.sqrt(MSbxsa / n)) + " (math.sqrt(MSbxsa / n))"
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
-        print " "
+        print "------"
 
 if __name__ == '__main__':
     pass
