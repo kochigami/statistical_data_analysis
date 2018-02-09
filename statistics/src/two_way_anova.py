@@ -126,6 +126,29 @@ class TwoWayAnova:
         elif mode == "RBFpq":
             rbf_pq = RBF_pq()
             SSs, SSa, SSaxs, SSb, SSbxs, SSaxb, SSaxbxs, SSt, S_dof, A_dof, AxS_dof, B_dof, BxS_dof, AxB_dof, AxBxS_dof, T_dof, MSs, MSa, MSaxs, MSb, MSbxs, MSaxb, MSaxbxs, Fa, Fb, Faxb, p_1, p_2, p_1x2 = rbf_pq.test(data, label_A, label_B)
+            # sub effect tests
+            if p_1x2 < 0.05:
+                print "simple major effect"
+                MSpool_a = (SSaxs + SSaxbxs) / float(AxS_dof + AxBxS_dof)
+                MSpool_b = (SSbxs + SSaxbxs) / float(BxS_dof + AxBxS_dof)
+                POOL_A_dof = AxS_dof + AxBxS_dof
+                POOL_B_dof = BxS_dof + AxBxS_dof
+                print "q1-a: 0.05, p (see below), AxS_dof: " + str(AxS_dof)
+                print "q1-b: 0.05, p (see below), BxS_dof: " + str(BxS_dof)
+                print "q2: 0.05, p (see below), AxBxS_dof:" + str(AxBxS_dof)
+                print "MSaxs: " + str(MSaxs) + " MSbxs: " + str(MSbxs) + " MSaxbxs: " + str(MSaxbxs)
+                print "------"
+                self.evaluate_simple_main_effect(data, label_A, label_B, MSpool_a, POOL_A_dof, True, MSpool_b, POOL_B_dof, mode="RBF")
+                # data, label_A, label_B, MSwc, WC_dof, is_data_size_equal, MSbxsa=None, BxSA_dof=None, mode="CRF"
+
+            if p_1 < 0.05:
+                print "major effect (factor1)"
+                self.evaluate_main_effect(data, label_A, label_B, MSaxs, AxS_dof, True)
+
+            if p_2 < 0.05:
+                print "major effect (factor2)"
+                self.evaluate_main_effect(data, label_B, label_A, MSbxs, BxS_dof, True)
+
             answer_list = [[math.ceil(SSs *100.0) *0.01, int(S_dof), math.ceil(MSs *100.0) *0.01, '--', '--'],
                            [math.ceil(SSa *100.0) *0.01, int(A_dof), math.ceil(MSa *100.0) *0.01, math.ceil(Fa *100.0) *0.01, math.ceil(p_1 *1000.0) *0.001],
                            [math.ceil(SSaxs *100.0) *0.01, int(AxS_dof), math.ceil(MSaxs *100.0) *0.01, '--', '--'],
@@ -167,8 +190,10 @@ class TwoWayAnova:
             print "Please calculate HSD as follows:"
             print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
             print "q_threshold: 0.05, dof1: " + str(p) + ", dof2: " + str(WC_dof)
-            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * q))) % q: df of factor2 if p is df of factor1"
+            print "dof of factor1: " + str(p) + " dof of factor2: " + str(q)
+            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * (dof of factor2))))"
             print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+            print "------"
             print "------"
 
     def CRF_evaluate_simple_main_effect(self, label_A, label_B, MSwc, WC_dof, is_data_size_equal, p, q, MSab, MSba):
@@ -207,6 +232,27 @@ class TwoWayAnova:
             if F_threshold < Fab[i]:
                 b_list.append(i)
         F_threshold = calc_f.ppf(0.95, q - 1, BxSA_dof)
+        a_list = []
+        for i in range(len(label_A)):
+            if F_threshold < Fba[i]:
+                a_list.append(i)
+        return a_list, b_list
+
+    def RBF_evaluate_simple_main_effect(self, label_A, label_B, MSpool_a, MSpool_b, POOL_A_dof, POOL_B_dof, p, q, MSab, MSba):
+        for i in range(len(label_A)):
+            Fba = [0 for i in range(len(label_A))]
+        for i in range(len(label_B)):
+            Fab = [0 for i in range(len(label_B))]
+        for i in range(len(label_B)):
+            Fab[i] = MSab[i] / MSpool_a
+        for i in range(len(label_A)):
+            Fba[i] = MSba[i] / MSpool_b
+        F_threshold = calc_f.ppf(0.95, p - 1, POOL_A_dof)
+        b_list = []
+        for i in range(len(label_B)):
+            if F_threshold < Fab[i]:
+                b_list.append(i)
+        F_threshold = calc_f.ppf(0.95, q - 1, POOL_B_dof)
         a_list = []
         for i in range(len(label_A)):
             if F_threshold < Fba[i]:
@@ -263,6 +309,9 @@ class TwoWayAnova:
         elif mode == "SPF":
             a_list, b_list = self.SPF_evaluate_simple_main_effect(label_A, label_B, MSwc, MSbxsa, WC_dof, BxSA_dof, is_data_size_equal, p, q, MSab, MSba)
             # MSwc: MSpool, WC_dof: POOL_dof
+        elif mode == "RBF":
+            a_list, b_list = self.RBF_evaluate_simple_main_effect(label_A, label_B, MSwc, MSbxsa, WC_dof, BxSA_dof, p, q, MSab, MSba)
+            # MSwc: MSpool_a, MSbxsa: MSpool_b, WC_dof: POOL_A_dof, BxSA_dof: POOL_B_dof
 
         for i in range(len(b_list)):
             a_list2 = {}
@@ -283,7 +332,12 @@ class TwoWayAnova:
             print "HSD: q_threshold(*) * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSpool / n))"
             print "q_threshold(*): " + "(q1 * MSsa + q2 * MSbxsa * (q - 1)) / (MSsa + MSbxsa * (q - 1))"
             print "p: " + str(p) + " q: " + str(q)
+        elif mode == "RBF":
+            print "HSD: q_threshold(*) * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSpool_a / n))"
+            print "q_threshold(*): " + "(q1-a * MSaxs + q2 * MSaxbxs * (q - 1)) / (MSaxs + MSaxbxs * (q - 1))"
+            print "p: " + str(p) + " q: " + str(q)
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print "------"
         print "------"
 
         for i in range(len(a_list)):
@@ -304,7 +358,12 @@ class TwoWayAnova:
         elif mode == "SPF":
             print "q_threshold: 0.05, m: " + str(q) + ", BxSA_dof: " + str(BxSA_dof)
             print "HSD: q_threshold * " +str(math.sqrt(MSbxsa / n)) + " (math.sqrt(MSbxsa / n))"
+        elif mode == "RBF":
+            print "HSD: q_threshold(*) * " +str(math.sqrt(MSbxsa / n)) + " (math.sqrt(MSpool_b / n))"
+            print "q_threshold(*): " + "(q1-b * MSbxs + q2 * MSaxbxs * (p - 1)) / (MSbxs + MSaxbxs * (p - 1))"
+            print "p: " + str(p) + " q: " + str(q)
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
+        print "------"
         print "------"
 
 if __name__ == '__main__':

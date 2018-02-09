@@ -71,8 +71,6 @@ class RBF_pq:
         for i in range(len(Sik)):
             BS += pow(Sik[i], 2.0) / p
 
-        print "BS: " + str(BS)
-
         tmp = [0 for j in range(len(data[(data.keys())[0]]))]
         for i in range(len(data.keys())):
             for j in range(len(data[(data.keys())[0]])):
@@ -81,7 +79,6 @@ class RBF_pq:
         S = 0.0
         for i in range(len(tmp)):
             S += pow(tmp[i], 2.0) / (p * q)
-        print "S: " + str(S)
 
         G = 0.0
         for i in range(len(data.keys())):
@@ -147,10 +144,6 @@ class RBF_pq:
         Fb = MSb / MSbxs
         Faxb = MSaxb / MSaxbxs
 
-        print "Fa: " + str(Fa)
-        print "Fb: " + str(Fb)
-        print "Faxb: " + str(Faxb)
-        
         p_1 = calc_f.sf(Fa, A_dof, AxS_dof)
         p_2 = calc_f.sf(Fb, B_dof, BxS_dof)
         p_1x2 = calc_f.sf(Faxb, AxB_dof, AxBxS_dof)        
