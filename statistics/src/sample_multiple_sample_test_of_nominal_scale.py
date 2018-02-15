@@ -3,6 +3,7 @@
 import sys
 from unpaired_multiple_sample_test_of_nominal_scale import UnpairedMultipleSampleTestOfNominalScale
 from paired_multiple_sample_test_of_nominal_scale import PairedMultipleSampleTestOfNominalScale
+from collections import OrderedDict
 
 if __name__ == '__main__':
     args = sys.argv
@@ -60,6 +61,9 @@ if __name__ == '__main__':
             Total         6          10           14       30
             (sum_column)
             '''
-            data = [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 0, 1], [1, 0, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+            data = OrderedDict()
+            data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+            data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
             paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
             paired_multiple_sample_test_of_nominal_scale.test(data)

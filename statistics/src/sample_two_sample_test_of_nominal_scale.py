@@ -4,6 +4,7 @@ import sys
 import numpy as np
 from paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
 from unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
+from collections import OrderedDict
 
 """
               Yes   No   Total
@@ -49,11 +50,11 @@ if __name__ == '__main__':
              ---------------------------------------------------
             1: agree 0: disagree
 
-            data = [[18, 36], [7, 29]]
+            data = {"Before": [1,1,1,1,1,...,0], "After": [1,1,1,1,1,...,0]}
 
-            focus on YES => NO & NO => YES
-            number of YES => NO: data[0][1]: b 
-            number of NO => YES: data[1][0]: c 
+            focus on Yes -> No & No -> Yes
+            number of Yes -> No : b 
+            number of No -> Yes:  c 
         
                             Yes   No   Total
              -------------------------------
@@ -64,7 +65,16 @@ if __name__ == '__main__':
 
             '''
 
-            data = np.array([[18, 36],[7, 29]])
+            data = OrderedDict()
+            data["Before"] = [1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1, 
+                              1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1, 
+                              0,0,0,0,0,0,0, 
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0]
+            data["After"] =  [1,1,1,1,1,1, 1,1,1,1,1,1, 1,1,1,1,1,1,
+                              0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0,
+                              1,1,1,1,1,1,1,
+                              0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0]
+
             paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
             paired_two_sample_test_of_nominal_scale.test(data)
 
