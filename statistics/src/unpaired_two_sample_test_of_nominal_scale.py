@@ -9,13 +9,13 @@ from fisher_test import FisherTest
 class UnpairedTwoSampleTestOfNominalScale:
     def test(self, data):
         # check data length is 2
-        if len(data) != 2 and len(data[0]) != 2 and len(data[1]) != 2:
+        if len(data.keys()) != 2 and len(data[(data.keys())[0]]) != 2 and len(data[(data.keys())[1]]) != 2:
             print "Please check the components of your data."
             print "length of data should be four"
             sys.exit()
         else:
             """
-            data = [[a, b], [c, d]]
+            data = {"Yes": [a, c], "No": [b, d]}
                             Yes   No   Total
               -------------------------------
               Condition1     a     b    a+b
@@ -23,10 +23,10 @@ class UnpairedTwoSampleTestOfNominalScale:
               -------------------------------
               Total         a+c   b+d   n (= a+b+c+d)
             """
-            a = data[0][0]
-            b = data[0][1]
-            c = data[1][0]
-            d = data[1][1]
+            a = data[(data.keys())[0]][0]
+            c = data[(data.keys())[0]][1]
+            b = data[(data.keys())[1]][0]
+            d = data[(data.keys())[1]][1]
             n = a+b+c+d
 
             """

@@ -67,6 +67,7 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         print "H value: " + str(H)
         
         # https://kusuri-jouhou.com/statistics/ichigen.html
+        p = -1.0
         if N == 17 or N < 17 and len(data) == 3:
             print "Please refer the ditribution list of H value from Kruskal-Wallis test"
             print "ex. https://kusuri-jouhou.com/statistics/bunpuhyou2.html"
@@ -74,4 +75,4 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
             p = stats.chi2.cdf(H, N - 1.0)
             print "p value: " + str(p)
 
-        return H
+        return p

@@ -3,6 +3,7 @@
 import sys
 from unpaired_multiple_sample_test_of_nominal_scale import UnpairedMultipleSampleTestOfNominalScale
 from paired_multiple_sample_test_of_nominal_scale import PairedMultipleSampleTestOfNominalScale
+from collections import OrderedDict
 
 if __name__ == '__main__':
     args = sys.argv
@@ -24,10 +25,13 @@ if __name__ == '__main__':
              Vision
             --------------------------------------------------
                         24          21          35       80
-            data = [[12, 10, 8],[5, 5, 20], [7, 6, 7]]
+            data = {"First": [12,5,7], "Middle": [10,5,6], "End": [8,20,7]}
             '''
 
-            data = [[12, 10, 8],[5, 5, 20], [7, 6, 7]]
+            data = OrderedDict()
+            data["First"] = [12, 5, 7]
+            data["Middle"] = [10, 5, 6]
+            data["End"] = [8, 20, 7]
             unpaired_multiple_sample_test_of_nominal_scale = UnpairedMultipleSampleTestOfNominalScale()
             unpaired_multiple_sample_test_of_nominal_scale.test(data)
             
@@ -60,6 +64,14 @@ if __name__ == '__main__':
             Total         6          10           14       30
             (sum_column)
             '''
-            data = [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 0, 1], [1, 0, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+            data = OrderedDict()
+            data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+            data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
             paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
             paired_multiple_sample_test_of_nominal_scale.test(data)
+        
+        else:
+            print "please choose sample type: "
+            print "1: unpaired test (chi-square test)"
+            print "2: paired test (Cochran's Q test)"

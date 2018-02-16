@@ -10,7 +10,10 @@ Cochran's Q test
 class PairedMultipleSampleTestOfNominalScale:
     def test(self, data):
         """
-        data = [[1,1,1], [1,1,1], [0,1,1], [0,1,1], [0,1,1], [0,0,1], [0,0,1], [0,0,1], [0,0,1], [0,0,0], [0,0,0]]
+        data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+        data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
+        ##data = [[1,1,1], [1,1,1], [0,1,1], [0,1,1], [0,1,1], [0,0,1], [0,0,1], [0,0,1], [0,0,1], [0,0,0], [0,0,0]]
         example
                   CandidateA  CandidateB  CandidateC  Total (sum_row)
         ---------------------------------------------------
@@ -31,18 +34,18 @@ class PairedMultipleSampleTestOfNominalScale:
         1: agree 0: disagree
         """
         sum_row = []
-        sum_column = [0 for i in range(len(data[0]))]
+        sum_column = [0 for i in range(len(data.keys()))]
         
-        for i in range(len(data)):
-            sum_row.append(sum(data[i]))
-            for j in range(len(data[i])):
-                sum_column[j] += data[i][j]
+        for i in range(len(data[(data.keys())[0]])):
+            sum_row.append(data[(data.keys())[0]][i] + data[(data.keys())[1]][i] + data[(data.keys())[2]][i])
+        for i in range(len(data.keys())):
+            sum_column[i] += sum(data[(data.keys())[i]])
         k = len(sum_column)
         # in this example, k is 3
 
         is_data_size_equal = True
-        for i in range(len(data)):
-            if len(data[0]) != len(data[i]):
+        for i in range(len(data.keys())):
+            if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
                 is_data_size_equal = False
         if is_data_size_equal == False:
             print "Please check your data again. Data have to be same size per each subject."

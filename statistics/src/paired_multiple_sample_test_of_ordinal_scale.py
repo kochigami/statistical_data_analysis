@@ -54,4 +54,4 @@ class PairedMultipleSampleTestOfOrdinalScale:
         print "S value: " + str(S)
         print "p value: " + str(p)
         
-        return S
+        return p
