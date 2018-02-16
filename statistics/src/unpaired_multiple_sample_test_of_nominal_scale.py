@@ -10,7 +10,7 @@ Chi-squared test
 class UnpairedMultipleSampleTestOfNominalScale:
     def test(self, data):
         """
-        data = [[a,b,c], [d,e,f], [g,h,i]]
+        data = {"Yes": [a,d,g], "No": [b,e,h], "Yes&No": [c,f,i]}
         example
                        Yes   No   Yes&No  Total (Sum row)
         ---------------------------------------
@@ -21,28 +21,35 @@ class UnpairedMultipleSampleTestOfNominalScale:
         Total        a+d+g  b+e+h   c+f+i (= a+b+c+d+e+f+g+h+i)
         (Sum column)
         """
-        sum_row = []
-        sum_column = [0 for i in range(len(data[0]))]
+        sum_column = []
+
+        len_max = -1000
+        for i in range(len(data.keys())):
+            if len(data[(data.keys())[i]]) > len_max:
+                len_max = len(data[(data.keys())[i]])
+
+        sum_row = [0 for i in range(len_max)]
         
-        for i in range(len(data)):
-            sum_row.append(sum(data[i]))
-            for j in range(len(data[i])):
-                sum_column[j] += data[i][j]
+        for i in range(len(data.keys())):
+            sum_column.append(sum(data[(data.keys())[i]]))
+            for j in range(len(data[(data.keys())[i]])):
+                sum_row[j] += data[(data.keys())[i]][j]
+
         N = sum(sum_row)
 
-        is_data_size_equal = True
-        for i in range(len(data)):
-            if len(data[0]) != len(data[i]):
-                is_data_size_equal = False
+        is_data_category_size_equal = True
+        for i in range(len(data.keys())):
+            if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
+                is_data_category_size_equal = False
 
-        if is_data_size_equal == False:
+        if is_data_category_size_equal == False:
             print "Please check your data again. Data should be equal size per each condition."
             sys.exit()
         else:
             chi_squared = 0.0
-            for i in range(len(data)):
-                for j in range(len(data[i])):
-                    chi_squared += (data[i][j] * data[i][j]) / float (sum_row[i] * sum_column[j])  
+            for i in range(len(data.keys())):
+                for j in range(len(data[(data.keys())[i]])):
+                    chi_squared += (data[(data.keys())[i]][j] * data[(data.keys())[i]][j]) / float (sum_row[j] * sum_column[i])  
             chi_squared -= 1.0
             chi_squared *= N
             df = (len(sum_row) - 1.0) * (len(sum_column) - 1.0)
