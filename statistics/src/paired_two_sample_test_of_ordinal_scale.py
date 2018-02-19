@@ -7,7 +7,7 @@ import math
 
 '''
 signed rank sum test
-signes test
+signed test
 '''
 
 class PairedTwoSampleTestOfOrdinalScale:
