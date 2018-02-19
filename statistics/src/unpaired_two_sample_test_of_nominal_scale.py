@@ -16,29 +16,51 @@ class UnpairedTwoSampleTestOfNominalScale:
         else:
             """
             data = {"Yes": [a, c], "No": [b, d]}
-                            Yes   No   Total
-              -------------------------------
-              Condition1     a     b    a+b
-              Condition2     c     d    c+d
-              -------------------------------
-              Total         a+c   b+d   n (= a+b+c+d)
+                            Yes   No   Yes/No   Total
+              --------------------------------------
+              Condition1     a     b    c      a+b+c
+              Condition2     c     d    d      d+e+f
+              --------------------------------------
+              Total         a+c   b+d  c+d     n (= a+b+c+d)
             """
-            a = data[(data.keys())[0]][0]
-            c = data[(data.keys())[0]][1]
-            b = data[(data.keys())[1]][0]
-            d = data[(data.keys())[1]][1]
-            n = a+b+c+d
+            data1 = []
+            data2 = []
+
+            for i in range(len(data[(data.keys())[0]])):
+                data1.append(data[(data.keys())[0]][i])
+            for i in range(len(data[(data.keys())[1]])):
+                data2.append(data[(data.keys())[1]][i])
+            
+            sum_row = [] # ex. 3
+            sum_column = [] # ex. 2
+            for i in range(len(data[(data.keys())[0]])):
+                sum_row.append(data[(data.keys())[0]][i] + data[(data.keys())[1]][i])
+                
+            for i in range(len(data.keys())):
+                sum_column.append(sum(data[(data.keys())[i]]))
+            
+            n = sum(data[(data.keys())[0]]) + sum(data[(data.keys())[1]])
+
+            data1_exp = []
+            data2_exp = []
+            for i in range(len(data[(data.keys())[0]])): # ex. 3
+                data1_exp.append((sum_row[i] * sum_column[0]) / float(n))
+            for i in range(len(data[(data.keys())[1]])): # ex. 3
+                data2_exp.append((sum_row[i] * sum_column[1]) / float(n))
 
             """
             fisher test is used in a certain condition; see http://aoki2.si.gunma-u.ac.jp/lecture/Cross/warning.html
                                                             and http://drmagician.exblog.jp/22086293/
             """
-            a_exp = (a+c) * (a+b) / float(n)
-            c_exp = (a+c) * (c+d) / float(n)
-            b_exp = (b+d) * (a+b) / float(n)            
-            d_exp = (b+d) * (c+d) / float(n)
-
-            if a_exp < 5 or b_exp < 5 or c_exp < 5 or d_exp < 5:
+            min_exp = 10000
+            for i in range(len(data1_exp)):
+                if min_exp > data1_exp[i]:
+                    min_exp = data1_exp[i]
+            for i in range(len(data2_exp)):
+                if min_exp > data2_exp[i]:
+                    min_exp = data2_exp[i]
+            
+            if min_exp < 5:
                 # use fisher's test
                 # followd this link: http://aoki2.si.gunma-u.ac.jp/lecture/Cross/Fisher.html
                 fisher_test = FisherTest()

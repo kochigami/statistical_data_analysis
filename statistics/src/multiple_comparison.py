@@ -38,14 +38,14 @@ class MultipleComparison:
                     test_data[(data_new.keys())[j]] = data[(data_new.keys())[j]]
                     test_data[(data_new.keys())[j+r-1]] = data[(data_new.keys())[j+r-1]]
                     print "comparison of " + str((data_new.keys())[j]) + " and " + str((data_new.keys())[j+r-1])
-                    if test == "cochran":
-                        # mcnemar
-                        paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
-                        paired_two_sample_test_of_nominal_scale.test(test_data)
-                    elif test == "chi-squared":
+                    if test == "chi-squared":
                         # fisher's exact test and chi-squared test
                         unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
                         unpaired_two_sample_test_of_nominal_scale.test(test_data)
+                    elif test == "mcnemar":
+                        # mcnemar
+                        paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
+                        paired_two_sample_test_of_nominal_scale.test(test_data)
                     elif test == "mann-whitney":
                         # Kruskal-Wallis
                         unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
