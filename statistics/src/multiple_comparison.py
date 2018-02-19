@@ -6,6 +6,8 @@ import operator
 from collections import OrderedDict
 from paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
 from unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
+from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
+from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 
 class MultipleComparison:
     def test(self, data, test="none", alpha=0.05):
@@ -36,14 +38,21 @@ class MultipleComparison:
                     test_data[(data_new.keys())[j]] = data[(data_new.keys())[j]]
                     test_data[(data_new.keys())[j+r-1]] = data[(data_new.keys())[j+r-1]]
                     print "comparison of " + str((data_new.keys())[j]) + " and " + str((data_new.keys())[j+r-1])
-                    if test == "cochran":
-                        # mcnemar
-                        paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
-                        paired_two_sample_test_of_nominal_scale.test(test_data)
-                    elif test == "chi-squared":
+                    if test == "chi-squared":
                         # fisher's exact test and chi-squared test
                         unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
                         unpaired_two_sample_test_of_nominal_scale.test(test_data)
+                    elif test == "mcnemar":
+                        # mcnemar
+                        paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
+                        paired_two_sample_test_of_nominal_scale.test(test_data)
+                    elif test == "mann-whitney":
+                        # Kruskal-Wallis
+                        unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
+                        unpaired_two_sample_test_of_ordinal_scale.test(test_data)
+                    elif test == "signed-test":
+                        paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
+                        paired_two_sample_test_of_ordinal_scale.test(test_data, mode="signed_test")
                     else:
                         print "Please input test name"
                 print "threshold is: " + str(2.0 * alpha / (m * ( r - 1 ))) # alpha_dash

@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
+from multiple_comparison import MultipleComparison
 
 """
 Cochran's Q test
 """
 
 class PairedMultipleSampleTestOfNominalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
         data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
@@ -71,4 +72,9 @@ class PairedMultipleSampleTestOfNominalScale:
             print "q: " + str(q)
             print "df: " + str(df)
             print "p: " + str(p)
+
+            if p < threshold:
+                multiple_comparison = MultipleComparison()
+                multiple_comparison.test(data, test="mcnemar")
+            
             return p

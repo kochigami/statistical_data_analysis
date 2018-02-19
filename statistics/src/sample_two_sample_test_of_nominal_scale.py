@@ -91,8 +91,8 @@ if __name__ == '__main__':
              data: [[52, 8], [48, 42]]            
             '''
             data = OrderedDict()
-            data["Smoker"] = [52, 48]
-            data["Non-Smoker"] = [8, 42]
+            data["Illness"] = [52, 8]
+            data["Healty"] = [48, 42]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
             unpaired_two_sample_test_of_nominal_scale.test(data)
 
@@ -110,8 +110,8 @@ if __name__ == '__main__':
              data: [[1, 12], [4, 6]]            
             '''
             data = OrderedDict()
-            data["Non-social"] = [1, 4]
-            data["Antisocial"] = [12, 6]
+            data["Teacher"] = [1, 12]
+            data["Counselor"] = [4, 6]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
             unpaired_two_sample_test_of_nominal_scale.test(data)
 

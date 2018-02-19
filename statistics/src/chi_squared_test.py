@@ -16,11 +16,14 @@ class ChiSquaredTest:
         else:
             # convert dict to list
             # data = {"Yes": [a, c], "No": [b, d]} -> data_tmp = [[a, b], [c, d]]
-            a = data[(data.keys())[0]][0]
-            c = data[(data.keys())[0]][1]
-            b = data[(data.keys())[1]][0]
-            d = data[(data.keys())[1]][1]
-            data_tmp = [[a, b], [c, d]]
+            data1 = []
+            data2 = []
+            for i in range(len(data[(data.keys())[0]])):
+                data1.append(data[(data.keys())[0]][i])
+
+            for i in range(len(data[(data.keys())[1]])):
+                data2.append(data[(data.keys())[1]][i])
+            data_tmp = [data1, data2]
             squared, p, dof, ef = stats.chi2_contingency(data_tmp)
             # squared: 検定統計量
             # p: p value

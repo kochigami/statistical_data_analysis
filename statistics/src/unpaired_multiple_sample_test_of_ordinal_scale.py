@@ -3,6 +3,7 @@
 from scipy import stats
 import sys
 import copy
+from multiple_comparison import MultipleComparison
 
 """
 Kruskal-Wallis test
@@ -11,9 +12,9 @@ H, p= stats.mstats.kruskalwallis(data[0], data[1], data[2])
 """
 
 class UnpairedMultipleSampleTestOfOrdinalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
-        data = [[3.88,4.60,6.30,2.15,4.80,5.20], [2.86,9.02,4.27,9.86,3.66,5.48], [1.82,4.21,3.10,1.99,2.75,2.18]]
+        data = {"A": [3.88,4.60,6.30,2.15,4.80,5.20], "B": [2.86,9.02,4.27,9.86,3.66,5.48], "C": [1.82,4.21,3.10,1.99,2.75,2.18]}
 
         [3.88,4.60,6.30,2.15,4.80,5.20]: conditionA
         [2.86,9.02,4.27,9.86,3.66,5.48]: conditionB
@@ -36,11 +37,11 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         sample_num_per_condition = []
 
         N = 0.0
-        for i in range(len(data)):
-            sample_num_per_condition.append(len(data[i]))
-            N += len(data[i])
-            for j in range(len(data[i])):
-                all_data.append(data[i][j])
+        for i in range(len(data.keys())):
+            sample_num_per_condition.append(len(data[(data.keys())[i]]))
+            N += len(data[(data.keys())[i]])
+            for j in range(len(data[(data.keys())[i]])):
+                all_data.append(data[(data.keys())[i]][j])
         
         sorted_all_data = []
         # sort all_data
@@ -52,27 +53,31 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         data = data_copy
 
         for i in range(len(sorted_all_data)):
-            for j in range(len(data)):
-                for k in range(len(data[j])):
-                    if sorted_all_data[i] == data[j][k]:
-                        all_data_order[j][k] = i+1.0
+            for j in range(len(data.keys())):
+                for k in range(len(data[(data.keys())[j]])):
+                    if sorted_all_data[i] == data[(data.keys())[j]][k]:
+                        all_data_order[(all_data_order.keys())[j]][k] = i+1.0
 
         # calc H value            
         H = 0.0
-        for i in range(len(all_data_order)):
+        for i in range(len(all_data_order.keys())):
             # sum of order in each category
-            H += sum(all_data_order[i]) * sum(all_data_order[i]) / len(all_data_order[i])
+            H += sum(all_data_order[(all_data_order.keys())[i]]) * sum(all_data_order[(all_data_order.keys())[i]]) / len(all_data_order[(all_data_order.keys())[i]])
         H *= 12.0 / (N * (N + 1.0)) 
         H -= 3.0 * (N + 1.0)
         print "H value: " + str(H)
         
         # https://kusuri-jouhou.com/statistics/ichigen.html
         p = -1.0
-        if N == 17 or N < 17 and len(data) == 3:
+        if N == 17 or N < 17 and len(data.keys()) == 3:
             print "Please refer the ditribution list of H value from Kruskal-Wallis test"
             print "ex. https://kusuri-jouhou.com/statistics/bunpuhyou2.html"
         else:
             p = stats.chi2.cdf(H, N - 1.0)
             print "p value: " + str(p)
+
+            if p < threshold:
+                multiple_comparison = MultipleComparison()
+                multiple_comparison.test(data, test="mann-whitney")
 
         return p

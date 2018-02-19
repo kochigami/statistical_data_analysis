@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
+from multiple_comparison import MultipleComparison
 
 """
 Chi-squared test
 """
 
 class UnpairedMultipleSampleTestOfNominalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
         data = {"Yes": [a,d,g], "No": [b,e,h], "Yes&No": [c,f,i]}
         example
@@ -57,4 +58,9 @@ class UnpairedMultipleSampleTestOfNominalScale:
             print "chi_squared: " + str(chi_squared)
             print "df: " + str(df)
             print "p: " + str(p)
+
+            if p < threshold:
+                multiple_comparison = MultipleComparison()
+                multiple_comparison.test(data, test="chi-squared")
+            
             return p

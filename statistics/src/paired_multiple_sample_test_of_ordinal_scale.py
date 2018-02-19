@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-import copy
+from multiple_comparison import MultipleComparison
 
 """
 Friedman test
@@ -10,9 +10,10 @@ Friedman test
 """
 
 class PairedMultipleSampleTestOfOrdinalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
-        data = [[1,2,3,5,4], [5,1,3,2,4], [1,2,3,4,5], [5,1,4,2,3], [5,4,2,3,1], [4,2,1,3,5], [5,4,2,3,1]]
+        
+        data = {"A": [1,5,1,5,5,4,5], "B": [2,1,2,1,4,2,4], "C": [3,3,3,4,2,1,2], "D": [5,2,4,2,3,3,3], "E": [4,4,5,3,1,5,1]}
 
         example
                    A  B  C  D  E   sum
@@ -27,31 +28,24 @@ class PairedMultipleSampleTestOfOrdinalScale:
                 ---------------------        
             T_j  | 26 16 18 22 23| 105 
         """
-        n = len(data)
-        k = len(data[0])
-        sum_of_order = [0 for i in range(len(data[0]))]
+        k = len(data.keys())
+        n = len(data[(data.keys())[0]])
+        sum_of_order = [0 for i in range(len(data.keys()))]
 
-        # sort data[i] and input order instead of raw value
-        for i in range(len(data)):
-            data_i_copy = copy.deepcopy(data[i])
-            data_i_copy.sort()
-            for j in range(len(data_i_copy)):
-                # we cannot use k because we used it as a variable
-                for h in range(len(data[i])):
-                    if data_i_copy[j] == data[i][h]:
-                        data[i][h] = j + 1.0
-
-        for i in range(len(data)):
-            for j in range(len(data[i])):
-                sum_of_order[j] += data[i][j]
-
+        for i in range(len(data.keys())):
+            for j in range(len(data[(data.keys())[i]])):
+                sum_of_order[i] += data[(data.keys())[i]][j]
         S = 0.0
         for i in range(len(sum_of_order)):
-            S += sum_of_order[i] * sum_of_order[i]
+            S += pow(sum_of_order[i], 2.0)
         S *= 12.0 / (n * k * (k + 1.0))
         S -= 3.0 * n * (k + 1.0)
         p = stats.chi2.cdf(S, k - 1.0)
         print "S value: " + str(S)
         print "p value: " + str(p)
         
+        if p < threshold:
+            multiple_comparison = MultipleComparison()
+            multiple_comparison.test(data, test="signed-test")
+
         return p
