@@ -6,6 +6,7 @@ import sys
 import numpy as np
 from unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
 from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
+from collections import OrderedDict
 
 if __name__ == '__main__':
     args = sys.argv
@@ -26,7 +27,10 @@ if __name__ == '__main__':
                         4.80  3.66  2.75
                         5.20  5.48  2.18
             '''
-            data = [[3.88,4.60,6.30,2.15,4.80,5.20], [2.86,9.02,4.27,9.86,3.66,5.48], [1.82,4.21,3.10,1.99,2.75,2.18]]
+            data = OrderedDict()
+            data["A"] = [3.88,4.60,6.30,2.15,4.80,5.20]
+            data["B"] = [2.86,9.02,4.27,9.86,3.66,5.48] 
+            data["C"] = [1.82,4.21,3.10,1.99,2.75,2.18]
             unpaired_multiple_sample_test_of_ordinal_scale = UnpairedMultipleSampleTestOfOrdinalScale()
             unpaired_multiple_sample_test_of_ordinal_scale.test(data)
             
