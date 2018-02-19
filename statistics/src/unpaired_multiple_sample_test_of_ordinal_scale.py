@@ -3,6 +3,7 @@
 from scipy import stats
 import sys
 import copy
+from multiple_comparison import MultipleComparison
 
 """
 Kruskal-Wallis test
@@ -11,7 +12,7 @@ H, p= stats.mstats.kruskalwallis(data[0], data[1], data[2])
 """
 
 class UnpairedMultipleSampleTestOfOrdinalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
         data = {"A": [3.88,4.60,6.30,2.15,4.80,5.20], "B": [2.86,9.02,4.27,9.86,3.66,5.48], "C": [1.82,4.21,3.10,1.99,2.75,2.18]}
 
@@ -74,5 +75,9 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         else:
             p = stats.chi2.cdf(H, N - 1.0)
             print "p value: " + str(p)
+
+            if p < threshold:
+                multiple_comparison = MultipleComparison()
+                multiple_comparison.test(data, test="mann-whitney")
 
         return p

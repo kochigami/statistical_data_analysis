@@ -10,23 +10,23 @@ if __name__ == '__main__':
     if len(args) is not 2:
         print "python sample_comparison.py <sample_type>"
         print "please choose sample type: "
-        print "1: cochran test"
-        print "2: chi-squared test"
+        print "1: chi-squared test"
+        print "2: mcnemar test"
         print "3: mann-whitney test"
         print "4: signed test"
     else:
         data = OrderedDict()
         if args[1] == "1":
-            data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-            data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
-            data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
-            multiple_comparison.test(data, test="cochran")
-        elif args[1] == "2":
             data["A"] = [12, 10, 8]
             data["B"] = [5, 7, 20]
             data["C"] = [7, 6, 7] 
             data["D"] = [1, 3, 4]
             multiple_comparison.test(data, test="chi-squared")
+        elif args[1] == "2":
+            data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+            data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
+            multiple_comparison.test(data, test="mcnemar")
         elif args[1] == "3":
             data["A"] = [3.88,4.60,6.30,2.15,4.80,5.20]
             data["B"] = [2.86,9.02,4.27,9.86,3.66,5.48] 

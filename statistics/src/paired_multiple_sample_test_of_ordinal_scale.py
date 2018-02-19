@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
+from multiple_comparison import MultipleComparison
 
 """
 Friedman test
@@ -9,7 +10,7 @@ Friedman test
 """
 
 class PairedMultipleSampleTestOfOrdinalScale:
-    def test(self, data):
+    def test(self, data, threshold=0.05):
         """
         
         data = {"A": [1,5,1,5,5,4,5], "B": [2,1,2,1,4,2,4], "C": [3,3,3,4,2,1,2], "D": [5,2,4,2,3,3,3], "E": [4,4,5,3,1,5,1]}
@@ -43,4 +44,8 @@ class PairedMultipleSampleTestOfOrdinalScale:
         print "S value: " + str(S)
         print "p value: " + str(p)
         
+        if p < threshold:
+            multiple_comparison = MultipleComparison()
+            multiple_comparison.test(data, test="signed-test")
+
         return p
