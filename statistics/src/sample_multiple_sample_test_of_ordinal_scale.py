@@ -49,6 +49,11 @@ if __name__ == '__main__':
             -------------------------------
             Total       26      16 18 22 23
             '''
-            data = [[1,2,3,5,4], [5,1,3,2,4], [1,2,3,4,5], [5,1,4,2,3], [5,4,2,3,1], [4,2,1,3,5], [5,4,2,3,1]]
+            data = OrderedDict()
+            data["A"] = [1,5,1,5,5,4,5]
+            data["B"] = [2,1,2,1,4,2,4]
+            data["C"] = [3,3,3,4,2,1,2]
+            data["D"] = [5,2,4,2,3,3,3]            
+            data["E"] = [4,4,5,3,1,5,1]
             paired_multiple_sample_test_of_ordinal_scale = PairedMultipleSampleTestOfOrdinalScale()
             paired_multiple_sample_test_of_ordinal_scale.test(data)
