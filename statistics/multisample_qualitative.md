@@ -1,53 +1,57 @@
 # 一元配置: 要因は1つ
 
-## 同じ被験者のふれ合いについて，計量尺度に基づくデータ取得 (対応有り)
+## 各処理水準に異なる被験者が無作為に割り当てられている（注）場合： completely randomized design (CR デザイン)
 
-- 1回の実験。ロボット1, ロボット2, ロボット3とのふれ合い時間の比較 (計量尺度)：  
--- 対応のある一元配置分散分析  
--- 要因A：ロボットの種類
+- 例：ロボット1, ロボット2, ロボット3 それぞれのふれ合い時間を比較する    
+- （１つしかない要因：ロボットの種類）  
+- 注：1人の被験者は，1回の実験で1つの条件しか試さない  
 
-## 違う被験者のふれ合いについて，計量尺度に基づくデータ取得 (対応無し)
+## 同一の被験者が全ての処理水準に参加している場合 or 特定の剰余変数によって被験者をブロック化（注）し，各ブロック内の被験者を各処理水準に無作為に割り当てる場合： randomized block design (RB デザイン)
 
-- ロボット1, ロボット2, ロボット3それぞれのふれ合い時間の比較 (計量尺度)：  
--- 対応のない一元配置分散分析  
--- 要因A：ロボットの種類  要因B: 個人差  
+- 例：ロボット1, ロボット2, ロボット3との被験者ごとのふれ合い時間の比較   
+- (要因１：ロボットの種類，要因２：個人差)  
+- 注：被験者を個人として扱うか，被験者をグループ化して扱うかの違い  
 
 # 二元配置: 要因は2つ
 
-## 繰り返し有り
+## 要因１，要因２が共に被験者間変数であり，それぞれの要因の各処理水準に異なる被験者が無作為に割り当てられている場合： completely randomized factorial design (CRFpq デザイン)
 
-- 「あるロボット」（複数の種類があり、1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，1つ選ぶ）の条件で，ロボットと複数の人に*1回*ふれ合ってもらう．  
-例えば2条件，2条件ずつであれば，4群分被験者がいる．ある1群に10人いるとすると，その10人で条件を繰り返すので「繰り返し有り」と言う．
--- 繰り返しのある二元配置  
--- 要因A: ロボットの種類、要因B: ロボットのふれ合い方  
+- 例：「あるロボット」（複数の種類があり、1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，1つ選ぶ）の条件で，ロボットと複数の人に*1回*ふれ合ってもらう．  
 
-- 「あるロボット」（複数の種類があり，1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，1つ選ぶ）の条件で，ロボットと複数の人に*長期的に*ふれ合ってもらう．  この時繰り返しのある二元配置になるが，個人差が残差に含まれてしまうことになる．一般的に個人差は大きくなるので良くない．  
-そこで個人差を残差から分離する．
--- 繰り返し測定型二元配置分散分析    
--- 要因A: ロボットの種類、要因B: ロボットのふれ合い方 =>   
-要因A: ロボットの種類，要因B: ロボットのふれ合い方、SUB: 被験者
+## 要因１の各処理水準には異なる被験者が無作為に割り当てられていて，要因２には同一の被験者がすべての処理水準に参加している or 特定の剰余変数に基づいて被験者をブロック化し，そのブロック内の被験者を各処理水準に無作為に割り当てる場合： split-plot design (SPFpq デザイン)
 
-## 繰り返しなし
+- 例：「あるロボット」（複数の種類があり、1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，全て選ぶ）の条件で，ロボットと複数の人に*1回*ふれ合ってもらう．  
 
-- あるロボット（1種類）と複数人に長期間ふれ合ってもらう．  
-例えば1ヶ月おきに評価のためのデータを取る．
--- 繰り返しのない二元配置  
--- 要因A: 時期、要因B: 個人差   
--- (memo) 対応のある一元配置分散分析と計算方法が同じ  
+## 同一の被験者が要因１，２の全ての処理水準に参加している場合 or 特定の剰余変数によって被験者をブロック化（注）し，各ブロック内の被験者を各処理水準に無作為に割り当てる場合： randomized block factorial design (RBFpq デザイン)
 
-- 複数人にまずロボットAと長期間ふれ合ってもらい，次にロボットBと長期間ふれ合ってもらう．  
-例えば1ヶ月おきに評価のためのデータを取る．　  
--- 繰り返しのない三元配置  
--- 要因A: 個人差、要因B: 時期、要因C: ロボットの種類  
--- (memo) ロボットの種類による影響を時期ごとの変化量で見る場合，要因Cを考慮しなくてよくなる
-  
+- 例：「あるロボット」（複数の種類があり、全て選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，全て選ぶ）の条件で，ロボットと複数の人に*1回*ふれ合ってもらう．  
+- 注：被験者を個人として扱うか，被験者をグループ化して扱うかの違い  
+
 ## サンプル
 
-unpaired & one-way:
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 1```
+CR デザイン（データ数同じ）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 2```  
 
-unpaired & two-way:
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 2```
+CR デザイン（データ数異なる）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 1```  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 3```  
 
-paired & one-way:
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 3```
+RB デザイン  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 4```  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 5```  
+
+CRFpq デザイン（データ数同じ）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 7```  
+
+CRFpq デザイン（データ数異なる）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 6```  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 8```  
+
+SPFpq デザイン（データ数同じ）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 9```  
+
+SPFpq デザイン（データ数異なる）  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 10```  
+
+RBFpq デザイン  
+```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 11```  
