@@ -8,3 +8,20 @@
 - Yes/ No 形式 (名義尺度)：コクランのQ検定  
 - グレード形式 (順位尺度)：フリードマンの検定  
 
+# サンプル
+
+- 名義尺度
+
+unpaired test (chi-square test):   
+```python sample_two_sample_test_of_nominal_scale.py 1```
+
+paired test (Cochran's Q test):  
+```python sample_two_sample_test_of_nominal_scale.py 2```
+
+- 順位尺度
+
+unpaired test (Kruskal-Wallis test):  
+```python sample_two_sample_test_of_ordinal_scale.py 1```
+
+paired test (Friedman test):  
+```python sample_two_sample_test_of_ordinal_scale.py 2```

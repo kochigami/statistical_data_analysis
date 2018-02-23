@@ -8,7 +8,7 @@ from collections import OrderedDict
 if __name__ == '__main__':
     args = sys.argv
     if len(args) is not 2:
-        print "python sample_u_test.py <sample_type>"
+        print "python two_sample_test_of_ordinal_scale.py <sample_type>"
         print "please choose sample type: "
         print "1: paired test (signed test + small data)"
         print "2: paired test (signed test + big data)"

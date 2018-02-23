@@ -3,7 +3,7 @@
 - Yes/ No 形式 (名義尺度)：マクニマーの検定
 - グレード形式 (順位尺度)：符号付き順位和検定
 
-# 条件1、条件2ごとにアンケート (対応無し)
+# 条件1、条件2ごとに異なる被験者に試してもらい，アンケート (対応無し)
 
 - Yes/ No 形式 (名義尺度)：カイ2乗検定  
 コクラン・ルールを満たさない場合：フィッシャーの直接法  
@@ -13,26 +13,27 @@
 
 # サンプル
 
-paired test + big data: 
+- 名義尺度
+
+paired test (McNemar test):   
 ```python sample_two_sample_test_of_nominal_scale.py 1```
 
-paired test + small data:
+unpaired test + big data (chi-square test):  
 ```python sample_two_sample_test_of_nominal_scale.py 2```
 
-unpaired test + big data:
+unpaired test + small data (Fisher's exact test):  
 ```python sample_two_sample_test_of_nominal_scale.py 3```
-![](sample_fig/sample_nominal_chi_squared.png)
 
-unpaired test + small data:
-```python sample_two_sample_test_of_nominal_scale.py 4```
+- 順位尺度
 
-paired-utest (sign test):
+paired sample, signed test + small data:  
 ```python sample_two_sample_test_of_ordinal_scale.py 1```
-![](sample_fig/sample_sign_test.png)
 
-paired-utest (z test):
+paired sample, signed test + big data:  
 ```python sample_two_sample_test_of_ordinal_scale.py 2```
 
-unpaired-ttest (mann-whitney test):
+paired sample, signed rank sum test:    
 ```python sample_two_sample_test_of_ordinal_scale.py 3```
-![](sample_fig/sample_mann_whitney.png)
+
+unpaired sample, mann-whitney test:  
+```python sample_two_sample_test_of_ordinal_scale.py 4```
