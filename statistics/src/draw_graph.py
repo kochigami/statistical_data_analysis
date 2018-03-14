@@ -3,40 +3,24 @@
 import matplotlib.pyplot as plt
 import math
 import numpy as np
-from paired_two_sample_test_of_interval_and_ratio_scale import PairedTwoSampleTestOfIntervalAndRatioScale
-from unpaired_two_sample_test_of_interval_and_ratio_scale import UnpairedTwoSampleTestOfIntervalAndRatioScale
-from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
-from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 
 class DrawGraph:
     """
-       if test_mode is paired-ttest or unpaired-ttest, data is like this.
-       data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
-               'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
-              Be sure that string list is like ([category1, category2]).
-
-       if test_mode is anova, data is like this.
-       data = {'Crispy-hot':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
-               'Crispy-mild': [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75],
-               'Normal-hot' : [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75],
-               'Normal-mild' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+    displaying bar graph which contains average data per sample group
     
-       if test_mode is unpaired-utest, data is like this.
-       data = {'Children':  [20, 18, 15, 13, 10, 6],                           
-               'Adults': [17, 16, 12, 9, 8, 6, 4, 2]}
-
-       if test_mode is paired-utest, data is like this.
-            data = {'Cusine_A': = [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
-                    'Cusine_B': = [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
-
-       title: string.
-       xlabel: string.
-       ylabel: string.
-       tight_layout: bool. if execute tight_layout, set True.
-       test_mode: string. paired-ttest, unpaired-ttest, within-anova, between-anova, paired-utest, unpaired-utest
-       p: float. if mode is paired-ttest, unpaired-ttest, paired-utest or unpaired-utest, it is required.
+    if test_mode is paired, data is like this.
+    data = {'Crispy':  [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90],
+    'Normal' : [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70, 80, 85]}
+    Be sure that string list is like ([category1, category2]).
+    
+    title: string.
+    xlabel: string.
+    ylabel: string.
+    tight_layout: bool. if execute tight_layout, set True.
+    sample_type: string. paired, unpaired
+    p: float. if conducted test is two sample test, it is required.
     """
-    def draw_graph(self, data, title, xlabel, ylabel, tight_layout=False, test_mode="paired-ttest", p=None):
+    def draw_graph(self, data, title, xlabel, ylabel, p=None, tight_layout=False, sample_type="paired"):
         """
         fig: make figure instance
         """
@@ -98,36 +82,18 @@ class DrawGraph:
         """
         add title, label
         """
-        if test_mode == "within-anova":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type)"
-        elif test_mode == "between-anova":
+        if sample_type == "paired":
+            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
+        else:
             new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]))
             for i in range(1, len(data.keys())):
                 new_title += ", " + str(len(data[(data.keys())[i]])) 
-            new_title += " respectively)"
-        elif test_mode == "paired-ttest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]])) + " for each type, * p < 0.05, ** p < 0.01)"
-        elif test_mode == "unpaired-ttest" or test_mode=="paired-utest" or test_mode=="unpaired-utest":
-            new_title = title + "\n(N = " + str(len(data[(data.keys())[0]]) + len(data[(data.keys())[1]]))  + " for total (" + str((data.keys())[0]) + ": " +  str(len(data[(data.keys())[0]])) + ", " + str((data.keys())[1]) + ": " + str(len(data[(data.keys())[1]])) + "),\n * p < 0.05, ** p < 0.01)"
+            new_title += " respectively, * p < 0.05, ** p < 0.01)"
         plt.title(new_title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        
-        if (test_mode == "paired-ttest" or test_mode == "unpaired-ttest") and p is None:
-            if test_mode == "paired-ttest":
-                paired_two_sample_test_of_interval_and_ratio_scale = PairedTwoSampleTestOfIntervalAndRatioScale()
-                p = paired_two_sample_test_of_interval_and_ratio_scale.test(data)
-            else:
-                unpaired_two_sample_test_of_interval_and_ratio_scale = UnpairedTwoSampleTestOfIntervalAndRatioScale()
-                p = unpaired_two_sample_test_of_interval_and_ratio_scale.test(data)
-        elif (test_mode == "unpaired-utest" or test_mode == "paired-utest") and p is None:
-            if test_mode == "paired-utest":
-                paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
-                p = paired_two_sample_test_of_ordinal_scale.test(data)
-            else:
-                unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
-                p = unpaired_two_sample_test_of_ordinal_scale.test(data)
-        if p:
+
+        if p and len(data.keys()) == 2:
             """
             add p value and mark
             """
