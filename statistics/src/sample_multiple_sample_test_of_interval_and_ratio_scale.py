@@ -54,7 +54,7 @@ if __name__ == '__main__':
         data['HamburgerB'] = [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80]
         data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90]
         one_way_anova_draw_table.draw_table(data, mode="CR")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "2":
         '''
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         data['a3'] = [10,13,8,13,12,14,14,16]
         data['a4'] = [9,11,13,14,16,12,15,14]
         one_way_anova_draw_table.draw_table(data, mode="CR")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
     
     elif args[1] == "3":
         '''
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         data['a3'] = [13,8,13,12,14,16,10]
         data['a4'] = [11,13,14,16,12]
         one_way_anova_draw_table.draw_table(data, mode="CR")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "4":
         # factorical & one-way
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90, 85, 85]
         
         one_way_anova_draw_table.draw_table(data, mode="RB")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired")
 
     elif args[1] == "5":
         '''
@@ -110,8 +110,7 @@ if __name__ == '__main__':
         data['a4'] = [9,11,13,14,16,12,15,14]
 
         one_way_anova_draw_table.draw_table(data, mode="RB")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
-
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired")
 
     elif args[1] == "6":
         # repeated & two-way
@@ -134,7 +133,7 @@ if __name__ == '__main__':
         label_b = ["Adult", "Children"]
 
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "7":
         data['a1-b1'] = [3,3,1,3,5]
@@ -149,7 +148,7 @@ if __name__ == '__main__':
         label_b = ["b1", "b2", "b3", "b4"]
 
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "8":
         '''
@@ -166,7 +165,7 @@ if __name__ == '__main__':
         label_b = ["b1", "b2"]
 
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="CRFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "9":
         '''
@@ -184,7 +183,7 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "10":
         data['a1-b1'] = [3,3,1,3,5]
@@ -198,7 +197,7 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="SPFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="between-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "11":
         data['a1-b1'] = [3,3,1,3,5]
@@ -212,7 +211,7 @@ if __name__ == '__main__':
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
         two_way_anova_draw_table.draw_table(data, label_a, label_b, mode="RBFpq")
-        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, test_mode="within-anova")
+        draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired")
 
     else:
         print "Please select 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11"

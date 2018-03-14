@@ -4,6 +4,7 @@
 # 参照：心理学のためのデータ解析テクニカルブック　北大路書房
 import sys
 import numpy as np
+from draw_graph import DrawGraph
 from unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
 from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
 from collections import OrderedDict
@@ -16,6 +17,7 @@ if __name__ == '__main__':
         print "1: unpaired test (Kruskal-Wallis test)"
         print "2: paired test (Friedman test)"
     else:
+        draw_graph = DrawGraph()
         if args[1] == "1":
             '''
             ABCの条件で ある刺激に対する幼児の反応時間を測定する．
@@ -33,7 +35,8 @@ if __name__ == '__main__':
             data["C"] = [1.82,4.21,3.10,1.99,2.75,2.18]
             unpaired_multiple_sample_test_of_ordinal_scale = UnpairedMultipleSampleTestOfOrdinalScale()
             unpaired_multiple_sample_test_of_ordinal_scale.test(data)
-            
+            draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
+
         elif args[1] == "2":
             '''
             CM 5本を 7人の評定者に順位付けしてもらう．
@@ -57,3 +60,10 @@ if __name__ == '__main__':
             data["E"] = [4,4,5,3,1,5,1]
             paired_multiple_sample_test_of_ordinal_scale = PairedMultipleSampleTestOfOrdinalScale()
             paired_multiple_sample_test_of_ordinal_scale.test(data)
+            draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired")
+
+        else:
+            print "python sample_multiple_sample_test_of_ordinal_scale.py <sample_type>"
+            print "please choose sample type: "
+            print "1: unpaired test (Kruskal-Wallis test)"
+            print "2: paired test (Friedman test)"
