@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-import numpy as np
+from draw_graph import DrawGraph
 from paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
 from unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
 from collections import OrderedDict
@@ -26,6 +26,7 @@ if __name__ == '__main__':
         print "2: unpaired test + big data (chi-square test)"
         print "3: unpaired test + small data (Fisher's exact test)"
     else:
+        draw_graph = DrawGraph()
         if args[1] == "1":
             '''
             講演会の前後で，ある質問に対して賛成か・反対かを尋ねる．
@@ -76,7 +77,8 @@ if __name__ == '__main__':
                               0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0]
 
             paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
-            paired_two_sample_test_of_nominal_scale.test(data)
+            p = paired_two_sample_test_of_nominal_scale.test(data)
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired", is_scale_nominal=True)
 
         elif args[1] == "2":
             '''
@@ -94,7 +96,8 @@ if __name__ == '__main__':
             data["Illness"] = [52, 8]
             data["Healty"] = [48, 42]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
-            unpaired_two_sample_test_of_nominal_scale.test(data)
+            p = unpaired_two_sample_test_of_nominal_scale.test(data)
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
 
         elif args[1] == "3":
             '''
@@ -113,7 +116,8 @@ if __name__ == '__main__':
             data["Teacher"] = [1, 12]
             data["Counselor"] = [4, 6]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
-            unpaired_two_sample_test_of_nominal_scale.test(data)
+            p = unpaired_two_sample_test_of_nominal_scale.test(data)
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
 
         else:
             print "python sample_two_sample_test_of_nominal_scale.py <sample_type>"

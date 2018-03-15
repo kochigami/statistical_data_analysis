@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+from draw_graph import DrawGraph
 from unpaired_multiple_sample_test_of_nominal_scale import UnpairedMultipleSampleTestOfNominalScale
 from paired_multiple_sample_test_of_nominal_scale import PairedMultipleSampleTestOfNominalScale
 from collections import OrderedDict
@@ -13,6 +14,7 @@ if __name__ == '__main__':
         print "1: unpaired test (chi-square test)"
         print "2: paired test (Cochran's Q test)"
     else:
+        draw_graph = DrawGraph()
         if args[1] == "1":
             '''
             刺激条件を変えて，複数の単語を記憶する．自由再生実験した時に，一番最初に再生された単語のリストでの位置を調べる．
@@ -34,7 +36,8 @@ if __name__ == '__main__':
             data["Audition+Vision"] = [7, 6, 7]
             unpaired_multiple_sample_test_of_nominal_scale = UnpairedMultipleSampleTestOfNominalScale()
             unpaired_multiple_sample_test_of_nominal_scale.test(data)
-            
+            draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
+
         elif args[1] == "2":
             '''
             20人の有権者に，A, B, C候補のそれぞれを支持するかどうかを尋ねる．
@@ -70,7 +73,8 @@ if __name__ == '__main__':
             data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
             paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
             paired_multiple_sample_test_of_nominal_scale.test(data)
-        
+            draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired", is_scale_nominal=True)
+
         else:
             print "please choose sample type: "
             print "1: unpaired test (chi-square test)"

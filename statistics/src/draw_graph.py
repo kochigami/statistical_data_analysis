@@ -20,29 +20,36 @@ class DrawGraph:
     sample_type: string. paired, unpaired
     p: float. if conducted test is two sample test, it is required.
     """
-    def draw_graph(self, data, title, xlabel, ylabel, p=None, tight_layout=False, sample_type="paired"):
+    def draw_graph(self, data, title, xlabel, ylabel, p=None, tight_layout=False, sample_type="paired", is_scale_nominal=False):
         """
         fig: make figure instance
         """
         fig = plt.figure()
         """
-        y_data: calculate sample_data_average as list [ave_0, ave_1, ave_2]
+        y_data: if nominal scale is not used: calculate sample_data_average as list [ave_0, ave_1, ave_2]
+                if nominal scale is used    : calculate sample_data_total_num as list [total_0, total_1, total_2]
         max_y_data: max y value for scale
         """
         y_data = []
-        for i in range(len(data.keys())):
-            y_data.append(np.mean(data[(data.keys())[i]]))
-        max_y_data = math.ceil(max(y_data))
+        if is_scale_nominal == False:
+            for i in range(len(data.keys())):
+                y_data.append(np.mean(data[(data.keys())[i]]))
+        else:
+            for i in range(len(data.keys())):
+                y_data.append(sum(data[(data.keys())[i]]))
 
+        max_y_data = math.ceil(max(y_data))
         """
         y_error: calculate sample_error as list [err_0, err_1]
+        is scale is nominal: it is not calculated
         left: list of x value for each bar, now it is just empty
         ddof=False means calculating Sample standard deviation
         not Unbiased standard deviation (ddof=True)
         """
         y_error = []
-        for i in range(len(data.keys())):
-            y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+        if is_scale_nominal == False:
+            for i in range(len(data.keys())):
+                y_error.append(np.std(data[(data.keys())[i]], ddof=False))
 
         left = np.array([])
         """
@@ -60,8 +67,13 @@ class DrawGraph:
         align: position to x bar (default is "edge")
         ecolor: color of yerror
         capsize: umbrella size of yerror
+
+        If scale is nominal, yerr doesn't exist.
         """
-        plt.bar(left, y_data, color="cyan", yerr=y_error, align="center", ecolor="blue", capsize=60)
+        if is_scale_nominal == False:
+            plt.bar(left, y_data, color="cyan", yerr=y_error, align="center", ecolor="blue", capsize=60)
+        else:
+            plt.bar(left, y_data, color="cyan", align="center", ecolor="blue", capsize=60)
         """
         plt.rcParams["font.size"]: modify character size in a graph
         plt.tick_params(labelsize=28): modify character size in x, ylabel
@@ -73,6 +85,11 @@ class DrawGraph:
         w = 0.4 (bar width from bar center line is 0.4)
         """
         ax = plt.gca()
+
+        """
+        set y range
+        """
+        ax.set_ylim([0.0, max_y_data + 1.0])
         for i in range(len(y_data)):
             ann = ax.annotate(str((round (y_data[i] * 100.0)) * 0.01), xy=(left[i] - 0.15, y_data[i] / 2.0), fontsize=28)
         """
