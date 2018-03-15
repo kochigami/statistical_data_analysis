@@ -3,7 +3,6 @@
 
 # 参照：心理学のためのデータ解析テクニカルブック　北大路書房
 import sys
-import numpy as np
 from draw_graph import DrawGraph
 from unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
 from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
