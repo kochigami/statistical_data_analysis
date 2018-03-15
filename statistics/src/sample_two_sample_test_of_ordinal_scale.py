@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+from draw_graph import DrawGraph
 from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
 from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 from collections import OrderedDict
@@ -20,6 +21,7 @@ if __name__ == '__main__':
         # if we use normal dict, the order of contents sometimes is decided randomly.
         # ex: should be [A, B, C], but output is [A, C, B]
         data = OrderedDict()
+        draw_graph = DrawGraph()
         if args[1] == "1":
             '''
             ref: https://kusuri-jouhou.com/statistics/fugou.html
@@ -41,7 +43,8 @@ if __name__ == '__main__':
             '''
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]
-            paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
 
         elif args[1] == "2":
             '''
@@ -51,7 +54,8 @@ if __name__ == '__main__':
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 2, 5, 3, 2, 3, 5, 4, 2, 3, 5, 4, 1, 2, 3, 2, 3, 5, 2, 3, 3, 5]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 1, 2, 3, 4, 3, 2, 3,
  5, 2, 3, 3, 3, 2, 2, 4, 1, 4, 4, 5, 4, 4]
-            paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
 
         elif args[1] == "3":
             '''
@@ -72,7 +76,8 @@ if __name__ == '__main__':
             '''
             data['Product_A'] = [25, 62, 58, 26, 42, 18, 11, 33, 50, 34]
             data['Product_B'] = [26, 31, 35, 24, 47, 13, 11, 21, 42, 18]
-            paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_rank_sum_test")
+            p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_rank_sum_test")
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
 
         elif args[1] == "4":
             '''
@@ -80,8 +85,8 @@ if __name__ == '__main__':
             '''
             data['24hour'] = [13, 14, 24, 28, 29, 35, 59, 83, 84, 89, 94, 97, 98, 117, 118, 128, 131, 175, 200, 200]
             data['48hour'] = [10, 12, 13, 16, 18, 21, 28, 28, 39, 40, 47, 57, 58, 62, 68, 69, 70, 82, 95, 111, 127]
-            unpaired_two_sample_test_of_ordinal_scale.test(data)
-            
+            p = unpaired_two_sample_test_of_ordinal_scale.test(data)
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired")
             
             # if we use OrderedDict, but if we use the initialization below,
             # the order of contents sometimes is still decided randomly.
