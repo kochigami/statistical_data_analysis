@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from pearsons_product_moment_correlation_coefficient import PearsonsProductMomentCorrelationCoefficient
-from spearmans_rank_correlation_coefficient import SpearmansRankCorrelationCoefficient
+from nominal.pearsons_product_moment_correlation_coefficient import PearsonsProductMomentCorrelationCoefficient
+from nominal.spearmans_rank_correlation_coefficient import SpearmansRankCorrelationCoefficient
 
 if __name__ == '__main__':
         args = sys.argv

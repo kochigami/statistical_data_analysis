@@ -4,10 +4,10 @@ import sys
 import numpy as np
 import operator
 from collections import OrderedDict
-from paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
-from unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
-from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
-from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
+from nominal.paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
+from nominal.unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
+from ordinal.paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
+from ordinal.unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 
 class MultipleComparison:
     def test(self, data, test="none", alpha=0.05):

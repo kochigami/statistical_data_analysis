@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# 参照：心理学のためのデータ解析テクニカルブック　北大路書房
 import sys
-from draw_graph import DrawGraph
-from unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
-from paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
+from draw.draw_graph import DrawGraph
+from ordinal.unpaired_multiple_sample_test_of_ordinal_scale import UnpairedMultipleSampleTestOfOrdinalScale
+from ordinal.paired_multiple_sample_test_of_ordinal_scale import PairedMultipleSampleTestOfOrdinalScale
 from collections import OrderedDict
 
 if __name__ == '__main__':

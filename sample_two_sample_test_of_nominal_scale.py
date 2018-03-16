@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from draw_graph import DrawGraph
-from paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
-from unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
+from draw.draw_graph import DrawGraph
+from nominal.paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
+from nominal.unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
 from collections import OrderedDict
 
 """
