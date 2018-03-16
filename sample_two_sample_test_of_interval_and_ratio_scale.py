@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from draw_graph import DrawGraph
-from paired_two_sample_test_of_interval_and_ratio_scale import PairedTwoSampleTestOfIntervalAndRatioScale
-from unpaired_two_sample_test_of_interval_and_ratio_scale import UnpairedTwoSampleTestOfIntervalAndRatioScale
+from draw.draw_graph import DrawGraph
+from interval_and_ratio.paired_two_sample_test_of_interval_and_ratio_scale import PairedTwoSampleTestOfIntervalAndRatioScale
+from interval_and_ratio.unpaired_two_sample_test_of_interval_and_ratio_scale import UnpairedTwoSampleTestOfIntervalAndRatioScale
 from collections import OrderedDict
 
 if __name__ == '__main__':

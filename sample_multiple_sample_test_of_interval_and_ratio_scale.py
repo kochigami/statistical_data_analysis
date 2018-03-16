@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from one_way_anova_draw_table import OneWayAnovaDrawTable
-from two_way_anova_draw_table import TwoWayAnovaDrawTable
-from draw_graph import DrawGraph
+from interval_and_ratio.one_way_anova_draw_table import OneWayAnovaDrawTable
+from interval_and_ratio.two_way_anova_draw_table import TwoWayAnovaDrawTable
+from draw.draw_graph import DrawGraph
 from collections import OrderedDict
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from draw_graph import DrawGraph
-from paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
-from unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
+from draw.draw_graph import DrawGraph
+from ordinal.paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
+from ordinal.unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 from collections import OrderedDict
 
 if __name__ == '__main__':

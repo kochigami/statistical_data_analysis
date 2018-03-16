@@ -13,11 +13,11 @@
 
 - 対応のあるt検定
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 1```
-![](sample_fig/sample_welch_test.png)
+![](fig/sample_welch_test.png)
 
 - 対応のないt検定
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 2```
-![](sample_fig/sample_unpaired_student_test.png)
+![](fig/sample_unpaired_student_test.png)
 
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 3```
-![](sample_fig/sample_paired_student_test.png)
+![](fig/sample_paired_student_test.png)

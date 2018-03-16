@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from multiple_comparison import MultipleComparison
+from interval_and_ratio.multiple_comparison import MultipleComparison
 from collections import OrderedDict
 
 if __name__ == '__main__':

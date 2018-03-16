@@ -3,8 +3,8 @@
 import numpy as np
 #from chi_squared_test_draw_graph import ChiSquaredTestDrawGraph
 #from chi_squared_test_draw_table import ChiSquaredTestDrawTable
-from chi_squared_test import ChiSquaredTest
-from fisher_test import FisherTest
+from nominal.chi_squared_test import ChiSquaredTest
+from nominal.fisher_test import FisherTest
 
 class UnpairedTwoSampleTestOfNominalScale:
     def test(self, data):
