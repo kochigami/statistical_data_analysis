@@ -1,23 +1,39 @@
-# 同じ被験者の条件ごとの計量尺度に基づくデータの比較 (例：ふれ合い時間）  
+# 同じ被験者に体験前後でアンケート (対応有り)
 
-- 1. 対応のある2条件の平均値の差の検定  
-- 例：同じ被験者で，ロボット1，ロボット2とのふれ合い時間を比較
+- Yes/ No 形式 (名義尺度)：マクニマーの検定
+- グレード形式 (順位尺度)：符号付き順位和検定
 
-# 異なる被験者の条件ごとの計量尺度に基づくデータの比較 (例：ふれ合い時間）  
+# 条件1、条件2ごとに異なる被験者に試してもらい，アンケート (対応無し)
 
-- 1. 対応のない2条件の平均値の差の検定（分散が等質な場合）  
-- 2. 対応のない2条件の平均値の差の検定（分散が等質でない場合）
-- 例：異なる被験者で，ロボット1，ロボット2とのふれ合い時間のデータを集めて比較  
+- Yes/ No 形式 (名義尺度)：カイ2乗検定  
+コクラン・ルールを満たさない場合：フィッシャーの直接法  
+最近は，パソコンで計算できるからどんなときもフィッシャーの直接法を用いるべきという意見もある．しかし，このパッケージではpythonでのオーバーフローの問題を回避できないので，コクラン・ルールを満たすかどうかの判定を行う．
+
+- グレード形式 (順位尺度)：マン・ホイトニーの検定
 
 # サンプル
 
-- 対応のあるt検定
-```python sample_two_sample_test_of_interval_and_ratio_scale.py 1```
-![](fig/sample_welch_test.png)
+- 名義尺度
 
-- 対応のないt検定
-```python sample_two_sample_test_of_interval_and_ratio_scale.py 2```
-![](fig/sample_unpaired_student_test.png)
+paired test (McNemar test):   
+```python sample_two_sample_test_of_nominal_scale.py 1```
 
-```python sample_two_sample_test_of_interval_and_ratio_scale.py 3```
-![](fig/sample_paired_student_test.png)
+unpaired test + big data (chi-square test):  
+```python sample_two_sample_test_of_nominal_scale.py 2```
+
+unpaired test + small data (Fisher's exact test):  
+```python sample_two_sample_test_of_nominal_scale.py 3```
+
+- 順位尺度
+
+paired sample, signed test + small data:  
+```python sample_two_sample_test_of_ordinal_scale.py 1```
+
+paired sample, signed test + big data:  
+```python sample_two_sample_test_of_ordinal_scale.py 2```
+
+paired sample, signed rank sum test:    
+```python sample_two_sample_test_of_ordinal_scale.py 3```
+
+unpaired sample, mann-whitney test:  
+```python sample_two_sample_test_of_ordinal_scale.py 4```
