@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from multiple_comparison import MultipleComparison
+from interval_and_ratio.multiple_comparison import MultipleComparison
 
 """
 Friedman test

@@ -1,7 +1,7 @@
 # 同じ被験者に体験前後でアンケート (対応有り)
 
 - Yes/ No 形式 (名義尺度)：マクニマーの検定
-- グレード形式 (順位尺度)：符号付き順位和検定
+- グレード形式 (順位尺度)：符号付き順位和検定 (Wilcoxon Signed-ranks test)
 
 # 条件1、条件2ごとに異なる被験者に試してもらい，アンケート (対応無し)
 
@@ -37,3 +37,36 @@ paired sample, signed rank sum test:
 
 unpaired sample, mann-whitney test:  
 ```python sample_two_sample_test_of_ordinal_scale.py 4```
+
+# how to report results
+
+- Mann Whitney U test
+
+```
+補足
+To study the differences in <dependent variable> between <level1 of the independent variable> and <level2 of the independent variable>, we used the Mann-Whitney U test to analyse <dependent variable>. We ran the Mann-Whitney U test using <type of independent variable> as the grouping variable and <dependent variable> as the dependent variable.
+```
+
+```
+A Mann-Whitney test indicated that the <fill dependent variable> was greater for <fill level1 of the independent variable> (Mdn = <fill median1>) than for <fill level2 of the independent variable> (Mdn = <fill median2>), U=<fill U>, p=<fill p>.   
+```
+
+- Wilcoxon Signed-ranks test
+
+```
+A Wilcoxon Signed-Ranks Test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>. 
+
+# if the reason you used a Wilcoxon Signed-Ranks Test is because your data is very skewed or non-normal, just report it the same way but replace "ranks" with "scores".
+```
+
+- Kruskal Wallis Test
+
+```
+A Kruskal Wallis Test indicated that there was a statistically significant difference between <fill dependent variable> (H(<fill dof>) = <fill H>, p=<fill p>), with a mean rank of <fill mean rank1> for <independent value1>, <fill mean rank2> for <independent value2>, <fill mean rank3> for <independent value3>.
+```
+
+- Friedman Test
+
+```
+A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of <fill chi-square value, in program, S value> which was significant (p < .01).
+```

@@ -4,6 +4,7 @@ from scipy import stats
 import sys
 import itertools
 import math
+import numpy
 
 '''
 signed rank sum test
@@ -178,6 +179,9 @@ class PairedTwoSampleTestOfOrdinalScale:
                     # calculate p value from z value
                     # multiply 2.0 for two-side test
                     p = stats.norm.sf(abs(z)) * 2.0
+                    print "z value: " + str(z)
+                print "median (" + str((data.keys())[0]) + ") =" + str(numpy.median(x))
+                print "median (" + str((data.keys())[1]) + ") =" + str(numpy.median(y))
                 print "p value: " + str(p)
                 return p
 

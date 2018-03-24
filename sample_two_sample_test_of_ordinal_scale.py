@@ -88,8 +88,6 @@ if __name__ == '__main__':
             data['48hour'] = [10, 12, 13, 16, 18, 21, 28, 28, 39, 40, 47, 57, 58, 62, 68, 69, 70, 82, 95, 111, 127]
             p = unpaired_two_sample_test_of_ordinal_scale.test(data)
             draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired")
-            print "To study the differences in learning effect between the rats which couldn't eat anything for 24 hours and rats which couldn't eat anything for 48 hours, we used the Mann-Whitney U test to analyse the learning counts. First we ran the Mann-Whitney U test using the “type of time” as the grouping variable and the “learning counts” as the test variable."
-            print "A Mann-Whitney test indicated that the learning times was significantly greater for rats which couldn't eat anything for 24 hours (Mdn = " + str(numpy.median(data['24hour'])) + ") than for rats which couldn't eat anything for 48 hours (Mdn = " + str(numpy.median(data['48hour'])) + "), U=117.5, p < 0.01."
             
             # if we use OrderedDict, but if we use the initialization below,
             # the order of contents sometimes is still decided randomly.
