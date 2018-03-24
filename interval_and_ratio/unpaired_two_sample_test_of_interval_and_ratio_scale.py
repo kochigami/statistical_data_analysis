@@ -86,5 +86,7 @@ class UnpairedTwoSampleTestOfIntervalAndRatioScale:
             ### homoscedasticity: tou bunsan
             print ("t-test with homoscedasticity")
 
+        print( "dof = " + str(dof) )
+        print( "t value = %(t)s" %locals() )
         print( "p value = %(p)s" %locals() )
         return p
