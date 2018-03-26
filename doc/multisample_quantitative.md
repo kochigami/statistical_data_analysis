@@ -65,3 +65,77 @@ SPFpq デザイン（データ数異なる）
 
 RBFpq デザイン  
 ```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 11```  
+
+# How to report results
+
+- A one-way between subjects ANOVA
+
+```
+A one-way between subjects ANOVA was conducted to compare the effect of <name of the effect (IV); ex. type of athelete> on the <dependent variable; ex. number of pizza slices eaten>.
+
+An analysis of variance showed that the effect of <name of the effect (IV)> on <dependent variable> was significant at the p<.05 level, F(<between groups dof, within groups dof>)=<F value>, p=<p value>. 
+
+Post hoc comparisons using the <test name; ex. Tukey HSD test> indicated that the mean score for the <condition 1> (M=<mean value>, SD=<sd value>) was significantly different than the <condition 2> (M=<mean value>, SD=<sd value>). However, the <condition 3> (M=<mean value>, SD=<sd value>) did not significantly differ from <codition 1> and <condition 2>.
+```
+
+- A one-way repeated measures ANOVA
+
+```
+A one-way repeated measures ANOVA was conducted to compare the effect of <name of the effect (IV); ex. time of eating pizza slices> on the <dependent variable; ex. pizza slices consumed, before, during and after the season>.
+
+These data consist of the <time of 30 people>. Each <person> was tested under <three times>. 
+
+The results of a one-way repeated measures ANOVA show that the <time of eating pizza slices> was significantly affected by <pizza slices consimed, before, during and after the season>, F(4, 36) = 18.36, p<.001.
+
+<Ver.1>
+Post hoc comparisons using the <test name; ex. Tukey HSD test> indicated that the mean score for the <condition 1> (M=<mean value>, SD=<sd value>) was significantly different than the <condition 2> (M=<mean value>, SD=<sd value>). 
+No other comparisons were significant.
+
+<Ver. 2>
+Three paired samples t-tests were used to make post hoc comparisons between conditions. 
+
+A first paired samples t-test indicated that there was a significant difference between <the number of pizza slices eaten> <before> (M=<3.0>, SD=<.76>) and <during> (M=<6.3>, SD=<.71>) <the season>; t(<7>)=<6.62>, p=.<.000>.
+
+A second paired samples t-test indicated that there was a significant difference between <the number of pizza slices eaten> <during> (M=<6.3>, SD=<.71>) and <after> (M=<1.4>, SD=<.52>) <the season>; t(<7>)=<13.91>, p=.<.000>.
+
+A third paired samples t-test indicated that there was a significant difference between <the number of pizza slices eaten> <before> (M=<3.0>, SD=<.76>) and <after> (M=<1.4>, SD=<.52>) <the season>; t(<7>)=<6.18>, p=.<.000>.
+```
+
+- A two-way between subjects ANOVA (A factrial ANOVA)
+
+```
+A two-way between subjects ANOVA was conducted on the influence of two independent variables (<two varables>; ex. athlete type, age) on the number of <independent variable; ex. slices of pizza eaten in one sitting>. 
+
+<Dependent variable1; ex. Athlete type> included <three> levels (<type1, type2, type3; ex. football, basketball, soccer players>) and <Dependent variable2; age> consisted of <two> levels (<type1, type2; ex. younger, older>). 
+
+All effects were statistically significant at the .05 significance level except for <the Age factor>.
+
+The main effect for <athelete> type yielded an F ratio of F(<2>, <63>)=<136.2>, p<.001, indicating a significant difference between <football players> (M=<9.39>, SD=<1.99>), <basketball players> (M=<5.17>, SD=<1.40>) and <soccer players> (M=<2.52>, SD=<1.53>).
+
+The main effect for <age> yielded an F ratio of F(<1>, <63>)=<2.9>, p>.05, indicating the effect for age was not significant, younger (M=<5.97>, SD=<3.97>) and older (M=<5.39>, SD=<2.34>).
+
+The interaction effect was significant, F(<2>, <63>)=<13.36>, p < .001.
+
+Post hoc comparisons using the <test name; ex. Tukey HSD test> indicated that the mean score for the <condition 1> (M=<mean value>, SD=<sd value>) was significantly different than the <condition 2> (M=<mean value>, SD=<sd value>). 
+No other comparisons were significant.
+```
+
+- A two-way mixed ANOVA (with one within-subjects factor and one between-groups factor)
+
+```
+The sleep quality (percentage of time spent in delta sleep) of women with secure, anxious or avoidant attachment styles (N = 3 x 10) was measured when sleeping with and without their partners. 
+
+If a harmonious relationship has a stress reducing effect, we expect sleep quality to improve in the presence of their partner especially for securely attached women. 
+
+A 3 x 2 ANOVA with Attachment Style as an independent factor and absence or Presence of Partner as a within-subjects factor was run. 
+
+The analysis revealed a main effect of Partner Presence (F(1, 27) = 90.74, p < .001) in the predicted direction, a main effect of Attachment Style (F(2, 27) = 17.47, p < .001) and an interaction between Partner Presence and Attachment Style (F(2, 27) = 50.57, p > .001). 
+
+As predicted, women with secure attachment styles slept better than either of the other two groups (p = .001) and they experienced the greatest improvement in sleep quality by the presence of their partners.
+```
+
+- A two-way repeated measures ANOVA 
+
+```
+
+```
