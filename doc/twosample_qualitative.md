@@ -40,6 +40,33 @@ unpaired sample, mann-whitney test:
 
 # how to report results
 
+## nominal
+
+- McNemar Test
+
+```
+A McNemar Test was performed to examine the relation between <ex. approval of product A> and <ex. a lecture from a company>.
+The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. People before taking a lecture from a company> were less likely to <ex. show an approval of productA> than were <ex. people after taking a lecture from a company>.
+```
+
+- Chi-square Test
+
+```
+A chi-square test of independence was performed to examine the relation between <ex. religion> and <ex. college interest>. 
+The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. Catholic teens> were less likely to <ex. show an interest in attending college> than were <ex. Protestant teens>.
+```
+
+- Fisher's Exact Test 
+
+```
+ex. 
+Fisher's Exact Test indicated that primary outcome results indicated a non-significant reduction in the acquisition of plasma cell endometritis in the antibiotic group with a prevalence of 28% (9/32), compared to 50% (14/28) in the placebo group (p=0.11). 
+reference: http://www.pmean.com/08/ReportingFishersExact.html
+
+```
+
+## ordinal
+
 - Mann Whitney U test
 
 ```
@@ -63,16 +90,4 @@ A sign test indicated that <fill time2 of independent variable; ex. post-test ra
 A Wilcoxon Signed-Ranks Test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>. 
 
 # if the reason you used a Wilcoxon Signed-Ranks Test is because your data is very skewed or non-normal, just report it the same way but replace "ranks" with "scores".
-```
-
-- Kruskal Wallis Test
-
-```
-A Kruskal Wallis Test indicated that there was a statistically significant difference between <fill dependent variable> (H(<fill dof>) = <fill H>, p=<fill p>), with a mean rank of <fill mean rank1> for <independent value1>, <fill mean rank2> for <independent value2>, <fill mean rank3> for <independent value3>.
-```
-
-- Friedman Test
-
-```
-A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of <fill chi-square value, in program, S value> which was significant (p < .01).
 ```
