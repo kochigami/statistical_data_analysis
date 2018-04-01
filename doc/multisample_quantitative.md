@@ -137,5 +137,7 @@ As predicted, women with secure attachment styles slept better than either of th
 - A two-way repeated measures ANOVA 
 
 ```
-
+We can report that there was a significant main effect of <looks>, F(<2>, <18>)=<66.44>, p<.001.
+We can report that there was a significant main effect of <charisma>, F(<2>, <18>) =<274.89>, p<.001.
+We can report that there was a significant interaction between <the attractiveness of the date and the charisma of the date>, F(<looks x charisma dof>, <error(looks x charisma) dof>) = <34.91>, p<.001.
 ```
