@@ -38,7 +38,7 @@ class DrawGraph:
             for i in range(len(data.keys())):
                 y_data.append(sum(data[(data.keys())[i]]))
 
-        max_y_data = math.ceil(max(y_data))
+        print "y_data: " + str(y_data)
         """
         y_error: calculate sample_error as list [err_0, err_1]
         is scale is nominal: it is not calculated
@@ -50,6 +50,9 @@ class DrawGraph:
         if is_scale_nominal == False:
             for i in range(len(data.keys())):
                 y_error.append(np.std(data[(data.keys())[i]], ddof=False))
+
+        print "y_error: " + str(y_error)
+        max_y_data = math.ceil(max(y_data) + max(y_error))
 
         left = np.array([])
         """

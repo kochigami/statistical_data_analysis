@@ -1,67 +1,61 @@
-# 一元配置: 要因は1つ
+# 条件1、条件2ごとにアンケート (対応無し)
 
-## 各処理水準に異なる被験者が無作為に割り当てられている（注）場合： 
+- Yes/ No 形式 (名義尺度)：カイ二乗検定  
+- グレード形式 (順位尺度)：クラスカル・ウォリスの検定    
 
-- completely randomized design (CR デザイン)
-- 注：1人の被験者は，1回の実験で1つの条件しか試さない  
-- 例：ロボット1, ロボット2, ロボット3 それぞれのふれ合い時間を比較する    
-- （１つしかない要因：ロボットの種類）  
+# 同じ被験者に体験前後でアンケート (対応有り)
 
-## 同一の被験者 / 被験者グループ（注）が全ての処理水準に参加している場合： 
+- Yes/ No 形式 (名義尺度)：コクランのQ検定  
+- グレード形式 (順位尺度)：フリードマンの検定  
 
-- randomized block design (RB デザイン)
-- 例：ロボット1, ロボット2, ロボット3との被験者ごとのふれ合い時間の比較   
-- (要因１：ロボットの種類，要因２：個人差)  
-- 注１：特定の剰余変数によって被験者をブロック化し，各ブロック内の被験者を各処理水準に無作為に割り当てる場合も含む
-- 注２：ブロック化は，被験者をグループ化して扱うこと（被験者を個人としては扱わない）  
+# サンプル
 
-# 二元配置: 要因は2つ
+- 名義尺度
 
-## 要因１，要因２が共に被験者間変数であり，
-## それぞれの要因の各処理水準に異なる被験者が無作為に割り当てられている場合：
+unpaired test (chi-square test):   
+```python sample_two_sample_test_of_nominal_scale.py 1```
 
-- completely randomized factorial design (CRFpq デザイン)
-- 例：「あるロボット」（複数の種類があり、1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，1つ選ぶ）の条件で，ロボットと複数の人に**1回**ふれ合ってもらう．  
+paired test (Cochran's Q test):  
+```python sample_two_sample_test_of_nominal_scale.py 2```
 
-## 要因１の各処理水準には異なる被験者が無作為に割り当てられていて，
-## 要因２には同一の被験者（注）がすべての処理水準に参加している場合： 
+- 順位尺度
 
-- split-plot design (SPFpq デザイン)
-- 注：特定の剰余変数に基づいて被験者をブロック化し，そのブロック内の被験者を各処理水準に無作為に割り当てる場合も含む
-- 例：「あるロボット」（複数の種類があり、1つ選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，全て選ぶ）の条件で，ロボットと複数の人にふれ合ってもらう．  
+unpaired test (Kruskal-Wallis test):  
+```python sample_two_sample_test_of_ordinal_scale.py 1```
 
-## 同一の被験者が要因１，２の全ての処理水準に参加している（注）場合：
+paired test (Friedman test):  
+```python sample_two_sample_test_of_ordinal_scale.py 2```
 
-- randomized block factorial design (RBFpq デザイン)
-- 例：「あるロボット」（複数の種類があり、全て選ぶ）と「あるふれ合い方」（複数のふれ合い方があり，全て選ぶ）の条件で，ロボットと複数の人にふれ合ってもらう．  
-- 注１：特定の剰余変数によって被験者をブロック化し，各ブロック内の被験者を各処理水準に無作為に割り当てる場合も含む
-- 注２：ブロック化は，被験者をグループ化して扱うこと（被験者を個人としては扱わない）  
+# how to report results
 
-## サンプル
+## nominal
 
-CR デザイン（データ数異なる）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 1```  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 3```  
+- Chi-square Test
 
-CR デザイン（データ数同じ）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 2```  
+```
+A chi-square test of independence was performed to examine the relation between <ex. religion> and <ex. college interest>. 
+The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. Catholic teens> were less likely to <ex. show an interest in attending college> than were <ex. Protestant teens>.
+```
 
-RB デザイン  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 4```  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 5```  
+- Cochran's Q Test
 
-CRFpq デザイン（データ数同じ）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 7```  
+```
+A Cochran's Q Test was performed to compare an approval rating between <ex. candidate1>, <ex. candidate2> and <ex. <ex. candidate3>.
+It indicated that 
+was conducted and rendered a X^2(<fill dof, ex. 2>) = <Q value> which was significant (p < .01).
 
-CRFpq デザイン（データ数異なる）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 6```  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 8```  
+```
 
-SPFpq デザイン（データ数同じ）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 9```  
+## ordinal
 
-SPFpq デザイン（データ数異なる）  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 10```  
+- Kruskal Wallis Test
 
-RBFpq デザイン  
-```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 11```  
+```
+A Kruskal Wallis Test indicated that there was a statistically significant difference between <fill dependent variable> (H(<fill dof>) = <fill H>, p=<fill p>), with a mean rank of <fill mean rank1> for <independent value1>, <fill mean rank2> for <independent value2>, <fill mean rank3> for <independent value3>.
+```
+
+- Friedman Test
+
+```
+A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of <fill chi-square value, in program, S value> which was significant (p < .01).
+```

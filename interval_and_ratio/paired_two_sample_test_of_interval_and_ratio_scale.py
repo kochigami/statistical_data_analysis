@@ -28,6 +28,8 @@ class PairedTwoSampleTestOfIntervalAndRatioScale:
         y = data[(data.keys())[1]]
         if len(x) == len(y):
             t, p = stats.ttest_rel(x, y)
+            print ("dof = " + str(len(x) - 1))
+            print ("t value = %(t)s" %locals() )
             print ("p value = %(p)s" %locals() )
             return p
         else:
