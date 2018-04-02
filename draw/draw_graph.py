@@ -50,9 +50,10 @@ class DrawGraph:
         if is_scale_nominal == False:
             for i in range(len(data.keys())):
                 y_error.append(np.std(data[(data.keys())[i]], ddof=False))
-
-        print "y_error: " + str(y_error)
-        max_y_data = math.ceil(max(y_data) + max(y_error))
+            print "y_error: " + str(y_error)
+            max_y_data = math.ceil(max(y_data) + max(y_error))
+        else:
+            max_y_data = math.ceil(max(y_data))
 
         left = np.array([])
         """
