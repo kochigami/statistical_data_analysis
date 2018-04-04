@@ -13,6 +13,22 @@ Fisher's Exact Test indicated that teachers considered less seriously non-social
 
 ## Two sample Test (ordinal scale)
 
+```
+A Mann-Whitney test indicated that the number of trials which satisfied the learning criteria was greater for mice which did not eat anything for 48 hours (Mdn=47.0) than for mice which did not eat anything for 24 hours (Mdn=91.5), U=117.5, p=0.008.
+```
+
+```
+A sign test indicated that there is not significant difference between the score of cusine A (Mdn=3.5) and that of cusine B (Mdn=3.0); p=0.34.
+```
+
+```
+A sign test indicated that there is not significant difference between the score of cusine A (Mdn=3.0) and that of cusine B (Mdn=3.0); Z=-0.98, p=0.34.
+```
+
+```
+A Wilcoxon Signed-Ranks Test indicated that the number of times people used product A in three months (Mdn=33.5) was statistically significantly higher than the number of times people used product B in three months (Mdn=22.5); T=4.5, n=9, p<.005. 
+```
+
 ## Two sample Test (interval and ratio scale)
 
 ```

@@ -94,7 +94,9 @@ class PairedTwoSampleTestOfOrdinalScale:
                     t = t_minus
                 else:
                     t = t_plus
-            
+                
+                print "median (" + str((data.keys())[0]) + ") =" + str(numpy.median(x))
+                print "median (" + str((data.keys())[1]) + ") =" + str(numpy.median(y))
                 print "t: " + str(t)
                 print "n: " + str(len(diff))
                 print "If t is smaller than T_threshold at n = " + str(len(diff)) + ", you can reject null hypothesis."
