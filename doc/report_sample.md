@@ -42,3 +42,33 @@ An independent-samples t-test was conducted to compare scores of taste in WakuWa
 ```
 A paired-samples t-test was conducted to compare scores of taste in WakuWaku Burger and MoguMogu Burger conditions. There was a significant difference in the scores for WakuWaku Burger (M=76.88, SD=6.585) and MoguMogu Burger (M=81.25, SD=5.995) conditions; t(7)=-2.97, p=0.021. 
 ```
+
+## Multiple sample Test (nominal)
+
+```
+A chi-square test of independence was performed to examine the relation between learning method (vision, audition, vision + audition) and the place of the learning word people remembered. 
+The relation between these variables was significant, X^2(2) = 9.69, p<.01. <ex. Catholic teens> were less likely to <ex. show an interest in attending college> than were <ex. Protestant teens>.
+```
+
+```
+A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C.
+It rendered a X^2(<fill dof, ex. 2>) = 8.0 which was significant (p = 0.018).
+Post hoc comparisons using the Tukey HSD test indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6). 
+```
+
+## Multiple sample Test (ordinal)
+
+```
+A Kruskal Wallis Test indicated that there was a statistically significant difference between the time which infants reacted to a specific stimulus (H(2) =7.06, p=0.017), with a mean rank of 11.2 for condition1, 12.5 for condition2, 4.83 for condition3. 
+
+Post hoc comparisons using the Tukey HSD test indicated that the mean score for the condition2 (M=12.5, SD=4.5) was significantly different than the condition3 (M=4.83, SD=3.02). 
+The mean score for the condition1 (M=11.2, SD=4.22) was significantly different than the condition3 (M=4.83, SD=3.02). 
+However, the condition1 (M=11.2, SD=4.22) did not significantly differ from codition2.
+```
+
+```
+A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of 3.66, which was not significant (p =  0.55).
+```
+
+## Multiple sample Test (interval and ratio)
+
