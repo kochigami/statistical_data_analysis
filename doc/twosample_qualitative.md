@@ -81,7 +81,7 @@ A Mann-Whitney test indicated that the <fill dependent variable> was greater for
 - Sign test
 
 ```
-A sign test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mean = <fill mean1>, SD=<sd1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mean = <fill mean2>, SD=<sd2>); Z=<fill Z>, p= <fill p>.
+A sign test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>.
 ```
 
 - Wilcoxon Signed-ranks test

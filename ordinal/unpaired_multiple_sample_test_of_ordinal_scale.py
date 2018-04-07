@@ -63,7 +63,7 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         H = 0.0
         for i in range(len(all_data_order.keys())):
             # sum of order in each category
-            print "median (" + str((all_data_order.keys())[i]) + "): " + str(numpy.median(all_data_order[(all_data_order.keys())[i]]))
+            print "mean rank (" + str((all_data_order.keys())[i]) + "): " + str(numpy.mean(all_data_order[(all_data_order.keys())[i]]))
             H += sum(all_data_order[(all_data_order.keys())[i]]) * sum(all_data_order[(all_data_order.keys())[i]]) / len(all_data_order[(all_data_order.keys())[i]])
         H *= 12.0 / (N * (N + 1.0)) 
         H -= 3.0 * (N + 1.0)

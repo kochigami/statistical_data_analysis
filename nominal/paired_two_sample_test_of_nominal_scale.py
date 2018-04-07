@@ -41,5 +41,6 @@ class PairedTwoSampleTestOfNominalScale:
             chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
             p = stats.chi2.cdf(chi2, df=1)
             p = 1.0 - p
+            print "chi2 value: " + str(chi2)
             print "p value: "+ str(p)
             return p

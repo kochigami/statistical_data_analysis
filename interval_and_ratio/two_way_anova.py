@@ -191,7 +191,7 @@ class TwoWayAnova:
             print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
             print "q_threshold: 0.05, dof1: " + str(p) + ", dof2: " + str(WC_dof)
             print "dof of factor1: " + str(p) + " dof of factor2: " + str(q)
-            print "HSD: q_threshold * " +str(math.sqrt(MSwc / (n * q))) + " (math.sqrt(MSwc / (n * (dof of factor2))))"
+            print "HSD: " + str(0.05 * math.sqrt(MSwc / (n * q))) + "(= q_threshold (0.05) * (math.sqrt(MSwc / (n * (dof of factor2)))))"
             print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
             print "------"
             print "------"
@@ -327,7 +327,7 @@ class TwoWayAnova:
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
         if mode == "CRF":
             print "q_threshold: 0.05, m: " + str(p) + ", WC_dof: " + str(WC_dof)
-            print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+            print "HSD:  " +str(0.05 * math.sqrt(MSwc / n)) + " (= q_threshold * math.sqrt(MSwc / n))"
         elif mode == "SPF":
             print "HSD: q_threshold(*) * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSpool / n))"
             print "q_threshold(*): " + "(q1 * MSsa + q2 * MSbxsa * (q - 1)) / (MSsa + MSbxsa * (q - 1))"
@@ -354,12 +354,12 @@ class TwoWayAnova:
         print "Refer to q table for Tukey's test. (ex. http://www2.stat.duke.edu/courses/Spring98/sta110c/qtable.html)"
         if mode == "CRF":
             print "q_threshold: 0.05, m: " + str(q) + ", WC_dof: " + str(WC_dof)
-            print "HSD: q_threshold * " +str(math.sqrt(MSwc / n)) + " (math.sqrt(MSwc / n))"
+            print "HSD: " + str(0.05 * math.sqrt(MSwc / n)) + " (= q_threshold (0.05) * (math.sqrt(MSwc / n)))"
         elif mode == "SPF":
             print "q_threshold: 0.05, m: " + str(q) + ", BxSA_dof: " + str(BxSA_dof)
-            print "HSD: q_threshold * " +str(math.sqrt(MSbxsa / n)) + " (math.sqrt(MSbxsa / n))"
+            print "HSD: " +str(0.05 * math.sqrt(MSbxsa / n)) + " (= q_threshold (0.05) * (math.sqrt(MSbxsa / n)))"
         elif mode == "RBF":
-            print "HSD: q_threshold(*) * " +str(math.sqrt(MSbxsa / n)) + " (math.sqrt(MSpool_b / n))"
+            print "HSD: q_threshold(*) * " +str(math.sqrt(MSbxsa / n)) + " (= math.sqrt(MSpool_b / n))"
             print "q_threshold(*): " + "(q1-b * MSbxs + q2 * MSaxbxs * (p - 1)) / (MSbxs + MSaxbxs * (p - 1))"
             print "p: " + str(p) + " q: " + str(q)
         print "if abs(average_list[k] - average_list[l]) > HSD, it is different significantly."
