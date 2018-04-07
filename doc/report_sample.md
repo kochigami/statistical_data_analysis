@@ -72,3 +72,58 @@ A non-parametric Friedman test of differences among repeated measures was conduc
 
 ## Multiple sample Test (interval and ratio)
 
+```
+A one-way between subjects ANOVA was conducted to compare the effect of a type of hamburger on the score of taste.
+
+An analysis of variance showed that the effect of a type of hamburger on the score was significant at the p<.05 level, F(2, 55)=12.26, p=0.001. 
+
+Post hoc comparisons using the holm test indicated that the mean score for the HamburgerA (M=84.0, SD=5.39) was significantly different than the HamburgerB (M=79.5, SD=5.45) (p<.001). 
+The HamburgerA (M=84.0, SD=5.39) was significantly different than the HamburgerC (M=88.5, SD=5.52) (p=0.0076). 
+The HamburgerB (M=79.5, SD=5.45) was significantly different than the HamburgerC (M=88.5, SD=5.52) (p=0.0091). 
+```
+
+```
+A one-way repeated measures ANOVA was conducted to compare the effect of a type of hamburger on the score of taste.
+
+These data consist of the scores of 20 people. Each person was evaluated under three conditions. 
+
+The results of a one-way repeated measures ANOVA show that the score of taste was significantly affected by a type of hamburger, F(2, 38)=23.17, p=0.001.
+The score of taste was significantly affected by a type of subject, F(19, 38)=3.69, p=0.001.
+
+Post hoc comparisons using the Holm test indicated that there was no significant difference between HamburgerA (M=84.0, SD=5.39), HamburgerB (M=79.5, SD=5.45) and HamburgerC (M=88.2, SD=5.34).
+```
+
+```
+A two-way between subjects ANOVA was conducted on the influence of two independent variables (robot type and people age) on the number of a score of people's satisfactiory of interaction with a robot. 
+
+Robot type included two levels (NAO and Pepper) and people age consisted of two levels (Adult and Children). 
+
+All effects were statistically significant at the .05 significance level except for robot type.
+
+The main effect for robot type type yielded an F ratio of F(1, 54)=1.48, p=0.23, indicating a significant difference between NAO (M=, SD=), Pepper (M=, SD=).
+
+The main effect for people age yielded an F ratio of F(1, 54)=4.15, p=0.047, indicating a significant difference between Children (M=, SD=) and Adults (M=, SD=).
+
+The interaction effect was significant, F(1, 54)=5.02, p=0.03.
+
+Post hoc comparisons using the Hlm test indicated a significant difference between NAO & Adults (M=79.67, SD=7.63) and Pepper & Adults (M=72.67, SD=7.50), and NAO & Children (M=71.0, SD=7.12) and NAO & Adults (M=79.67, SD=7.63).
+No other comparisons were statically significant.
+```
+
+```
+The sleep quality (percentage of time spent in delta sleep) of people with a1 and a2 (N=2x5) was measured when sleeping with b1, b2, b3 and b4. 
+
+(If a harmonious relationship has a stress reducing effect, we expect sleep quality to improve in the presence of their partner especially for securely attached women.)
+
+A 2 x 4 ANOVA with category of a1 & a2 as an independent factor and category of b1, b2, b3 and b4 as a within-subjects factor was run. 
+
+The analysis revealed a main effect of a category of a1 & a2 (F(1, 8)=2.91, p=0.102) in the predicted direction, a main effect of a category of b1, b2, b3 and b4 (F(3, 24)=5.21, p=0.007) and an interaction between a category of a1 & a2 and a category of b1, b2, b3 and b4 (F(3, 24)=8.06, p=0.001). 
+
+(As predicted, women with a1 slept better than either of the other two groups (p = .001) and they experienced the greatest improvement in sleep quality by the presence of their partners.)
+```
+
+```
+We can report that there was a significant main effect of Factor1, F(1, 4)=8.1, p=0.047.
+We can report that there was a significant main effect of Factor2, F(3, 12) =6.04, p=0.01.
+We can report that there was a significant interaction between Factor1 and Factor2, F(3, 12)=7.08, p=0.006.
+```

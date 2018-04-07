@@ -183,8 +183,7 @@ class OneWayAnova:
                 dof[str((data.keys())[i]) + " + " + str((data.keys())[j])] = num[i] + num[j] -2
         p = {}
         for i in range(len(pairs.keys())):
-            for j in range(i+1, len(data.keys())):
-                p[str((data.keys())[i]) + " + " + str((data.keys())[j])] = calc_p.sf(pairs[(pairs.keys())[i]], dof[(pairs.keys())[i]])
+            p[str((pairs.keys())[i])] = calc_p.sf(pairs[(pairs.keys())[i]], dof[(pairs.keys())[i]])
 
         modified_threshold = []
         for i in range(len(pairs.keys())):
