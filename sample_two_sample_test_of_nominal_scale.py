@@ -99,9 +99,9 @@ if __name__ == '__main__':
             data["Healty"] = [48, 42]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
-
             print "カイ二乗検定を喫煙率に実施した．その結果，病気の患者の喫煙率(87%)は，健常者の喫煙率(53%)より有意に高いことが明らかになった．(x_2 (1) = 16.531, p < 0.01)"
+            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
+            draw_table.draw_table(p, data, ["Illness", "Healthy"], ["Smoker", "Non-Smoker"], "test")
 
         elif args[1] == "3":
             '''

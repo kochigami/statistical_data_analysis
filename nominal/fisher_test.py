@@ -6,25 +6,27 @@ import math
 
 class FisherTest:   
    def test(self, data):
-      """
-                     Yes   No   Total
+      # check data length is 2
+      if len(data.keys()) != 2:
+         print "Please check the components of your data."
+         print "Number of types should be two."
+         sys.exit()
+
+      elif len(data[(data.keys())[0]]) == 2 and len(data[(data.keys())[1]]) == 2:
+         """
+                    Yes   No   Total
       -------------------------------
       Condition1     a     b    a+b
       Condition2     c     d    c+d
       -------------------------------
       Total         a+c   b+d   n (= a+b+c+d)
-      
-      data[(data.keys())[0]][0] = a
-      data[(data.keys())[0]][1] = c
-      data[(data.keys())[1]][0] = b
-      data[(data.keys())[1]][1] = d
-      """
-      # check data length is 2
-      if len(data.keys()) != 2:
-         print "Please check the components of your data. The number of types should be two."
-         sys.exit()
 
-      elif len(data[(data.keys())[0]]) == 2 and len(data[(data.keys())[1]]) == 2:
+      data[(data.keys())[0]][0] = a
+      data[(data.keys())[0]][1] = b
+      data[(data.keys())[1]][0] = c
+      data[(data.keys())[1]][1] = d
+         """
+
          a = data[(data.keys())[0]][0]
          b = data[(data.keys())[0]][1]
          c = data[(data.keys())[1]][0]
@@ -37,12 +39,9 @@ class FisherTest:
             print "In python, it seems that we can't calculate fact(> 999)."
             sys.exit()
          else:
-            #bunshi = kai(a+b) * kai(c+d) * kai(a+c) * kai(b+d)
-            #bunbo = kai(n) * kai(a) * kai(b) * kai(c) * kai(d)
-            #p =  bunshi / bunbo            
             p = 0.0
+            # adding p value when i=0, 1, ..., a
             for i in range(0, a+1):
-               # adding p value when i=0, 1, ..., a
                b = a_plus_b - i
                d = b_plus_d - b
                c = n - i - b - d
@@ -63,12 +62,33 @@ class FisherTest:
                tmp2 = (kai_a_b / float(kai_a)) / kai_b
                # kai(a+c) * kai(b+d) / kai(n)
                tmp3 = (kai_a_c / float(kai_n)) * kai_b_d
+               '''
+               bunshi = kai(a+b) * kai(c+d) * kai(a+c) * kai(b+d)
+               bunbo = kai(n) * kai(a) * kai(b) * kai(c) * kai(d)
+               p =  bunshi / bunbo
+               '''
                p += tmp1 * tmp2 * tmp3
 
             print "p value: " + str(p)
             return p
 
       elif len(data[(data.keys())[0]]) == 3 and len(data[(data.keys())[1]]) == 3:
+         """
+                       Yes   No  Yes/No  Total
+         -------------------------------------
+         Condition1     a     b    c     a+b+c
+         Condition2     d     e    f     d+e+f
+         ------------------------------------
+         Total         a+d   b+e   c+f   n (= a+b+c+d+e+f)
+
+         data[(data.keys())[0]][0] = a
+         data[(data.keys())[0]][1] = b
+         data[(data.keys())[0]][2] = c
+         data[(data.keys())[1]][0] = d
+         data[(data.keys())[1]][1] = e
+         data[(data.keys())[1]][2] = f
+         """
+
          a = data[(data.keys())[0]][0]
          b = data[(data.keys())[0]][1]
          c = data[(data.keys())[0]][2]
@@ -85,13 +105,17 @@ class FisherTest:
             sys.exit()
          else:
             p = 0.0
+            # calculate the range of b
             if a_b_c - a < b_e:
                max_b = a_b_c - a
             else:
                max_b = b_e
+
+            # adding p value when i=0, 1, ..., a & j=0, i, ... max_b
             for i in range(0, a+1):
-               # adding p value when i=0, 1, ..., a
                for j in range(0, max_b+1):
+                  # i: a
+                  # j: b
                   c = a_b_c - i - j
                   e = b_e - j
                   d = a_d - i
@@ -110,6 +134,7 @@ class FisherTest:
                   kai_f = math.factorial(f)
                   kai_n = math.factorial(n)
 
+                  # (a+b+c)! (d+e+f)! (a+d)! (b+e)! (c+f)! / (a! b! c! d! e! f! n!)
                   tmp1 = kai_a_b_c * kai_d_e_f * kai_a_d * kai_b_e * kai_c_f 
                   tmp2 = kai_a * kai_b * kai_c * kai_d * kai_e * kai_f * kai_n
                   p += tmp1 / float(tmp2)
