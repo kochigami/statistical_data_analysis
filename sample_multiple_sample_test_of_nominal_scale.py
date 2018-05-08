@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from draw.draw_graph import DrawGraph
+from draw.chi_squared_test_draw_table import ChiSquaredTestDrawTable
 from nominal.unpaired_multiple_sample_test_of_nominal_scale import UnpairedMultipleSampleTestOfNominalScale
 from nominal.paired_multiple_sample_test_of_nominal_scale import PairedMultipleSampleTestOfNominalScale
 from collections import OrderedDict
@@ -36,7 +37,6 @@ if __name__ == '__main__':
             data["Audition+Vision"] = [7, 6, 7]
             unpaired_multiple_sample_test_of_nominal_scale = UnpairedMultipleSampleTestOfNominalScale()
             unpaired_multiple_sample_test_of_nominal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
 
         elif args[1] == "2":
             '''

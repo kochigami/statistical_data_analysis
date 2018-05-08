@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from scipy import stats
-import numpy as np
 import sys
 
 class ChiSquaredTest:
     def test(self, data):
-        """
-        """
         # check component type is 2
         if len(data.keys()) != 2:
             print "len(data.keys()) should be two"
