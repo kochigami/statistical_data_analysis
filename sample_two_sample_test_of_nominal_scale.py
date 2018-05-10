@@ -5,6 +5,7 @@ from draw.draw_graph import DrawGraph
 from draw.chi_squared_test_draw_table import ChiSquaredTestDrawTable
 from nominal.paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
 from nominal.unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
+from nominal.one_condition_nominal_scale import TestOfOneConditionWithNominalScale
 from collections import OrderedDict
 
 """
@@ -26,6 +27,8 @@ if __name__ == '__main__':
         print "1: paired test (McNemar test)"
         print "2: unpaired test + big data (chi-square test)"
         print "3: unpaired test + small data (Fisher's exact test)"
+        print "4: one condition test + two factors (binominal test)"
+        print "5: one condition test + more than two factors (chi-square test)"
     else:
         draw_graph = DrawGraph()
         draw_table = ChiSquaredTestDrawTable()
@@ -122,9 +125,27 @@ if __name__ == '__main__':
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
             draw_table.draw_table(p, data, ["Teacher", "Counselor"], ["Non-social", "Antisocial"], "test")
 
+        elif args[1] == "4":
+            data = OrderedDict()
+            data["O"] = 34
+            data["Others"] = 86
+            test_of_one_condition_with_nominal_scale = TestOfOneConditionWithNominalScale()
+            p = test_of_one_condition_with_nominal_scale.test(data,p_threshold=0.45)
+
+        elif args[1] == "5":
+            data = OrderedDict()
+            data["Kakansho"] = 72
+            data["Honin"] = 23
+            data["Kyohi"] = 16
+            data["Dekiai"] = 49
+            test_of_one_condition_with_nominal_scale = TestOfOneConditionWithNominalScale()
+            p = test_of_one_condition_with_nominal_scale.test(data)
+            
         else:
             print "python sample_two_sample_test_of_nominal_scale.py <sample_type>"
             print "please choose sample type: "
             print "1: paired test"
             print "2: unpaired test + big data"
             print "3: unpaired test + small data"
+            print "4: one condition test: binominal test"
+            print "5: one condition test: chi-square test"
