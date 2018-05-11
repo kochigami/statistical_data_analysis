@@ -20,61 +20,67 @@ class PairedMultipleSampleTestOfNominalScale:
         ---------------------------------------------------
         Subject1      1           1           1        3
         Subject2      1           1           1        3     
-        Subject3      0           1           1        2     
-        Subject4      0           1           1        2
-        Subject5      0           1           1        2
-        Subject6      0           0           1        1
-        Subject7      0           0           1        1
-        Subject8      0           0           1        1
-        Subject9      0           0           0        0
-        Subject10     0           0           0        0
+        Subject3      1           1           1        3     
+        Subject4      1           1           1        3
+        Subject5      1           0           1        2
+        Subject6      1           0           1        2
+        Subject7      0           1           1        2
+        Subject8      0           1           1        2
+        Subject9      0           1           1        2
+        Subject10     0           1           1        2
+        Subject11     0           1           0        1
+        Subject12     0           1           0        1     
+        Subject13     0           0           1        1     
+        Subject14     0           0           1        1
+        Subject15     0           0           1        1
+        Subject16     0           0           1        1
+        Subject17     0           0           0        0
+        Subject18     0           0           0        0
+        Subject19     0           0           0        0
+        Subject20     0           0           0        0
         --------------------------------------------------
-        Total         2           5           8       15
+        Total         6          10           14       30
         (sum_column)
 
         1: agree 0: disagree
         """
-        sum_row = []
-        sum_column = [0 for i in range(len(data.keys()))]
+        '''
+        k: the number of conditions (ex: k = len(data.keys()) (= 3 in this example))
+        sum_C_j: sum of each column (ex: sum_C_j = sum(data["CandidateA"]) + sum(data["CandidateB"]) + sum(data["CandidateC"]) = 30)
+        sum_C_j2: squared sum of each column (ex: sum_C_j2 = sum(data["CandidateA"])^2 + sum(data["CandidateB"])^2 + sum(data["CandidateC"])^2)
+        sum_R_j2: squared sum of each row (ex: sum_R_j2 = sum(data['Subject1'])^2 + ... + sum(data['Subject20'])^2)
         
-        for i in range(len(data[(data.keys())[0]])):
-            sum_row.append(data[(data.keys())[0]][i] + data[(data.keys())[1]][i] + data[(data.keys())[2]][i])
-        for i in range(len(data.keys())):
-            sum_column[i] += sum(data[(data.keys())[i]])
-        k = len(sum_column)
-        # in this example, k is 3
+        => q = ((k-1) * (k * sum_C_j2 - sum_C_j ** 2)) / (k * sum_C_j - sum_R_j2)
+        '''
 
-        is_data_size_equal = True
-        for i in range(len(data.keys())):
-            if len(data[(data.keys())[0]]) != len(data[(data.keys())[i]]):
-                is_data_size_equal = False
-        if is_data_size_equal == False:
-            print "Please check your data again. Data have to be same size per each subject."
-            sys.exit()
-        else:
-            q_tmp1 = 0.0
-            q_tmp2 = 0.0
+        k = len(data.keys())
 
-            for i in range(len(sum_column)):
-                q_tmp1 += sum_column[i] * sum_column[i]
-                q_tmp2 += sum_column[i]
-                
-            q = (k - 1.0) * abs(k * q_tmp1 - pow(q_tmp2, 2.0))
+        sum_C_j = 0.0
+        sum_C_j2 = 0.0
+        for i in range(k):
+            sum_C_j += sum(data[data.keys()[i]])
+            sum_C_j2 += sum(data[data.keys()[i]]) ** 2
+        
+        sum_R_j2 = 0.0
+        # n: the number of column (data size of data['Candidate1'])
+        # This test is executed under the hypothesis that data size of data['Candidate1'] == data size of data['Candidate2'] == data size of data['Candidate3']
+        n = len(data[data.keys()[i]])
+        for i in range(n):
+            tmp = 0.0
+            for j in range(k):
+                tmp += data[data.keys()[j]][i]
+            sum_R_j2 += tmp ** 2
+        
+        q = ((k-1) * (k * sum_C_j2 - sum_C_j ** 2)) / (k * sum_C_j - sum_R_j2)
 
-            q_tmp3 = 0.0
-            for j in range(len(sum_row)):
-                q_tmp3 += sum_row[j] * sum_row[j]
+        df = k - 1.0
+        p = stats.chi2.pdf(q, df)
+        print "q: {}".format(q)
+        print "df: {}".format(df)
+        print "p: {}".format(p)
 
-            q /= k * q_tmp2 - q_tmp3
-
-            df = k - 1.0
-            p = 1.0 - stats.chi2.cdf(q, df)
-            print "q: " + str(q)
-            print "df: " + str(df)
-            print "p: " + str(p)
-
-            if p < threshold:
-                multiple_comparison = MultipleComparison()
-                multiple_comparison.test(data, test="mcnemar")
+        if p < threshold:
+            multiple_comparison = MultipleComparison()
+            multiple_comparison.test(data, test="mcnemar")
             
-            return p
+        return p

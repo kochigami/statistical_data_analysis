@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from draw.draw_graph import DrawGraph
+from draw.chi_squared_test_draw_table import ChiSquaredTestDrawTable
 from nominal.paired_two_sample_test_of_nominal_scale import PairedTwoSampleTestOfNominalScale
 from nominal.unpaired_two_sample_test_of_nominal_scale import UnpairedTwoSampleTestOfNominalScale
 from collections import OrderedDict
@@ -26,7 +26,7 @@ if __name__ == '__main__':
         print "2: unpaired test + big data (chi-square test)"
         print "3: unpaired test + small data (Fisher's exact test)"
     else:
-        draw_graph = DrawGraph()
+        draw_table = ChiSquaredTestDrawTable()
         if args[1] == "1":
             '''
             講演会の前後で，ある質問に対して賛成か・反対かを尋ねる．
@@ -90,16 +90,15 @@ if __name__ == '__main__':
              ------------------------------------
              Total          100      50      150
 
-             data: [[52, 8], [48, 42]]            
+             OrderedDict([('Illness', [52, 8]), ('Healty', [48, 42])])
             '''
             data = OrderedDict()
             data["Illness"] = [52, 8]
             data["Healty"] = [48, 42]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
-
             print "カイ二乗検定を喫煙率に実施した．その結果，病気の患者の喫煙率(87%)は，健常者の喫煙率(53%)より有意に高いことが明らかになった．(x_2 (1) = 16.531, p < 0.01)"
+            draw_table.draw_table(p, data, ["Illness", "Healthy"], ["Smoker", "Non-Smoker"], "test")
 
         elif args[1] == "3":
             '''
@@ -112,14 +111,14 @@ if __name__ == '__main__':
              -----------------------------------------
              Total           5          18         23
 
-             data: [[1, 12], [4, 6]]            
+             OrderedDict([('Teacher', [1, 12]), ('Counselor', [4, 6])])
             '''
             data = OrderedDict()
             data["Teacher"] = [1, 12]
             data["Counselor"] = [4, 6]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired", is_scale_nominal=True)
+            draw_table.draw_table(p, data, ["Teacher", "Counselor"], ["Non-social", "Antisocial"], "test")
 
         else:
             print "python sample_two_sample_test_of_nominal_scale.py <sample_type>"
