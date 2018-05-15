@@ -3,6 +3,7 @@
 import sys
 import numpy
 from draw.draw_graph import DrawGraph
+from draw.draw_box_graph import DrawBoxGraph
 from ordinal.paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
 from ordinal.unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 from collections import OrderedDict
@@ -23,6 +24,7 @@ if __name__ == '__main__':
         # ex: should be [A, B, C], but output is [A, C, B]
         data = OrderedDict()
         draw_graph = DrawGraph()
+        draw_box_graph = DrawBoxGraph()
         if args[1] == "1":
             '''
             ref: https://kusuri-jouhou.com/statistics/fugou.html
@@ -83,11 +85,13 @@ if __name__ == '__main__':
         elif args[1] == "4":
             '''
             ラット 20匹に24時間ご飯をあげない．21匹には48時間あげない．その後学習を行わせ，学習基準に到達するまでの試行回数を調べる．
+            両条件の試行数に有意な差が認められるか．
+            (心理学のためのデータ解析テクニカルブック p. 207 を参照)
             '''
             data['24hour'] = [13, 14, 24, 28, 29, 35, 59, 83, 84, 89, 94, 97, 98, 117, 118, 128, 131, 175, 200, 200]
             data['48hour'] = [10, 12, 13, 16, 18, 21, 28, 28, 39, 40, 47, 57, 58, 62, 68, 69, 70, 82, 95, 111, 127]
             p = unpaired_two_sample_test_of_ordinal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired")
+            draw_box_graph.draw_graph(data, "test", "x", "y") 
             
             # if we use OrderedDict, but if we use the initialization below,
             # the order of contents sometimes is still decided randomly.

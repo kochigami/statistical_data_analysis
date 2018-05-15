@@ -14,6 +14,8 @@ class UnpairedTwoSampleTestOfOrdinalScale:
         data = {'Children':  [20, 18, 15, 13, 10, 6],
                 'Adults': [17, 16, 12, 9, 8, 6, 4, 2]}
         # https://kusuri-jouhou.com/statistics/mann.html
+        => comparison of two median
+
         # use mannwhitneyu() from scipy
         # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mannwhitneyu.html
         # however, alternative keyword cannnot be used
@@ -24,8 +26,8 @@ class UnpairedTwoSampleTestOfOrdinalScale:
             print "The number of data type should be two."
             sys.exit()
         result = stats.mannwhitneyu(data[(data.keys())[0]], data[(data.keys())[1]], use_continuity=True)
-        print "median (" + str((data.keys())[0]) + "): "+ str(numpy.median(data[(data.keys())[0]]))
-        print "median (" + str((data.keys())[1]) + "): "+ str(numpy.median(data[(data.keys())[1]]))
-        print "U value: " + str(result[0]) 
-        print "p value: " + str(result[1])
+        print "median ({}): {}".format((data.keys())[0], numpy.median(data[(data.keys())[0]]))
+        print "median ({}): {}".format((data.keys())[1], numpy.median(data[(data.keys())[1]]))
+        print "U value: {}".format(result[0]) 
+        print "p value: {}".format(result[1])
         return result[1]
