@@ -12,6 +12,16 @@ signed test
 '''
 
 class PairedTwoSampleTestOfOrdinalScale:
+    '''
+    calc_ave:
+    calculate average order
+    
+    [ex]
+    diff:  [-1, +31, +23, +2, -5, +5]
+    order: [1, 6, 5, 2, 3.5, 3.5]
+    3.5 = (3 + 4) / 2
+    (i: 3, count: 2) 
+    '''
     def calc_ave(self, order, count, i):
         tmp_sum = 0.0
         for j in range(count):
@@ -37,11 +47,18 @@ class PairedTwoSampleTestOfOrdinalScale:
                 print "The number of data type should be two."
                 sys.exit()
             else:
+                '''
+                calculate x[i] - y[i] => diff
+                '''
                 diff = []
                 for i in range(nx):
                     if x[i] - y[i] != 0.0:
                         diff.append(x[i] - y[i])
 
+                '''
+                sort diff ascending order 
+                ex. [5,3,1,2] => [1,2,3,5]
+                '''
                 for i in range(len(diff)):
                     for j in range(i+1, len(diff)):
                         if abs(diff[i]) > abs(diff[j]):
@@ -49,6 +66,16 @@ class PairedTwoSampleTestOfOrdinalScale:
                             diff[i] = diff[j]
                             diff[j] = tmp
 
+                '''
+                check whether rigut and left component of a target component are same
+                ex [a, b, b, c]
+                => a: a vs b
+                => b: a vs b, b vs b (set 1)
+                => b: b vs b (set 1), b vs c
+                => c: b vs c
+
+                ==> [0, 1, 1, 0]
+                '''
                 order = []
                 tmp = []
                 if abs(diff[0]) == abs(diff[1]):
@@ -67,8 +94,10 @@ class PairedTwoSampleTestOfOrdinalScale:
                 else:
                     tmp.append(0)
 
-                # tmp
-                # [0, 0, 1, 1, 0, 0, 0, 0, 0]
+                '''
+                calculate order
+                if 1 is found, calculate average order
+                '''
                 count = 1
                 for i in range(len(tmp)-1):
                     if tmp[i+count-1] == 1:
@@ -82,6 +111,10 @@ class PairedTwoSampleTestOfOrdinalScale:
                     else:
                         order.append(i+count-1.0+1.0)
                     
+                '''
+                if diff[i] > 0 => t_plus += 1
+                if diff[i] < 0 => t_minus += 1
+                '''
                 t_plus = 0.0
                 t_minus = 0.0
                 for i in range(len(diff)):
@@ -90,16 +123,19 @@ class PairedTwoSampleTestOfOrdinalScale:
                     else:
                         t_plus += order[i]
             
+                '''
+                choose smaller one from t_minus or t_plus as t
+                '''
                 if t_minus < t_plus:
                     t = t_minus
                 else:
                     t = t_plus
                 
-                print "median (" + str((data.keys())[0]) + ") =" + str(numpy.median(x))
-                print "median (" + str((data.keys())[1]) + ") =" + str(numpy.median(y))
-                print "t: " + str(t)
-                print "n: " + str(len(diff))
-                print "If t is smaller than T_threshold at n = " + str(len(diff)) + ", you can reject null hypothesis."
+                print "median ({}) = {}".format((data.keys())[0], numpy.median(x))
+                print "median ({}) = {}".format((data.keys())[1], numpy.median(y))
+                print "t: {}".format(t)
+                print "n: {}".format(len(diff))
+                print "If t is smaller than T_threshold at n = {}, you can reject null hypothesis.".format(len(diff))
                 return True
 
         elif mode == "signed_test":
