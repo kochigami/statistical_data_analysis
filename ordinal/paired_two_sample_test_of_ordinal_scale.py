@@ -144,7 +144,7 @@ class PairedTwoSampleTestOfOrdinalScale:
             '''
             """
             data = {'Cusine_A': [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
-            'Cusine_B': [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
+                    'Cusine_B': [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]}
             # https://kusuri-jouhou.com/statistics/fugou.html
             """
             x = data[(data.keys())[0]]
@@ -156,9 +156,16 @@ class PairedTwoSampleTestOfOrdinalScale:
                 print "The number of data type should be two."
                 sys.exit()
             else:
+                '''
+                calculate difference between two paired samples
+                '''
                 diff = []
                 for i in range(nx):
                     diff.append(x[i] - y[i])
+                '''
+                if diff is more than 0 => count_plus += 1
+                if diff is less than 0 => count_minus += 1
+                '''
                 count_plus = 0
                 count_minus = 0
                 for i in range(len(diff)):
@@ -166,47 +173,78 @@ class PairedTwoSampleTestOfOrdinalScale:
                         count_plus += 1
                     if diff[i] < 0.0:
                         count_minus += 1
-                # choose smallest one among count_plus and count_minus
+                '''
+                choose smallest one among count_plus and count_minus as r
+                '''
                 if count_plus < count_minus or count_plus == count_minus:
                     r = count_plus
                 else:
                     r = count_minus
-                # emit the pair if diff == 0
+                '''
+                set n
+                (emit the pair if diff == 0)
+                '''
                 n = count_plus + count_minus
 
-                # if 5 < n < 25 or n == 25, execute below
+                '''
+                if n < 6, we can't use signed test
+                '''
                 if n < 6:
                     print "n should be more than 5."
                     sys.exit()
+
                 elif n > 5 and (n < 25 or n == 25):
+                    '''
+                    if 5 < n < 25 or n == 25, calculate the possibility directly
+
+                    calculate the possiblity.
+                    hypothesis: there is no difference between condition A & B
+                    = the probability that smallest one (r) appeared is 1/2
+                    so caluculate the probability that the value appears which is smaller than r
+                    '''
                     p = 0.0
-                    # hypothesis: there is no difference between condition A & B
-                    #            = the probability that smallest one (r) appeared is 1/2
-                    # so caluculate the probability that the value appears which is smaller than r 
+
                     # for loop from 0 to r
                     for i in range(0, r+1):
-                        # [0] * 5 = [0, 0, 0, 0, 0]
-                        # one of the initializing list
-                        # list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3))
-                        # >> [('a', 'b', 'c'),
-                        #     ('a', 'b', 'd'),
-                        #     ('a', 'b', 'e'),
-                        #     ('a', 'c', 'd'),
-                        #     ('a', 'c', 'e'),
-                        #     ('a', 'd', 'e'),
-                        #     ('b', 'c', 'd'),
-                        #     ('b', 'c', 'e'),
-                        #     ('b', 'd', 'e'),
-                        #     ('c', 'd', 'e')]
-                        # len(list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3)))
-                        # >> 10
+                        '''
+                          nCi * (1/2)^i * (1/2)^(n-i) (i=0,1, ..., r)
+                        = nCi * (1/2)^n (i=0,1, ..., r)
+                        '''
                         p += len(list(itertools.combinations([0] * n, i))) * pow(0.5, n)
-                    # for two-side test, p value should be doubled
+                        '''
+                        * initialization of a list
+                        [0] * 5 = [0, 0, 0, 0, 0]
+
+                        * returns 5C3
+                        list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3))
+                        >> [('a', 'b', 'c'),
+                            ('a', 'b', 'd'),
+                            ('a', 'b', 'e'),
+                            ('a', 'c', 'd'),
+                            ('a', 'c', 'e'),
+                            ('a', 'd', 'e'),
+                            ('b', 'c', 'd'),
+                            ('b', 'c', 'e'),
+                            ('b', 'd', 'e'),
+                            ('c', 'd', 'e')]
+
+                        * returns the number of 5C3
+                        len(list(itertools.combinations(['a', 'b', 'c', 'd', 'e'], 3)))
+                        >> 10
+                        '''
+
+                    '''
+                    for two-side test, p value should be doubled
+                    '''
                     p = p * 2.0
-                # else (n > 25): calculate z
+
                 elif n > 25:
-                    # followed algorithm described in this link:
-                    # https://kusuri-jouhou.com/statistics/fugou.html
+                    '''
+                    if n > 25, calculate z
+
+                    followed algorithm described in this link:
+                    https://kusuri-jouhou.com/statistics/fugou.html
+                    '''
                     u = n * 0.5
                     theta = math.sqrt(n) * 0.5
                     if r < u:
@@ -214,13 +252,16 @@ class PairedTwoSampleTestOfOrdinalScale:
                     else:
                         z = ((r - 0.5) - u) / theta
 
-                    # calculate p value from z value
-                    # multiply 2.0 for two-side test
+                    '''
+                    calculate p value from z value
+                    multiply 2.0 for two-side test
+                    '''
                     p = stats.norm.sf(abs(z)) * 2.0
-                    print "z value: " + str(z)
-                print "median (" + str((data.keys())[0]) + ") =" + str(numpy.median(x))
-                print "median (" + str((data.keys())[1]) + ") =" + str(numpy.median(y))
-                print "p value: " + str(p)
+                    print "z value: {}".format(z)
+
+                print "median ({}) = {}".format((data.keys())[0], numpy.median(x))
+                print "median ({}) = {}".format((data.keys())[1], numpy.median(y))
+                print "p value: {}".format(p)
                 return p
 
         else:

@@ -5,13 +5,6 @@ import matplotlib.pyplot as plt
 
 class DrawBoxGraph:
     def draw_graph(self, data, title, xlabel, ylabel):
-        # # 数学の点数
-        # math = [74, 65, 40, 62, 85, 67, 82, 71, 60, 99]
-        # # 国語の点数
-        # literature = [81, 62, 32, 67, 41, 50, 85, 70, 67, 97]
-        # # 点数のタプル
-        # data = (math, literature)
-
         # 箱ひげ図
         fig, ax = plt.subplots()
         

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import numpy
-from draw.draw_graph import DrawGraph
 from draw.draw_box_graph import DrawBoxGraph
 from ordinal.paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestOfOrdinalScale
 from ordinal.unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
@@ -23,12 +22,15 @@ if __name__ == '__main__':
         # if we use normal dict, the order of contents sometimes is decided randomly.
         # ex: should be [A, B, C], but output is [A, C, B]
         data = OrderedDict()
-        draw_graph = DrawGraph()
         draw_box_graph = DrawBoxGraph()
         if args[1] == "1":
             '''
             ref: https://kusuri-jouhou.com/statistics/fugou.html
             12人にA, B両方の料理を食べてもらい，5点満点で採点してもらう．
+            A, Bの料理のおいしさに差はあるか．
+
+            data:
+
             Subject | CusineA | CusineB | 
             -----------------------------
             1           5         3               
@@ -47,18 +49,53 @@ if __name__ == '__main__':
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
+            draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "2":
             '''
             ref: https://kusuri-jouhou.com/statistics/fugou.html
             30人にA, B両方の料理を食べてもらい，5点満点で採点してもらう．
+            A, Bの料理のおいしさに差はあるか．
+
+            data:
+
+            Subject | CusineA | CusineB |
+            -----------------------------
+            1           5         3
+            2           3         5
+            3           4         3
+            4           4         3
+            5           3         5
+            6           4         2
+            7           4         2
+            8           1         1
+            9           3         4
+            10          3         2
+            11          5         2
+            12          3         3
+            13          2         4
+            14          3         3
+            15          5         2
+            16          4         3
+            17          2         5
+            18          3         2
+            19          5         3
+            20          4         3
+            21          1         3
+            22          2         2
+            23          3         2
+            24          2         4
+            25          3         1
+            26          5         4
+            27          2         4
+            28          3         5
+            29          3         4
+            30          5         4
             '''
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 2, 5, 3, 2, 3, 5, 4, 2, 3, 5, 4, 1, 2, 3, 2, 3, 5, 2, 3, 3, 5]
-            data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 1, 2, 3, 4, 3, 2, 3,
- 5, 2, 3, 3, 3, 2, 2, 4, 1, 4, 4, 5, 4, 4]
+            data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 1, 2, 3, 4, 3, 2, 3, 5, 2, 3, 3, 3, 2, 2, 4, 1, 4, 4, 5, 4, 4]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
+            draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "3":
             '''
@@ -80,7 +117,7 @@ if __name__ == '__main__':
             data['Product_A'] = [25, 62, 58, 26, 42, 18, 11, 33, 50, 34]
             data['Product_B'] = [26, 31, 35, 24, 47, 13, 11, 21, 42, 18]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_rank_sum_test")
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
+            draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "4":
             '''
