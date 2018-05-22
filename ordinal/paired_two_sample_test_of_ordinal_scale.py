@@ -67,7 +67,7 @@ class PairedTwoSampleTestOfOrdinalScale:
                             diff[j] = tmp
 
                 '''
-                check whether rigut and left component of a target component are same
+                check whether right and left component of a target component are same
                 ex [a, b, b, c]
                 => a: a vs b
                 => b: a vs b, b vs b (set 1)
@@ -110,7 +110,12 @@ class PairedTwoSampleTestOfOrdinalScale:
                                 break
                     else:
                         order.append(i+count-1.0+1.0)
-                    
+                        if i == len(tmp)-2:
+                            '''
+                            if last component of list is 0, we have to add the rank of last component here.
+                            '''
+                            order.append((i+1.0)+count-1.0+1.0)
+
                 '''
                 if diff[i] > 0 => t_plus += 1
                 if diff[i] < 0 => t_minus += 1
