@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from interval_and_ratio.multiple_comparison import MultipleComparison
+from multiple_comparison.multiple_comparison import MultipleComparison
 
 """
 Cochran's Q test
@@ -81,6 +81,6 @@ class PairedMultipleSampleTestOfNominalScale:
 
         if p < threshold:
             multiple_comparison = MultipleComparison()
-            multiple_comparison.test(data, test="mcnemar")
+            multiple_comparison.test(data, test="cochran")
             
         return p

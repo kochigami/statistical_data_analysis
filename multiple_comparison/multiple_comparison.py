@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
 import numpy as np
 import operator
 from collections import OrderedDict
@@ -64,21 +63,24 @@ class MultipleComparison:
                     print "\ncomparison of {} and {}".format((data_new.keys())[j], (data_new.keys())[j+r-1])
                     '''
                     run test and get p value
+                    
+                    test: executed test name (with multiple conditions (> 2 conditions))
                     '''
-                    # FIXME: add explanation about what test variable means
-                    if test == "chi-squared":
-                        # fisher's exact test and chi-squared test
+
+                    if test == "chi-square":
+                        # using fisher's exact test and chi-squared test
                         unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
                         unpaired_two_sample_test_of_nominal_scale.test(test_data)
-                    elif test == "mcnemar":
-                        # mcnemar
+                    elif test == "cochran":
+                        # using mcnemar test
                         paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
                         paired_two_sample_test_of_nominal_scale.test(test_data)
-                    elif test == "mann-whitney":
-                        # Kruskal-Wallis
+                    elif test == "kruskal-wallis":
+                        # using mann-whitney test
                         unpaired_two_sample_test_of_ordinal_scale = UnpairedTwoSampleTestOfOrdinalScale()
                         unpaired_two_sample_test_of_ordinal_scale.test(test_data)
-                    elif test == "signed-test":
+                    elif test == "friedman":
+                        # using signed-test
                         paired_two_sample_test_of_ordinal_scale = PairedTwoSampleTestOfOrdinalScale()
                         paired_two_sample_test_of_ordinal_scale.test(test_data, mode="signed_test")
                     else:

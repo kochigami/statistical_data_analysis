@@ -78,7 +78,26 @@ if __name__ == '__main__':
 
             paired_two_sample_test_of_nominal_scale = PairedTwoSampleTestOfNominalScale()
             p = paired_two_sample_test_of_nominal_scale.test(data)
-            draw_graph.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired", is_scale_nominal=True)
+
+            '''
+            convert data as data["Agree"] = [54, 25], data["Disagree"] = [36, 65]
+            (Before, After)
+            '''
+            data_converted = OrderedDict()
+            data_converted["Agree"] = []
+            data_converted["Disagree"] = []
+            for i in data.keys():
+                tmp_agree = 0
+                tmp_disagree = 0
+                for j in range(len(data[i])):
+                    if data[i][j] == 1:
+                        tmp_agree +=1
+                    elif data[i][j] == 0:
+                        tmp_disagree +=1
+                data_converted["Agree"].append(tmp_agree)
+                data_converted["Disagree"].append(tmp_disagree)
+
+            draw_table.draw_table(p, data_converted, ["Before", "After"], ["Agree", "Disagree"], "test")
 
         elif args[1] == "2":
             '''

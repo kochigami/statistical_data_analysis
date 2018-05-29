@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from interval_and_ratio.multiple_comparison import MultipleComparison
+from multiple_comparison.multiple_comparison import MultipleComparison
 import numpy
 from collections import OrderedDict
 
@@ -164,6 +164,6 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
 
             if p < threshold:
                 multiple_comparison = MultipleComparison()
-                multiple_comparison.test(data, test="mann-whitney")
+                multiple_comparison.test(data, test="kruskal-wallis")
 
         return p
