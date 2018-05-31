@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from interval_and_ratio.multiple_comparison import MultipleComparison
+from multiple_comparison.multiple_comparison import MultipleComparison
 
 """
 Friedman test
@@ -61,6 +61,6 @@ class PairedMultipleSampleTestOfOrdinalScale:
         
         if p < threshold:
             multiple_comparison = MultipleComparison()
-            multiple_comparison.test(data, test="signed-test")
+            multiple_comparison.test(data, test="friedman")
 
         return p

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from interval_and_ratio.multiple_comparison import MultipleComparison
+from multiple_comparison.multiple_comparison import MultipleComparison
 
 """
 Chi-squared test
@@ -54,6 +54,6 @@ class UnpairedMultipleSampleTestOfNominalScale:
 
             if p < threshold:
                 multiple_comparison = MultipleComparison()
-                multiple_comparison.test(data, test="chi-squared")
+                multiple_comparison.test(data, test="chi-square")
             
             return p

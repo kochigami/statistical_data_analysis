@@ -32,9 +32,9 @@ if __name__ == '__main__':
             '''
 
             data = OrderedDict()
-            data["Audition"] = [12, 10, 8]
-            data["Vision"] = [5, 5, 20]
-            data["Audition+Vision"] = [7, 6, 7]
+            data["First"] = [12, 5, 7]
+            data["Middle"] = [10, 5, 6]
+            data["End"] = [8, 20, 7]
             unpaired_multiple_sample_test_of_nominal_scale = UnpairedMultipleSampleTestOfNominalScale()
             unpaired_multiple_sample_test_of_nominal_scale.test(data)
 
