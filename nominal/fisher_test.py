@@ -105,43 +105,42 @@ class FisherTest:
             sys.exit()
          else:
             p = 0.0
-            # calculate the range of b
-            if a_b_c - a < b_e:
-               max_b = a_b_c - a
-            else:
-               max_b = b_e
+            # 0 =< d, e =< n - a_b_c (d+e+f)
+            # f = n - a_b_c (= d+e+f) - d - e
+            # a = a_d - d
+            # b = b_e - e
+            # c = a_b_c - a - b
+            
+            for i in range(0, n - a_b_c + 1):
+               for j in range(0, n - a_b_c- i + 1):
+                  f_tmp = n - a_b_c - i - j
+                  a_tmp = a_d - i
+                  b_tmp = b_e - j
+                  c_tmp = a_b_c - a_tmp - b_tmp
+                  if a_tmp > 0 and b_tmp > 0 and c_tmp > 0 and f_tmp > 0 and a_tmp < a and b_tmp < b:
+                     kai_a_b_c = math.factorial(a_b_c)
+                     kai_d_e_f = math.factorial(n - a_b_c)
+                     kai_a_d = math.factorial(a_d)
+                     kai_b_e = math.factorial(b_e)
+                     kai_c_f = math.factorial(n - a_d - b_e)
+                     kai_a = math.factorial(a_tmp)
+                     kai_b = math.factorial(b_tmp)
+                     kai_c = math.factorial(c_tmp)
+                     kai_d = math.factorial(i)
+                     kai_e = math.factorial(j)
+                     kai_f = math.factorial(f_tmp)
+                     kai_n = math.factorial(n)
 
-            # adding p value when i=0, 1, ..., a & j=0, i, ... max_b
-            for i in range(0, a+1):
-               for j in range(0, max_b+1):
-                  # i: a
-                  # j: b
-                  c = a_b_c - i - j
-                  e = b_e - j
-                  d = a_d - i
-                  f = n - i - j - c - d - e
-                  
-                  kai_a_b_c = math.factorial(a_b_c)
-                  kai_d_e_f = math.factorial(n - a_b_c)
-                  kai_a_d = math.factorial(a_d)
-                  kai_b_e = math.factorial(b_e)
-                  kai_c_f = math.factorial(n - a_d - b_e)
-                  kai_a = math.factorial(i)
-                  kai_b = math.factorial(j)
-                  kai_c = math.factorial(c)
-                  kai_d = math.factorial(d)
-                  kai_e = math.factorial(e)
-                  kai_f = math.factorial(f)
-                  kai_n = math.factorial(n)
-
-                  # (a+b+c)! (d+e+f)! (a+d)! (b+e)! (c+f)! / (a! b! c! d! e! f! n!)
-                  tmp1 = kai_a_b_c * kai_d_e_f * kai_a_d * kai_b_e * kai_c_f 
-                  tmp2 = kai_a * kai_b * kai_c * kai_d * kai_e * kai_f * kai_n
-                  p += tmp1 / float(tmp2)
+                     tmp1 = kai_a_b_c * kai_d_e_f * kai_a_d * kai_b_e * kai_c_f 
+                     tmp2 = kai_a * kai_b * kai_c * kai_d * kai_e * kai_f * kai_n
+                     print "{} {} {}".format(a_tmp,b_tmp,c_tmp)
+                     print "{} {} {}\n".format(i,j,f_tmp)
+                     print "{}".format(tmp1/float(tmp2))
+                     print "\n"
+                     p += tmp1 / float(tmp2)
             
             print "p value: " + str(p)
             return p
-
       else:
          print "If the number of components per each condition is more than three (= 4, 5,...), please calculate p value by yourself."
          sys.exit()
