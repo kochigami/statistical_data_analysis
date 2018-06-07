@@ -69,7 +69,7 @@ class FisherTest:
                '''
                p += tmp1 * tmp2 * tmp3
 
-            print "p value: " + str(p)
+            print "p value: {}".format(p)
             return p
 
       elif len(data[(data.keys())[0]]) == 3 and len(data[(data.keys())[1]]) == 3:
@@ -100,11 +100,29 @@ class FisherTest:
          a_d = a + d
          n = a+b+c+d+e+f
 
+         kai_a_b_c = math.factorial(a_b_c)
+         kai_d_e_f = math.factorial(n - a_b_c)
+         kai_a_d = math.factorial(a_d)
+         kai_b_e = math.factorial(b_e)
+         kai_c_f = math.factorial(n - a_d - b_e)
+         kai_a = math.factorial(a)
+         kai_b = math.factorial(b)
+         kai_c = math.factorial(c)
+         kai_d = math.factorial(d)
+         kai_e = math.factorial(e)
+         kai_f = math.factorial(f)
+         kai_n = math.factorial(n)
+
+         tmp1 = kai_a_b_c * kai_d_e_f * kai_a_d * kai_b_e * kai_c_f
+         tmp2 = kai_a * kai_b * kai_c * kai_d * kai_e * kai_f * kai_n
+         p_threshold = tmp1 / float(tmp2)
+
          if a+d > 999 or b+e > 999 or c+f > 999 or a+b+c > 999 or d+e+f > 999 or n > 999:
             print "In python, it seems that we can't calculate fact(> 999)."
             sys.exit()
          else:
             p = 0.0
+
             # 0 =< d, e =< n - a_b_c (d+e+f)
             # f = n - a_b_c (= d+e+f) - d - e
             # a = a_d - d
@@ -137,9 +155,10 @@ class FisherTest:
                      print "{} {} {}\n".format(i,j,f_tmp)
                      print "{}".format(tmp1/float(tmp2))
                      print "\n"
-                     p += tmp1 / float(tmp2)
+                     if p < p_threshold:
+                        p += tmp1 / float(tmp2)
             
-            print "p value: " + str(p)
+            print "p value: {}".format(p)
             return p
       else:
          print "If the number of components per each condition is more than three (= 4, 5,...), please calculate p value by yourself."
