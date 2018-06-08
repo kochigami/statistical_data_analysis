@@ -40,6 +40,7 @@ class FisherTest:
             sys.exit()
          else:
             p = 0.0
+            # want to calculate a possibility when a takes smaller one than original a
             # adding p value when i=0, 1, ..., a
             for i in range(0, a+1):
                b = a_plus_b - i
@@ -100,6 +101,7 @@ class FisherTest:
          a_d = a + d
          n = a+b+c+d+e+f
 
+         # calculate an original possibility with given data set
          kai_a_b_c = math.factorial(a_b_c)
          kai_d_e_f = math.factorial(n - a_b_c)
          kai_a_d = math.factorial(a_d)
@@ -121,9 +123,10 @@ class FisherTest:
             print "In python, it seems that we can't calculate fact(> 999)."
             sys.exit()
          else:
+            # calculate a possibility which is equal or smaller than an original one
             p = 0.0
 
-            # 0 =< d, e =< n - a_b_c (d+e+f)
+            # 0 =< d, e =< n - a_b_c (= d+e+f)
             # f = n - a_b_c (= d+e+f) - d - e
             # a = a_d - d
             # b = b_e - e
@@ -135,7 +138,7 @@ class FisherTest:
                   a_tmp = a_d - i
                   b_tmp = b_e - j
                   c_tmp = a_b_c - a_tmp - b_tmp
-                  if a_tmp > 0 and b_tmp > 0 and c_tmp > 0 and f_tmp > 0 and a_tmp < a and b_tmp < b:
+                  if a_tmp > 0 and b_tmp > 0 and c_tmp > 0 and f_tmp > 0:
                      kai_a_b_c = math.factorial(a_b_c)
                      kai_d_e_f = math.factorial(n - a_b_c)
                      kai_a_d = math.factorial(a_d)
@@ -151,12 +154,9 @@ class FisherTest:
 
                      tmp1 = kai_a_b_c * kai_d_e_f * kai_a_d * kai_b_e * kai_c_f 
                      tmp2 = kai_a * kai_b * kai_c * kai_d * kai_e * kai_f * kai_n
-                     print "{} {} {}".format(a_tmp,b_tmp,c_tmp)
-                     print "{} {} {}\n".format(i,j,f_tmp)
-                     print "{}".format(tmp1/float(tmp2))
-                     print "\n"
-                     if p < p_threshold:
-                        p += tmp1 / float(tmp2)
+                     p_tmp = tmp1 / float(tmp2)
+                     if p_tmp <= p_threshold:
+                        p += p_tmp
             
             print "p value: {}".format(p)
             return p
