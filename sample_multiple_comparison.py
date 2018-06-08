@@ -21,7 +21,7 @@ if __name__ == '__main__':
             data["B"] = [5, 7, 20]
             data["C"] = [7, 6, 7] 
             data["D"] = [1, 3, 4]
-            multiple_comparison.test(data, test="chi-square")
+            multiple_comparison.test(data, test="chi-square", mode="holm")
         elif args[1] == "2":
             data["CandidateA"] = [1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             data["CandidateB"] = [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]

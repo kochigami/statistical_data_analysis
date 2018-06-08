@@ -90,6 +90,7 @@ class MultipleComparison:
 
         elif mode == "holm":
             p_list = OrderedDict()
+            sorted_p_list = OrderedDict()
             combinations = list(itertools.combinations(data.keys(), 2))
             '''
             create data of a chosen pair
@@ -122,12 +123,16 @@ class MultipleComparison:
                 else:
                     print "Please input test name"
 
-            sorted_p_list = sorted(p_list.items())
-            # [('CandidateA+CandidateB', 0.21431035639840246), ('CandidateA+CandidateC', 0.0075392851328786288), ('CandidateB+CandidateC', 0.21431035639840246)]
-            for i in range(len(sorted_p_list)-1, -1, -1):
-                tmp = list(sorted_p_list[i])[1]
-                tmp *= i+1
-                p_list[sorted_p_list[i][0]] = tmp
+            # decending sort
+            for k, v in sorted(p_list.items(), key=lambda x: -x[1]):
+                sorted_p_list[str(k)] = v
+            # sorted_p_list: OrderedDict([('A+C', 0.8193893539627245), ('B+D', 0.6461080882133514), ('C+D', 0.498681672594716), ('A+D', 0.18558104194277167), ('B+C', 0.10205296671359539), ('A+B', 0.014271727596197067)])
+
+            # adjust a possibility
+            for i in range(1, len(p_list.keys())+1):
+                tmp = sorted_p_list[sorted_p_list.keys()[i-1]]
+                tmp *= i
+                p_list[sorted_p_list.keys()[i-1]] = tmp
 
             print "\nFinal Results as Follows: (threshold is 0.05)"
             for i in range(len(p_list.keys())):
