@@ -1,34 +1,51 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import numpy as np
-import math
-from scipy.stats import t as calc_p
-from scipy.stats import f as calc_f
-# referenced as calc_p because of the error below:
-# File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
-# p = t.sf(t_value, dof)
-# UnboundLocalError: local variable 't' referenced before assignment
-# t test
-from collections import OrderedDict
 
+from scipy.stats import f as calc_f
+'''
+referenced as calc_p because of the error below:
+File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
+p = t.sf(t_value, dof)
+UnboundLocalError: local variable 't' referenced before assignment
+t test
+'''
+
+'''
+CRF: completely randomized factorial design
+'''
 class CRF_pq:
     def test(self, data, label_A, label_B, mode="equal"):
-        ABS = 0.0
-        for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys()[i])])):
-                ABS += pow((data[(data.keys()[i])])[j], 2.0)
-        AB = 0.0
-        for i in range(len(data.keys())):
-            AB += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
+        '''
+        data: 
 
+        data['NAO-Adult'] = [65, 85, 75, 85, 75, 80, 90, 75, 85, 65, 75, 85, 80, 85, 90]
+        data['NAO-Children'] = [65, 70, 80, 75, 70, 60, 65, 70, 85, 60, 65, 75, 70, 80, 75]
+        data['Pepper-Adult'] = [70, 65, 85, 80, 75, 65, 75, 60, 85, 65, 75, 70, 65, 80, 75]
+        data['Pepper-Children'] = [70, 70, 85, 80, 65, 75, 65, 85, 80, 60, 70, 75, 70]
+
+        label_A: ["NAO", "Pepper"]
+        label_B: ["Adult", "Children"]
+        '''
+        # number of each condition A, B
         p = len(label_A)
         q = len(label_B)
 
+        # ABS: squared sum of each sample
+        ABS = 0.0
+        for i in data.keys():
+            for j in range(len(data[i])):
+                ABS += pow((data[i])[j], 2.0)
+        # AB: squared sum of each condition / sample num (condition: NAO-Adult, NAO-Children, Pepper-Adult, Pepper-Children)
+        AB = 0.0
+        for i in data.keys():
+            AB += pow(sum(data[i]), 2.0) / len(data[i])
+
+        # dof
         A_dof = p - 1
         B_dof = q - 1
         AxB_dof = A_dof * B_dof
 
+        # TODO refactor from here
         if mode == "equal":
             G = 0.0
             for i in range(len(data.keys())):
