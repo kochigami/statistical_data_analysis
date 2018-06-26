@@ -1,43 +1,75 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import numpy as np
-import math
-from scipy.stats import t as calc_p
 from scipy.stats import f as calc_f
-# referenced as calc_p because of the error below:
-# File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
-# p = t.sf(t_value, dof)
-# UnboundLocalError: local variable 't' referenced before assignment
-# t test
-from collections import OrderedDict
+'''
+referenced as calc_p because of the error below:
+File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
+p = t.sf(t_value, dof)
+UnboundLocalError: local variable 't' referenced before assignment
+t test
+'''
 
+'''
+SPF: split-plot design
+
+reference: 心理学のためのデータ解析テクニカルブック　 森 敏昭, 吉田 寿夫編著　北大路書房 p. 107-121
+'''
 class SPF_pq:
     def test(self, data, label_A, label_B, mode="equal"):
-        ABS = 0.0
-        for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys()[i])])):
-                ABS += pow((data[(data.keys()[i])])[j], 2.0)
-        AB = 0.0
-        for i in range(len(data.keys())):
-            AB += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
+        '''
+        data: 
+        
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4,6]
+        data['a2-b2'] = [2,6,3,6,4]
+        data['a2-b3'] = [3,2,3,6,5]
+        data['a2-b4'] = [2,3,3,4,6]
 
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+
+        Major Effect A
+        Error of Major Effect A S(A)
+        Major Effect B
+        Interaction  AxB
+        Error        BxS(A)
+        '''
+        # number of each condition A, B
         p = len(label_A)
         q = len(label_B)
 
+        # ABS: squared sum of each sample
+        ABS = 0.0
+        for i in data.keys():
+            for j in range(len(data[i])):
+                ABS += pow((data[i])[j], 2.0)
+        # AB: squared sum of each condition / sample num (condition: a1-b1, a1-b2, a2-b1, a2-b2)
+        AB = 0.0
+        for i in data.keys():
+            AB += pow(sum(data[i]), 2.0) / len(data[i])
+
+        # dof
         A_dof = p - 1
         B_dof = q - 1
         AxB_dof = A_dof * B_dof
-        
-        AS = 0.0
-        Sij = []
+
+        # n_j: list of sample number
+        # ex. [a1, a2] = [5, 4]
+        # each sample number of a1 / a2 is same
+        # len(data['a1-b1']) == len(data['a1-b2']) == len(data['a1-b3']) == len(data['a1-b4']) = 5
+        # len(data['a2-b1']) == len(data['a2-b2']) == len(data['a2-b3']) == len(data['a2-b4']) = 4 
         n_j = []
         for j in range(len(label_A)):
-            for i in range(len(data.keys())):
-                if label_A[j] in (data.keys())[i]:
-                    n_j.append(len(data[(data.keys())[i]]))
+            for i in data.keys():
+                if label_A[j] in i:
+                    n_j.append(len(data[i]))
                     break
 
+        # Sij: 
+        Sij = []
         tmp = [[] for i in range(len(n_j))]
         for i in range(len(label_A)):
             tmp[i] = [0 for s in range(n_j[i])]
@@ -47,6 +79,7 @@ class SPF_pq:
                         tmp[i][j] += data[(data.keys())[k]][j]
                 Sij.append(tmp[i][j])
 
+        AS = 0.0
         for i in range(len(Sij)):
             AS += pow(Sij[i], 2.0) / q
 
