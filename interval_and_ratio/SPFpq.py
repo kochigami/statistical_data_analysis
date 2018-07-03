@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from scipy.stats import f as calc_f
+from utils import Utils
 '''
 referenced as calc_p because of the error below:
 File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
@@ -37,19 +38,16 @@ class SPF_pq:
         Interaction  AxB
         Error        BxS(A)
         '''
+        utils = Utils()
         # number of each condition A, B
-        p = len(label_A)
-        q = len(label_B)
+        p = utils.condition_num(label_A)
+        q = utils.condition_num(label_B)
 
         # ABS: squared sum of each sample
-        ABS = 0.0
-        for i in data.keys():
-            for j in range(len(data[i])):
-                ABS += pow((data[i])[j], 2.0)
+        ABS = utils.ABS(data)
+
         # AB: squared sum of each condition / sample num (condition: a1-b1, a1-b2, a2-b1, a2-b2)
-        AB = 0.0
-        for i in data.keys():
-            AB += pow(sum(data[i]), 2.0) / len(data[i])
+        AB = utils.AB(data)
 
         # dof
         A_dof = p - 1
@@ -87,28 +85,24 @@ class SPF_pq:
             AS += pow(Sij[i], 2.0) / q
 
         # A_sum: category1 sum
-        A_sum = []
-        A_sum_tmp = 0.0
-        for i in range(len(label_A)):
-            for j in range(len(data.keys())):
-                if label_A[i] in (data.keys())[j]:
-                    A_sum_tmp += sum(data[(data.keys())[j]])
-            A_sum.append(A_sum_tmp)
-            A_sum_tmp = 0.0
-
+        A_sum = utils.condition_sum(data, label_A)
 
         if mode == "equal":
             # G: sum of all the data
-            G = 0.0
-            for i in range(len(data.keys())):
-                for j in range(len(data[(data.keys()[i])])):
-                    G += (data[(data.keys()[i])])[j]
+            G = utils.G(data)
 
+            # n: number of data per each category
+            # focus on (data.keys()[0]) in this case
+            # because the number of data per each category is equal
             n = len(data[(data.keys()[0])])
 
-            WC_dof = p * q * (n - 1.0)
+            # WC_dof: dof of Error
+            # (npq-1) - (p-1) - (q-1) - (p-1)(q-1)
+            # = npq-p-q-pq+p+q = npq - pq = pq (n-1)
+            WC_dof = utils.WC_dof(p, q, n)
 
-            X = pow(G, 2.0) / (n * p * q)
+            # X: G^2 / npq
+            X = utils.X(G, p, q, n)
 
             # A: sum of Aj^2/ n*q
             A = 0.0
@@ -116,14 +110,7 @@ class SPF_pq:
                 A += pow(A_sum[i], 2.0) / (n * q)
 
             # B_sum: category2 sum
-            B_sum = []
-            B_sum_tmp = 0.0
-            for i in range(len(label_B)):
-                for j in range(len(data.keys())):
-                    if label_B[i] in (data.keys())[j]:
-                        B_sum_tmp += sum(data[(data.keys())[j]])
-                B_sum.append(B_sum_tmp)
-                B_sum_tmp = 0.0
+            B_sum = utils.condition_sum(data, label_B)
 
             # B: sum of Bk^2 / n*p
             B = 0.0
