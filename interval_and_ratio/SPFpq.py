@@ -40,8 +40,8 @@ class SPF_pq:
         '''
         utils = Utils()
         # number of each condition A, B
-        p = utils.condition_num(label_A)
-        q = utils.condition_num(label_B)
+        p = utils.condition_type_num(label_A)
+        q = utils.condition_type_num(label_B)
 
         # ABS: squared sum of each sample
         ABS = utils.ABS(data)
@@ -59,25 +59,11 @@ class SPF_pq:
         # each sample number of a1 / a2 is same
         # len(data['a1-b1']) == len(data['a1-b2']) == len(data['a1-b3']) == len(data['a1-b4']) = 5
         # len(data['a2-b1']) == len(data['a2-b2']) == len(data['a2-b3']) == len(data['a2-b4']) = 4 
-        n_j = []
-        for j in range(len(label_A)):
-            for i in data.keys():
-                if label_A[j] in i:
-                    n_j.append(len(data[i]))
-                    break
+        n_j = utils.condition_num(data, label_A)
 
         # Sij: total sum of data per subject
         # ex. [18, 19, 19, 19, 29, 10, 16, 11, 20, 21]
-        Sij = []
-        tmp = [[] for i in range(len(n_j))]
-        for i in range(len(label_A)):
-            tmp[i] = [0 for s in range(n_j[i])]
-            # tmp = [[0 0 0 0 0], [0 0 0 0]] 
-            for j in range(n_j[i]):
-                for k in range(len(data.keys())):
-                    if label_A[i] in (data.keys())[k]:
-                        tmp[i][j] += data[(data.keys())[k]][j]
-                Sij.append(tmp[i][j])
+        Sij = utils.Sij(data, n_j, label_A)
 
         # AS: sum of Sij^2 / q
         AS = 0.0
@@ -160,31 +146,8 @@ class SPF_pq:
             for i in range(len(data.keys())):
                 unweighted_mean.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
 
-            A_sum_tmp = 0.0
-            A_num_tmp = 0.0
-            A_sum = []
-            for j in range(len(label_A)):
-                for i in range(len(data.keys())):
-                    if label_A[j] in (data.keys())[i]:
-                        A_sum_tmp += unweighted_mean[i]
-                        A_num_tmp += 1.0
-                A_sum_tmp = A_sum_tmp / A_num_tmp
-                A_sum.append(A_sum_tmp)
-                A_sum_tmp = 0.0
-                A_num_tmp = 0.0
-
-            B_sum_tmp = 0.0
-            B_num_tmp = 0.0
-            B_sum = []
-            for j in range(len(label_B)):
-                for i in range(len(data.keys())):
-                    if label_B[j] in (data.keys())[i]:
-                        B_sum_tmp += unweighted_mean[i]
-                        B_num_tmp += 1.0
-                B_sum_tmp = B_sum_tmp / B_num_tmp
-                B_sum.append(B_sum_tmp)
-                B_sum_tmp = 0.0
-                B_num_tmp = 0.0
+            A_sum = utils.condition_sum_of_unweighted_mean(data, label_A, unweighted_mean)
+            B_sum = utils.condition_sum_of_unweighted_mean(data, label_B, unweighted_mean)
 
             # G_dash: sum of non-weighted average per condition
             G_dash = sum(unweighted_mean)

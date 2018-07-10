@@ -37,8 +37,8 @@ class CRF_pq:
         utils = Utils()
 
         # number of each condition A, B
-        p = utils.condition_num(label_A)
-        q = utils.condition_num(label_B)
+        p = utils.condition_type_num(label_A)
+        q = utils.condition_type_num(label_B)
 
         # ABS: squared sum of each sample
         ABS = utils.ABS(data)
@@ -120,34 +120,9 @@ class CRF_pq:
             G_dash = sum(unweighted_mean)
 
             # A_sum: list of unweighted mean [NAO, Pepper]
-            A_sum_tmp = 0.0
-            A_num_tmp = 0.0
-            A_sum = []
-            for j in range(len(label_A)):
-                for i in range(len(data.keys())):
-                    if label_A[j] in (data.keys())[i]:
-                        A_sum_tmp += unweighted_mean[i]
-                        A_num_tmp += 1
-                # calculate unweighted mean per each condition of A (NAO, Pepper)
-                A_sum_tmp = A_sum_tmp / A_num_tmp
-                A_sum.append(A_sum_tmp)
-                A_sum_tmp = 0.0
-                A_num_tmp = 0.0
-
+            A_sum = utils.condition_sum_of_unweighted_mean(data, label_A, unweighted_mean)
             # B_sum: list of unweighted mean [Adult, Children]
-            B_sum_tmp = 0.0
-            B_num_tmp = 0.0
-            B_sum = []
-            for j in range(len(label_B)):
-                for i in range(len(data.keys())):
-                    if label_B[j] in (data.keys())[i]:
-                        B_sum_tmp += unweighted_mean[i]
-                        B_num_tmp += 1
-                # calculate unweighted mean per each condition of B (Adult, Children)
-                B_sum_tmp = B_sum_tmp / B_num_tmp
-                B_sum.append(B_sum_tmp)
-                B_sum_tmp = 0.0
-                B_num_tmp = 0.0
+            B_sum = utils.condition_sum_of_unweighted_mean(data, label_B, unweighted_mean)
 
             # N: total number of samples
             N = 0
