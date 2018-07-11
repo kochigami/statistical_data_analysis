@@ -80,12 +80,14 @@ class RBF_pq:
         for i in range(len(Sik)):
             BS += pow(Sik[i], 2.0) / p
 
-        # TODO From here
+        # tmp: sum list of each subject
+        # ex. [28, 35, 30, 39, 50]
         tmp = [0 for j in range(len(data[(data.keys())[0]]))]
         for i in range(len(data.keys())):
             for j in range(len(data[(data.keys())[0]])):
                 tmp[j] += data[(data.keys())[i]][j]
         
+        # S: Si^2 / p*q
         S = 0.0
         for i in range(len(tmp)):
             S += pow(tmp[i], 2.0) / (p * q)
@@ -101,16 +103,19 @@ class RBF_pq:
         # X: G^2 / npq
         X = utils.X(G, p, q, n)
 
+        # A
         A_sum = utils.condition_sum(data, label_A)
         A = 0.0
         for i in range(len(A_sum)):
             A += pow(A_sum[i], 2.0) / (n * q)
 
+        # B
         B_sum = utils.condition_sum(data, label_B)
         B = 0.0
         for i in range(len(B_sum)):
             B += pow(B_sum[i], 2.0) / (n * p)
 
+        # calculate sum of square
         SSa = A - X
         SSb = B - X
         SSaxb = AB - A - B + X
@@ -120,12 +125,14 @@ class RBF_pq:
         SSbxs = BS - B - S + X
         SSaxbxs = ABS - AB - AS - BS + A + B + S - X
 
+        # calculate dof
         AxS_dof = (p - 1) * (n - 1)
         S_dof = n - 1
         BxS_dof = (q - 1) * (n - 1)
         AxBxS_dof = (p - 1) * (q - 1) * (n - 1)
         T_dof = n * p * q - 1
 
+        # calculate mean square
         MSs = SSs / S_dof
         MSa = SSa / A_dof
         MSaxs = SSaxs / AxS_dof
@@ -134,10 +141,12 @@ class RBF_pq:
         MSaxb = SSaxb / AxB_dof
         MSaxbxs = SSaxbxs / AxBxS_dof
 
+        # calculate F
         Fa = MSa / MSaxs
         Fb = MSb / MSbxs
         Faxb = MSaxb / MSaxbxs
-
+        
+        # calculate p
         p_1 = calc_f.sf(Fa, A_dof, AxS_dof)
         p_2 = calc_f.sf(Fb, B_dof, BxS_dof)
         p_1x2 = calc_f.sf(Faxb, AxB_dof, AxBxS_dof)        
