@@ -5,6 +5,7 @@ import numpy as np
 import math
 from scipy.stats import t as calc_p
 from scipy.stats import f as calc_f
+from utils import Utils
 # referenced as calc_p because of the error below:
 # File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
 # p = t.sf(t_value, dof)
@@ -23,6 +24,7 @@ class OneWayAnova:
     RB: randomized block design
     '''
     def one_way_anova(self, data, mode="CR", threshold=0.05, comparison_mode="holm"):
+        utils = Utils()
         # if mode is RB, sample num should be same in each category
         if mode == "RB":
             for i in range(len(data.keys()) - 1):
@@ -44,26 +46,33 @@ class OneWayAnova:
             p: the number of condition
             n: the number of each data per condition
             """
+
+            # p: the number of condition
             p = len(data.keys())
+
+            # N: the total number of data in all the conditions
             N = 0.0
             for i in range(len(data.keys())):
                 N += len(data[(data.keys())[i]])
             
-            G = 0.0
-            for i in range(len(data.keys())):
-                G += sum(data[(data.keys())[i]])
+            # G: total sum of all data
+            G = utils.G(data)
 
+            # X: G^2 / n*p
             X = pow(G, 2.0) / float(N)
 
+            # AS: square sum of each data
             AS = 0.0
             for i in range(len(data.keys())):
                 for j in range(len(data[(data.keys())[i]])):
                     AS += pow(data[(data.keys())[i]][j], 2.0)
 
+            # A: sum of each category
             A = 0.0
             for i in range(len(data.keys())):
                 A += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
 
+            # calculate squared sum
             SSa = A - X
             SSwc = AS - A
             SSr = AS - X
@@ -73,6 +82,7 @@ class OneWayAnova:
             total_dof = N - 1
             within_dof = total_dof - between_dof
 
+            # calculate mean square
             MSa = SSa / between_dof
             MSwc = SSwc / within_dof
             F = MSa / MSwc
@@ -99,25 +109,31 @@ class OneWayAnova:
             Total  | ss_b+s+e       | b+s+e_dof   | 
             """
             
+            # p: the number of condition
             p = len(data.keys())
+
+            # n: the number of each data per condition
+            # note: It is same in all the conditions in RB design.
             n = len(data[(data.keys())[0]])
             
-            G = 0.0
-            for i in range(len(data.keys())):
-                G += sum(data[(data.keys())[i]])
+            # G: total sum of all data
+            G = utils.G(data)
 
+            # X: G^2 / n*p
             X = pow(G, 2.0) / (float(p) * n)
 
+            # AS: square sum of each data
             AS = 0.0
             for i in range(len(data.keys())):
                 for j in range(len(data[(data.keys())[i]])):
                     AS += pow(data[(data.keys())[i]][j], 2.0)
 
+            # A: sum of each category
             A = 0.0
             for i in range(len(data.keys())):
                 A += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
-            print A
 
+            # S: sum of each data per subject
             S = 0.0
             for i in range(len(data[(data.keys())[0]])):
                 tmp = 0.0
@@ -125,8 +141,7 @@ class OneWayAnova:
                     tmp += data[(data.keys())[j]][i]
                 S += pow(tmp, 2.0) / p
 
-            print S
-
+            # calculate squared sum
             SSs = S - X
             SSa = A - X
             SSres = AS - A - S + X
@@ -137,12 +152,14 @@ class OneWayAnova:
             subject_dof = n - 1.0
             error_dof =  n * p - 1 - between_dof - subject_dof
 
+            # calculate mean square
             MSa = SSa / between_dof
             MSs = SSs / subject_dof
             MSres = SSres / error_dof 
             Fa = MSa / MSres
             Fs = MSs / MSres
 
+            # calculate p
             pa = calc_f.sf(Fa, between_dof, error_dof)
             ps = calc_f.sf(Fs, subject_dof, error_dof)
  

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 class Utils():
+
     def condition_type_num(self, condition):
         return len(condition)
     
@@ -21,8 +22,7 @@ class Utils():
     def G(self, data):
         G = 0.0
         for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys()[i])])):
-                G += (data[(data.keys()[i])])[j]
+            G += sum(data[(data.keys())[i]])
         return G
         
     def WC_dof(self, p, q, n):
