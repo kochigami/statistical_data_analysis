@@ -16,34 +16,15 @@ SPF: split-plot design
 reference: 心理学のためのデータ解析テクニカルブック　 森 敏昭, 吉田 寿夫編著　北大路書房 p. 107-121
 '''
 class SPF_pq:
+    # 要因Aには異なる被験者が割り当てられている (例えばa1, a2 のどちらか)
+    # 要因Bは全ての被験者が試している (例えばb1-b4全部試す)
     def test(self, data, label_A, label_B, mode="equal"):
-        '''
-        data: 
-        
-        data['a1-b1'] = [3,3,1,3,5]
-        data['a1-b2'] = [4,3,4,5,7]
-        data['a1-b3'] = [6,6,6,4,8]
-        data['a1-b4'] = [5,7,8,7,9]
-        data['a2-b1'] = [3,5,2,4,6]
-        data['a2-b2'] = [2,6,3,6,4]
-        data['a2-b3'] = [3,2,3,6,5]
-        data['a2-b4'] = [2,3,3,4,6]
-
-        label_a = ["a1", "a2"]
-        label_b = ["b1", "b2", "b3", "b4"]
-
-        Major Effect A
-        Error of Major Effect A S(A)
-        Major Effect B
-        Interaction  AxB
-        Error        BxS(A)
-        '''
         utils = Utils()
         # number of each condition A, B
         p = utils.condition_type_num(label_A)
         q = utils.condition_type_num(label_B)
 
-        # ABS: squared sum of each sample
+        # ABS: squared sum of all the data
         ABS = utils.ABS(data)
 
         # AB: squared sum of each condition / sample num (condition: a1-b1, a1-b2, a2-b1, a2-b2)
@@ -54,14 +35,14 @@ class SPF_pq:
         B_dof = q - 1
         AxB_dof = A_dof * B_dof
 
-        # n_j: list of sample number
+        # n_j: list of sample number (category A)
         # ex. [a1, a2] = [5, 4]
         # each sample number of a1 / a2 is same
         # len(data['a1-b1']) == len(data['a1-b2']) == len(data['a1-b3']) == len(data['a1-b4']) = 5
         # len(data['a2-b1']) == len(data['a2-b2']) == len(data['a2-b3']) == len(data['a2-b4']) = 4 
         n_j = utils.condition_num(data, label_A)
 
-        # Sij: total sum of data per subject
+        # Sij: total sum list of data per subject
         # ex. [18, 19, 19, 19, 29, 10, 16, 11, 20, 21]
         Sij = utils.Sij(data, n_j, label_A)
 
@@ -70,10 +51,68 @@ class SPF_pq:
         for i in range(len(Sij)):
             AS += pow(Sij[i], 2.0) / q
 
-        # A_sum: category1 sum
+        # A_sum: category1 sum list
         A_sum = utils.condition_sum(data, label_A)
 
         if mode == "equal":
+            '''
+            data:
+
+            data['a1-b1'] = [3,3,1,3,5]
+            data['a1-b2'] = [4,3,4,5,7]
+            data['a2-b3'] = [6,6,6,4,8]
+            data['a2-b4'] = [5,7,8,7,9]
+            data['a2-b1'] = [3,5,2,4,6]
+            data['a2-b2'] = [2,6,3,6,4]
+            data['a2-b3'] = [3,2,3,6,5]
+            data['a2-b4'] = [2,3,3,4,6]
+
+            label_a = ["a1", "a2"]
+            label_b = ["b1", "b2", "b3", "b4"]
+
+            results:
+            Major Effect A
+            Error of Major Effect A S(A)
+            Major Effect B
+            Interaction  AxB
+            Error        BxS(A)
+
+            requires:
+            p: number of each condition A
+            q: number of each condition B
+            A_dof:   dof of category A
+            B_dof:   dof of category B
+            AxB_dof: dof of AxB
+            n_j: list of sample number (category A)
+            Sij: total sum list of data per subject
+            A_sum: category1 sum list
+            ABS: squared sum of all the data
+            AB: squared sum of each condition / sample num per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+            G: sum of all the data
+            X: G^2 / npq
+            A: Aj^2 / nq (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
+            B: Bi^2 / np (i=0~len(B_sum), Bi: B_sum[i], sum list of category B)
+            WC_dof: pq (n-1)
+            Sij: total sum of data per subject
+            AS: sum of Sij^2 / q
+
+            SSa:   A-X
+            SSb:   B-X
+            SSaxb: AB-A-B+X
+            SSwc:  ABS-AB
+            SSsa = AS - A
+            SSbxsa = ABS - AB - AS + A
+
+            MSa = SSa / A_dof
+            MSb = SSb / B_dof
+            MSaxb = SSaxb / AxB_dof
+            MSsa = SSsa / SA_dof
+            MSbxsa = SSbxsa / BxSA_dof
+
+            Fa = MSa / MSsa
+            Fb = MSb / MSbxsa
+            Faxb = MSaxb / MSbxsa
+            '''
             # G: sum of all the data
             G = utils.G(data)
 
