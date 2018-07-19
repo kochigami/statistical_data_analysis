@@ -83,8 +83,10 @@ class SPF_pq:
             A_dof:   dof of category A
             B_dof:   dof of category B
             AxB_dof: dof of AxB
+            BxSA_dof: p * (q - 1) * (n - 1)
+            unweighted_mean: list of mean value per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+
             n_j: list of sample number (category A)
-            Sij: total sum list of data per subject
             A_sum: category1 sum list
             ABS: squared sum of all the data
             AB: squared sum of each condition / sample num per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
@@ -100,13 +102,13 @@ class SPF_pq:
             SSb:   B-X
             SSaxb: AB-A-B+X
             SSwc:  ABS-AB
-            SSsa = AS - A
-            SSbxsa = ABS - AB - AS + A
+            SSsa: AS - A
+            SSbxsa: ABS - AB - AS + A
 
             MSa = SSa / A_dof
+            MSsa = SSsa / SA_dof
             MSb = SSb / B_dof
             MSaxb = SSaxb / AxB_dof
-            MSsa = SSsa / SA_dof
             MSbxsa = SSbxsa / BxSA_dof
 
             Fa = MSa / MSsa
@@ -175,6 +177,70 @@ class SPF_pq:
             p_1x2 = calc_f.sf(Faxb, AxB_dof, BxSA_dof)
 
         else:
+            '''
+            data:
+
+            data['a1-b1'] = [3,3,1,3,5]
+            data['a1-b2'] = [4,3,4,5,7]
+            data['a2-b3'] = [6,6,6,4,8]
+            data['a2-b4'] = [5,7,8,7,9]
+            data['a2-b1'] = [3,5,2,4]
+            data['a2-b2'] = [2,6,3,6]
+            data['a2-b3'] = [3,2,3,6]
+            data['a2-b4'] = [2,3,3,4]
+
+            label_a = ["a1", "a2"]
+            label_b = ["b1", "b2", "b3", "b4"]
+
+            results:
+            Major Effect A
+            Error of Major Effect A S(A)
+            Major Effect B
+            Interaction  AxB
+            Error        BxS(A)
+
+            requires:
+            p: number of each condition A
+            q: number of each condition B
+            SA_dof: p * (n - 1)
+            A_dof:   dof of category A
+            B_dof:   dof of category B
+            AxB_dof: dof of AxB
+            BxSA_dof: p * (q - 1) * (n - 1)
+            unweighted_mean: list of mean value per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+
+            ABS: squared sum of all the data
+            Sij: total sum of data per subject
+            AS: sum of Sij^2 / q
+            AB: squared sum of each condition / sample num per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+            A_sum: category1 sum list
+            B_sum: category2 sum list
+            n_j: list of sample number (category A)
+            A: Aj^2 / nj * q (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
+
+            G_dash: sum of non-weighted average per condition
+            X_dash: G_dash^2 / p * q
+            A_dash: q * Aj^2 (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
+            B_dash: p * Bk^2 (k=0~len(B_sum), Bk: B_sum[k], sum list of category B)
+            AB_dash: squared sum of unweighted_mean
+            n_tilde: p / (sum of 1/n_j[i])
+
+            SSsa: AS - A
+            SSbxsa: ABS - AB - AS + A
+            SSa:   n_tilde * (A_dash -X_dash)
+            SSb:   n_tilde * (B_dash -X_dash)
+            SSaxb: n_tilde * (AB_dash - A_dash - B_dash + X_dash)
+
+            MSa = SSa / A_dof
+            MSsa = SSsa / SA_dof
+            MSb = SSb / B_dof
+            MSaxb = SSaxb / AxB_dof
+            MSbxsa = SSbxsa / BxSA_dof
+
+            Fa = MSa / MSsa
+            Fb = MSb / MSbxsa
+            Faxb = MSaxb / MSbxsa
+            '''
             # A: Aj^2 / nj * q
             A = 0.0
             for i in range(len(A_sum)):
@@ -182,8 +248,8 @@ class SPF_pq:
 
             # unweighted_mean
             unweighted_mean = []
-            for i in range(len(data.keys())):
-                unweighted_mean.append(sum(data[(data.keys())[i]]) / float(len(data[(data.keys())[i]])))
+            for i in data.keys():
+                unweighted_mean.append(sum(data[i]) / float(len(data[i])))
 
             A_sum = utils.condition_sum_of_unweighted_mean(data, label_A, unweighted_mean)
             B_sum = utils.condition_sum_of_unweighted_mean(data, label_B, unweighted_mean)
@@ -194,24 +260,24 @@ class SPF_pq:
             # X_dash: G_dash^2 / p * q
             X_dash = pow(G_dash, 2.0) / (p * q)
 
-            # A_dash
+            # A_dash: q * Aj^2 (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
             A_dash = 0.0
             for i in range(len(A_sum)):
                 A_dash += pow(A_sum[i], 2.0)
             A_dash *= q
 
-            # B_dash
+            # B_dash: p * Bk^2 (k=0~len(B_sum), Bk: B_sum[k], sum list of category B)
             B_dash = 0.0
             for i in range(len(B_sum)):
                 B_dash += pow(B_sum[i], 2.0)
             B_dash *= p
         
-            # AB_dash
+            # AB_dash: squared sum of unweighted_mean
             AB_dash = 0.0
             for i in range(len(unweighted_mean)):
                 AB_dash += pow(unweighted_mean[i], 2.0)
             
-            # n_tilde
+            # n_tilde: p / (sum of 1/n_j[i])
             tmp = 0.0
             for i in range(len(n_j)):
                 tmp += 1.0 / n_j[i]
