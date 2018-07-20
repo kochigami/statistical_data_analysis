@@ -32,6 +32,7 @@ class RBF_pq:
         label_a = ["a1", "a2"]
         label_b = ["b1", "b2", "b3", "b4"]
 
+        results:
         Subject                  S
         Major Effect A           A
         Error of Major Effect A  AxS
@@ -39,6 +40,54 @@ class RBF_pq:
         Error of Major Effect B  BxS
         Interaction              AxB
         Error                    AxBxS
+
+        requires:
+        n: number of data per category
+        p: number of each condition A
+        q: number of each condition B
+        ABS: squared sum of all the data
+        AB: squared sum of each condition / sample num per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+        G: sum of all the data
+        X: G^2 / npq
+        A: Aj^2 / nq (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
+        B: Bi^2 / np (i=0~len(B_sum), Bi: B_sum[i], sum list of category B)
+        n_j: list of sample number (condition A)
+        Sij: total sum of data per subject (condition A)
+        AS: sum of Sij^2 / q
+        n_k: list of sample number (condition B)
+        Sik: total sum of data per subject (condition B)
+        BS: sum of BSik^2 / p
+        S: sum of Sij^2 / (p*q)
+
+        SSa:   A-X
+        SSb:   B-X
+        SSaxb: AB-A-B+X
+        SSt: ABS-X
+        SSs: S-X
+        SSaxs: AS-A-S+X
+        SSbxs: BS-B-S+X
+        SSaxbxs: ABS-AB-AS-BS+A+B+S-X
+
+        A_dof = p - 1
+        B_dof = q - 1
+        AxB_dof = A_dof * B_dof
+        AxS_dof = (p - 1) * (n - 1)
+        S_dof = n - 1
+        BxS_dof = (q - 1) * (n - 1)
+        AxBxS_dof = (p - 1) * (q - 1) * (n - 1)
+        T_dof = n * p * q - 1
+
+        MSs = SSs / S_dof
+        MSa = SSa / A_dof
+        MSaxs = SSaxs / AxS_dof
+        MSb = SSb / B_dof
+        MSbxs = SSbxs / BxS_dof
+        MSaxb = SSaxb / AxB_dof
+        MSaxbxs = SSaxbxs / AxBxS_dof
+
+        Fa = MSa / MSaxs
+        Fb = MSb / MSbxs
+        Faxb = MSaxb / MSaxbxs
         '''
         utils = Utils()
         # number of each condition A, B
