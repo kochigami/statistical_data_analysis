@@ -1,131 +1,76 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import numpy as np
-import math
-from scipy.stats import t as calc_p
+from utils import Utils
 from scipy.stats import f as calc_f
-# referenced as calc_p because of the error below:
+'''
+referenced as calc_p because of the error below:
 # File "/home/kochigami/my_tutorial/statistics/src/t_test/t_test.py", line 80, in unpaired_ttest
 # p = t.sf(t_value, dof)
 # UnboundLocalError: local variable 't' referenced before assignment
 # t test
-from collections import OrderedDict
+'''
 
+'''
+RBF: randomized block factorial design
+
+reference: 心理学のためのデータ解析テクニカルブック　 森 敏昭, 吉田 寿夫編著　北大路書房 p. 116-121
+'''
 class RBF_pq:
     def test(self, data, label_A, label_B):
-        ABS = 0.0
-        for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys()[i])])):
-                ABS += pow((data[(data.keys()[i])])[j], 2.0)
-        AB = 0.0
-        for i in range(len(data.keys())):
-            AB += pow(sum(data[(data.keys())[i]]), 2.0) / len(data[(data.keys())[i]])
+        '''
+        data:
+                        s1 2 3 4 5
+        data['a1-b1'] = [3,3,1,3,5]
+        data['a1-b2'] = [4,3,4,5,7]
+        data['a1-b3'] = [6,6,6,4,8]
+        data['a1-b4'] = [5,7,8,7,9]
+        data['a2-b1'] = [3,5,2,4,6]
+        data['a2-b2'] = [2,6,3,6,4]
+        data['a2-b3'] = [3,2,3,6,5]
+        data['a2-b4'] = [2,3,3,4,6]
 
-        p = len(label_A)
-        q = len(label_B)
+        label_a = ["a1", "a2"]
+        label_b = ["b1", "b2", "b3", "b4"]
+
+        results:
+        Subject                  S
+        Major Effect A           A
+        Error of Major Effect A  AxS
+        Major Effect B           B
+        Error of Major Effect B  BxS
+        Interaction              AxB
+        Error                    AxBxS
+
+        requires:
+        n: number of data per category
+        p: number of each condition A
+        q: number of each condition B
+        ABS: squared sum of all the data
+        AB: squared sum of each condition / sample num per condition (condition: a1-b1, a1-b2, a1-b3, a1-b4, a2-b1, a2-b2, a2-b3, a2-b4)
+        G: sum of all the data
+        X: G^2 / npq
+        A: Aj^2 / nq (j=0~len(A_sum), Aj: A_sum[j], sum list of category A)
+        B: Bi^2 / np (i=0~len(B_sum), Bi: B_sum[i], sum list of category B)
+        n_j: list of sample number (condition A)
+        Sij: total sum of data per subject (condition A)
+        AS: sum of Sij^2 / q
+        n_k: list of sample number (condition B)
+        Sik: total sum of data per subject (condition B)
+        BS: sum of BSik^2 / p
+        S: sum of Sij^2 / (p*q)
+
+        SSa:   A-X
+        SSb:   B-X
+        SSaxb: AB-A-B+X
+        SSt: ABS-X
+        SSs: S-X
+        SSaxs: AS-A-S+X
+        SSbxs: BS-B-S+X
+        SSaxbxs: ABS-AB-AS-BS+A+B+S-X
 
         A_dof = p - 1
         B_dof = q - 1
         AxB_dof = A_dof * B_dof
-        
-        AS = 0.0
-        Sij = []
-        n_j = []
-        for j in range(len(label_A)):
-            for i in range(len(data.keys())):
-                if label_A[j] in (data.keys())[i]:
-                    n_j.append(len(data[(data.keys())[i]]))
-                    break
-
-        tmp = [[] for i in range(len(n_j))]
-        for i in range(len(label_A)):
-            tmp[i] = [0 for s in range(n_j[i])]
-            for j in range(n_j[i]):
-                for k in range(len(data.keys())):
-                    if label_A[i] in (data.keys())[k]:
-                        tmp[i][j] += data[(data.keys())[k]][j]
-                Sij.append(tmp[i][j])
-
-        for i in range(len(Sij)):
-            AS += pow(Sij[i], 2.0) / q
-
-        BS = 0.0
-        Sik = []
-        n_k = []
-        for j in range(len(label_B)):
-            for i in range(len(data.keys())):
-                if label_B[j] in (data.keys())[i]:
-                    n_k.append(len(data[(data.keys())[i]]))
-                    break
-
-        tmp = [[] for i in range(len(n_k))]
-        for i in range(len(label_B)):
-            tmp[i] = [0 for s in range(n_k[i])]
-            for j in range(n_k[i]):
-                for k in range(len(data.keys())):
-                    if label_B[i] in (data.keys())[k]:
-                        tmp[i][j] += data[(data.keys())[k]][j]
-                Sik.append(tmp[i][j])
-
-        for i in range(len(Sik)):
-            BS += pow(Sik[i], 2.0) / p
-
-        tmp = [0 for j in range(len(data[(data.keys())[0]]))]
-        for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys())[0]])):
-                tmp[j] += data[(data.keys())[i]][j]
-        
-        S = 0.0
-        for i in range(len(tmp)):
-            S += pow(tmp[i], 2.0) / (p * q)
-
-        G = 0.0
-        for i in range(len(data.keys())):
-            for j in range(len(data[(data.keys()[i])])):
-                G += (data[(data.keys()[i])])[j]
-
-        n = len(data[(data.keys()[0])])
-
-        X = pow(G, 2.0) / (n * p * q)
-
-        A_sum = []
-        A_sum_tmp = 0.0
-        # category1 sum
-        for i in range(len(label_A)):
-            for j in range(len(data.keys())):
-                if label_A[i] in (data.keys())[j]:
-                    A_sum_tmp += sum(data[(data.keys())[j]])
-            A_sum.append(A_sum_tmp)
-            A_sum_tmp = 0.0
-
-        A = 0.0
-        for i in range(len(A_sum)):
-            A += pow(A_sum[i], 2.0) / (n * q)
-
-        # category2 sum
-        B_sum = []
-        B_sum_tmp = 0.0
-        for i in range(len(label_B)):
-            for j in range(len(data.keys())):
-                if label_B[i] in (data.keys())[j]:
-                    B_sum_tmp += sum(data[(data.keys())[j]])
-            B_sum.append(B_sum_tmp)
-            B_sum_tmp = 0.0
-
-        B = 0.0
-        for i in range(len(B_sum)):
-            B += pow(B_sum[i], 2.0) / (n * p)
-
-        SSa = A - X
-        SSb = B - X
-        SSaxb = AB - A - B + X
-        SSt = ABS - X
-        SSs = S - X
-        SSaxs = AS - A - S + X
-        SSbxs = BS - B - S + X
-        SSaxbxs = ABS - AB - AS - BS + A + B + S - X
-
         AxS_dof = (p - 1) * (n - 1)
         S_dof = n - 1
         BxS_dof = (q - 1) * (n - 1)
@@ -143,7 +88,114 @@ class RBF_pq:
         Fa = MSa / MSaxs
         Fb = MSb / MSbxs
         Faxb = MSaxb / MSaxbxs
+        '''
+        utils = Utils()
+        # number of each condition A, B
+        p = utils.condition_type_num(label_A)
+        q = utils.condition_type_num(label_B)
 
+        # ABS: squared sum of each sample
+        ABS = utils.ABS(data)
+
+        # AB: squared sum of each condition / sample num (condition: a1-b1, a1-b2, a2-b1, a2-b2)
+        AB = utils.AB(data)
+
+        # dof
+        A_dof = p - 1
+        B_dof = q - 1
+        AxB_dof = A_dof * B_dof
+        
+        # n_j: list of sample number
+        # ex. [a1, a2] = [5, 5]
+        n_j = utils.condition_num(data, label_A)
+
+        # Sij: total sum of data per subject
+        Sij = utils.Sij(data, n_j, label_A)
+
+        # AS: sum of Sij^2 / q
+        AS = 0.0
+        for i in range(len(Sij)):
+            AS += pow(Sij[i], 2.0) / q
+
+        # n_k: list of sample number
+        # ex. [b1, b2] = [5, 5]
+        n_k = utils.condition_num(data, label_B)
+
+        # Sik: total sum of data per subject
+        Sik = utils.Sij(data, n_k, label_B)
+
+        # BS: sum of Sik^2 / p
+        BS = 0.0
+        for i in range(len(Sik)):
+            BS += pow(Sik[i], 2.0) / p
+
+        # tmp: sum list of each subject
+        # ex. [28, 35, 30, 39, 50]
+        tmp = [0 for j in range(len(data[(data.keys())[0]]))]
+        for i in range(len(data.keys())):
+            for j in range(len(data[(data.keys())[0]])):
+                tmp[j] += data[(data.keys())[i]][j]
+        
+        # S: Si^2 / p*q
+        S = 0.0
+        for i in range(len(tmp)):
+            S += pow(tmp[i], 2.0) / (p * q)
+
+        # G: sum of all the data
+        G = utils.G(data)
+
+        # n: number of data per each category
+        # focus on (data.keys()[0]) in this case
+        # because the number of data per each category is equal
+        n = len(data[(data.keys()[0])])
+
+        # X: G^2 / npq
+        X = utils.X(G, p, q, n)
+
+        # A
+        A_sum = utils.condition_sum(data, label_A)
+        A = 0.0
+        for i in range(len(A_sum)):
+            A += pow(A_sum[i], 2.0) / (n * q)
+
+        # B
+        B_sum = utils.condition_sum(data, label_B)
+        B = 0.0
+        for i in range(len(B_sum)):
+            B += pow(B_sum[i], 2.0) / (n * p)
+
+        # calculate sum of square
+        SSa = A - X
+        SSb = B - X
+        SSaxb = AB - A - B + X
+        SSt = ABS - X
+        SSs = S - X
+        SSaxs = AS - A - S + X
+        SSbxs = BS - B - S + X
+        SSaxbxs = ABS - AB - AS - BS + A + B + S - X
+
+        # calculate dof
+        AxS_dof = (p - 1) * (n - 1)
+        S_dof = n - 1
+        BxS_dof = (q - 1) * (n - 1)
+        AxBxS_dof = (p - 1) * (q - 1) * (n - 1)
+        T_dof = n * p * q - 1
+
+        # calculate mean square
+        MSs = SSs / S_dof
+        MSa = SSa / A_dof
+        MSaxs = SSaxs / AxS_dof
+        MSb = SSb / B_dof
+        MSbxs = SSbxs / BxS_dof
+        MSaxb = SSaxb / AxB_dof
+        MSaxbxs = SSaxbxs / AxBxS_dof
+
+        # calculate F
+        Fa = MSa / MSaxs
+        Fb = MSb / MSbxs
+        Faxb = MSaxb / MSaxbxs
+        
+        # calculate p
         p_1 = calc_f.sf(Fa, A_dof, AxS_dof)
         p_2 = calc_f.sf(Fb, B_dof, BxS_dof)
         p_1x2 = calc_f.sf(Faxb, AxB_dof, AxBxS_dof)        
