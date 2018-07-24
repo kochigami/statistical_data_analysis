@@ -10,18 +10,35 @@ from ordinal.paired_two_sample_test_of_ordinal_scale import PairedTwoSampleTestO
 from ordinal.unpaired_two_sample_test_of_ordinal_scale import UnpairedTwoSampleTestOfOrdinalScale
 
 class MultipleComparison:
+    '''
+    [多重分析]
+
+    ライアン法
+    ホルム法
+    '''
     def test(self, data, test="none", alpha=0.05, mode="ryan"):
+        '''
+        data:  {A: [1,2,3], B: [2,4,6], ...}
+        test:  test name used in multiple sample comparison with nominal and ordinal scale
+               (candidates: chi-square, cochran, kruskal-wallis, friedman)
+        alpha: threshold (ex. 0.05)
+        mode:  test mode of multiple sample comparison
+        '''
         if mode == "ryan":
             '''
             ryan method
             
-            data: {A: [1,2,3], B: [2,4,6], ...}
-            
+            compare two pairs picked from all the data under the threshold of alpha_dash
             alpha_dash = 2 * alpha / (m * ( r - 1 ))
-            m: the number of step 
-            r: the number of step - the total number of step
+            m: the number of step (= len(data.keys()))
+            r: the number of step - the current number of step
+            '''
+
+            '''
+            set m
             '''
             m = len(data.keys())
+
             '''
             calculate
             data_average: {A: 2, B: 4, ...}
@@ -29,20 +46,26 @@ class MultipleComparison:
             data_average = {}
             for r in range(m):
                 data_average[(data.keys())[r]] = np.average(data[(data.keys())[r]])
+
             '''
             sort data_average
             set a result as data_tmp
+            ex. value = {'kokugo': 60, 'sansuu': 70}
+                => [('sansuu', 70), ('kokugo', 60)]
             '''
             data_tmp = sorted(data_average.items(), key=operator.itemgetter(1))
+
             '''
             make OrderedDict "data_new" by copying data_tmp
+            ex. [('sansuu', 70), ('kokugo', 60)]
+                => {'sansuu': 70, 'kokugo': 60}
             '''
             data_new = OrderedDict()
             for r in range(len(data_tmp)):
                 data_new[(data_tmp[r])[0]] = (data_tmp[r])[1]
-        
+
             '''
-            r: the number of step - the total number of step
+            r: the number of step - the current number of step
             '''
             for i in range(m):
                 r = m - i
@@ -54,7 +77,11 @@ class MultipleComparison:
                     print "threshold is: {}".format(2.0 * alpha / (m * ( r - 1 )))
                     for j in range(0, i+1):
                         '''
-                        create data of a chosen pair
+                        create data of a chosen pair (j, j+r-1)
+                        ex. if m = 4
+                        i=0, r=4: (j, j+r-1) = (0, 3)
+                        i=1, r=3: (j, j+r-1) = (0, 2), (1, 3)
+                        i=2, r=2: (j, j+r-1) = (0, 1), (1, 2), (2, 3)
                         '''
                         test_data = OrderedDict()
                         test_data[(data_new.keys())[j]] = data[(data_new.keys())[j]]
