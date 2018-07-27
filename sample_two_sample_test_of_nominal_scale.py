@@ -97,6 +97,7 @@ if __name__ == '__main__':
                 data_converted["Agree"].append(tmp_agree)
                 data_converted["Disagree"].append(tmp_disagree)
 
+            print "A McNemar Test was performed to examine the relation between approval of a question and a lecture from a company. The relation between these variables was significant, X^2(dof=1)=18.23, p<.01. People after taking a lecture from a company were less likely to show an approval of a question than were people before taking a lecture from a company."
             draw_table.draw_table(p, data_converted, ["Before", "After"], ["Agree", "Disagree"], "test")
 
         elif args[1] == "2":
@@ -109,13 +110,14 @@ if __name__ == '__main__':
              ------------------------------------
              Total          100      50      150
 
-             OrderedDict([('Illness', [52, 8]), ('Healty', [48, 42])])
+             OrderedDict([('Illness', [52, 8]), ('Healthy', [48, 42])])
             '''
             data = OrderedDict()
             data["Illness"] = [52, 8]
-            data["Healty"] = [48, 42]
-            unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()    
+            data["Healthy"] = [48, 42]
+            unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale() 
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
+            print "A chi-square test of independence was performed to examine the relation between the habit of smoking and health conditions. The relation between these variables was significant, X^2(dof=1) = 16.53, p<.01. Non-smokers were less likely to have illness than were smokers."
             print "カイ二乗検定を喫煙率に実施した．その結果，病気の患者の喫煙率(87%)は，健常者の喫煙率(53%)より有意に高いことが明らかになった．(x_2 (1) = 16.531, p < 0.01)"
             draw_table.draw_table(p, data, ["Illness", "Healthy"], ["Smoker", "Non-Smoker"], "test")
 
@@ -137,6 +139,7 @@ if __name__ == '__main__':
             data["Counselor"] = [4, 6]
             unpaired_two_sample_test_of_nominal_scale = UnpairedTwoSampleTestOfNominalScale()
             p = unpaired_two_sample_test_of_nominal_scale.test(data)
+            print "Fisher's Exact Test indicated that primary outcome results indicated a non-significant reduction in the tendency of taking care of non-social behavior in the teacher group with a prevelence of 20% (1/5), compared to 40% (4/10) in the counselor group (p=0.087)."
             draw_table.draw_table(p, data, ["Teacher", "Counselor"], ["Non-social", "Antisocial"], "test")
 
         else:
