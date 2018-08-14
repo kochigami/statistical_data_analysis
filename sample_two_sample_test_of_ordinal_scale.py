@@ -49,6 +49,7 @@ if __name__ == '__main__':
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 3, 5, 3]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 2, 2, 3]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            print "A sign test indicated that there is not significant difference between the score of cusine A (Mdn=3.5) and that of cusine B (Mdn=3.0); p=0.34."
             draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "2":
@@ -95,6 +96,7 @@ if __name__ == '__main__':
             data['Cusine_A'] = [5, 3, 4, 4, 3, 4, 4, 1, 3, 2, 5, 3, 2, 3, 5, 4, 2, 3, 5, 4, 1, 2, 3, 2, 3, 5, 2, 3, 3, 5]
             data['Cusine_B'] = [3, 5, 3, 3, 5, 2, 2, 1, 4, 1, 2, 3, 4, 3, 2, 3, 5, 2, 3, 3, 3, 2, 2, 4, 1, 4, 4, 5, 4, 4]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_test")
+            print "A sign test indicated that there is not significant difference between the score of cusine A (Mdn=3.0) and that of cusine B (Mdn=3.0); p=0.33."
             draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "3":
@@ -117,6 +119,7 @@ if __name__ == '__main__':
             data['Product_A'] = [25, 62, 58, 26, 42, 18, 11, 33, 50, 34]
             data['Product_B'] = [26, 31, 35, 24, 47, 13, 11, 21, 42, 18]
             p = paired_two_sample_test_of_ordinal_scale.test(data, mode="signed_rank_sum_test")
+            print "Signed rank sum test indicated that the number of times 10 people used product A in the three months (Mdn=33.5) was statistically significantly higher than the number of times they used product B in three months (Mdn=25.0)"
             draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "4":
@@ -128,6 +131,7 @@ if __name__ == '__main__':
             data['24hour'] = [13, 14, 24, 28, 29, 35, 59, 83, 84, 89, 94, 97, 98, 117, 118, 128, 131, 175, 200, 200]
             data['48hour'] = [10, 12, 13, 16, 18, 21, 28, 28, 39, 40, 47, 57, 58, 62, 68, 69, 70, 82, 95, 111, 127]
             p = unpaired_two_sample_test_of_ordinal_scale.test(data)
+            print "A Mann-Whitney test indicated that the number of trials which satisfied with the learning criteria was greater for mice which did not eat anything for 48 hours (Mdn=47.0) than for mice which did not eat anything for 24 hours (Mdn=91.5), U=117.5, p=0.008."
             draw_box_graph.draw_graph(data, "test", "x", "y") 
             
             # if we use OrderedDict, but if we use the initialization below,

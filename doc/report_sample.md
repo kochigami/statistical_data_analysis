@@ -14,7 +14,7 @@ Fisher's Exact Test indicated that teachers considered less seriously non-social
 ## Two sample Test (ordinal scale)
 
 ```
-A Mann-Whitney test indicated that the number of trials which satisfied the learning criteria was greater for mice which did not eat anything for 48 hours (Mdn=47.0) than for mice which did not eat anything for 24 hours (Mdn=91.5), U=117.5, p=0.008.
+A Mann-Whitney test indicated that the number of trials which satisfied with the learning criteria was greater for mice which did not eat anything for 48 hours (Mdn=47.0) than for mice which did not eat anything for 24 hours (Mdn=91.5), U=117.5, p=0.008.
 ```
 
 ```
