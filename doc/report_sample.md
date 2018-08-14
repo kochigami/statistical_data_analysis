@@ -36,7 +36,7 @@ Welch test was conducted to compare scores of mathematics mini test in class A a
 ```
 
 ```
-An independent-samples t-test was conducted to compare scores of taste in WakuWaku Burger and MoguMogu Burger conditions. There was not a significant difference in the scores for WakuWaku Burger (M=76.88, SD=7.043) and MoguMogu Burger (M=81.88, SD=7.474) conditions; t(14)=12.9, p=0.11.
+An independent-samples t-test was conducted to compare scores of taste in WakuWaku Burger and MoguMogu Burger conditions. There was not a significant difference in the scores for WakuWaku Burger (M=76.88, SD=7.043) and MoguMogu Burger (M=81.88, SD=7.474) conditions; t(14)=1.29, p=0.11.
 ```
 
 ```

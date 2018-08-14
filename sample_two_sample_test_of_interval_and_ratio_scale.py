@@ -27,6 +27,7 @@ if __name__ == '__main__':
             data['HamburgerA'] = [15.3, 14.9, 14.5, 14.4, 14.0, 13.9, 14.1, 14.7, 15.3, 14.6]
             data['HamburgerB'] = [13.9, 14.2, 14.1, 14.3, 14.1, 13.7, 14.7, 13.9, 14.1, 13.8, 14.3]
             p = unpaired_two_sample_test_of_interval_and_ratio_scale.test(data)
+            print "Welch test was conducted to compare scores of  subjective test in Hamburger A and Hamburger B. There was a significant difference in the scores for Hamburger A (M=14.6, SD=0.47) and Hamburger B (M=14.1, SD=0.27) conditions; t(14)=2.64, p=0.0098."
             d.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired")
         elif args[1] == "2":
             # for student's test
@@ -34,12 +35,14 @@ if __name__ == '__main__':
             data['HamburgerA'] = [70, 75, 70, 85, 90, 70, 80, 75]
             data['HamburgerB'] = [85, 80, 95, 70, 80, 75, 80, 90]
             p = unpaired_two_sample_test_of_interval_and_ratio_scale.test(data)
+            print "An independent-samples t-test was conducted to compare scores of taste in Hamburger A and Hamburger B. There was not a significant difference in the scores for Hamburger A (M=76.9, SD=7.04) and Hamburger B (M=81.9, SD=7.47) conditions; t(14)=1.29, p=0.11."
             d.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="unpaired")
         elif args[1] == "3":
             # followed this website for sample: http://kogolab.chillout.jp/elearn/hamburger/chap5/sec1.html
             data['HamburgerA'] = [90, 75, 75, 75, 80, 65, 75, 80]
             data['HamburgerB'] = [95, 80, 80, 80, 75, 75, 80, 85]
             p = paired_two_sample_test_of_interval_and_ratio_scale.test(data)
+            print "A paired-samples t-test was conducted to compare scores of taste in Hamburger A and Hamburger B. There was a significant difference in the scores for Hamburger A (M=76.9, SD=6.58) and Hamburger B (M=81.3, SD=5.99) conditions; t(7)=-2.97, p=0.021. "
             d.draw_graph(data, "test", "x", "y", p, tight_layout=True, sample_type="paired")
 
         # if we use OrderedDict, but if we use the initialization below, 
