@@ -52,7 +52,7 @@ The relation between these variables was significant, X^2(2) = 9.69, p<.01. <ex.
 
 ```
 A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C.
-It rendered a X^2(<fill dof, ex. 2>) = 8.0 which was significant (p = 0.018).
+It rendered a X^2(<fill dof, ex. 2>) = 8.0 which was significant (p = 0.009).
 Post hoc comparisons using the Tukey HSD test indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6). 
 ```
 

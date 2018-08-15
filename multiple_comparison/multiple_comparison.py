@@ -24,6 +24,7 @@ class MultipleComparison:
         alpha: threshold (ex. 0.05)
         mode:  test mode of multiple sample comparison
         '''
+        print "\ntest mode is {}".format(mode)
         if mode == "ryan":
             '''
             ryan method
