@@ -53,7 +53,7 @@ The relation between these variables was significant, X^2(2) = 9.69, p<.01. <ex.
 ```
 A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C.
 It rendered a X^2(<fill dof, ex. 2>) = 8.0 which was significant (p = 0.009).
-Post hoc comparisons using the Tukey HSD test indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6). 
+Post hoc comparisons using Ryan's method indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6). 
 ```
 
 ## Multiple sample Test (ordinal)
@@ -61,9 +61,9 @@ Post hoc comparisons using the Tukey HSD test indicated that the mean score for 
 ```
 A Kruskal Wallis Test indicated that there was a statistically significant difference between the time which infants reacted to a specific stimulus (H(2) =7.06, p=0.017), with a mean rank of 11.2 for condition1, 12.5 for condition2, 4.83 for condition3. 
 
-Post hoc comparisons using the Tukey HSD test indicated that the mean score for the condition2 (M=12.5, SD=4.5) was significantly different than the condition3 (M=4.83, SD=3.02). 
-The mean score for the condition1 (M=11.2, SD=4.22) was significantly different than the condition3 (M=4.83, SD=3.02). 
-However, the condition1 (M=11.2, SD=4.22) did not significantly differ from codition2.
+Post hoc comparisons using Ryan's method indicated that the mean score for the condition2 (M=12.5, SD=2.66) was significantly different than the condition3 (M=4.83, SD=0.81). 
+The mean score for the condition1 (M=11.2, SD=1.27) was significantly different than the condition3 (M=4.83, SD=0.82). 
+However, the condition1 did not significantly differ from codition2.
 ```
 
 ```

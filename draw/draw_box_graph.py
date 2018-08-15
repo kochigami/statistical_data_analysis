@@ -21,6 +21,10 @@ class DrawBoxGraph:
             tmp_label.append(i)
         ax.set_xticklabels(tmp_label)
 
+        # print SD
+        for i in range(len(tmp_data)):
+            print "std {}: {}".format(tmp_label[i], np.std(tmp_data[i]))
+
         if text:
             '''
             plot number of sample for each condition as text

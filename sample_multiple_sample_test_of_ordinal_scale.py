@@ -37,6 +37,7 @@ if __name__ == '__main__':
             data["C"] = [1.82,4.21,3.10,1.99,2.75,2.18]
             unpaired_multiple_sample_test_of_ordinal_scale = UnpairedMultipleSampleTestOfOrdinalScale()
             unpaired_multiple_sample_test_of_ordinal_scale.test(data)
+            print "A Kruskal Wallis Test indicated that there was a statistically significant difference between the time which infants reacted to a specific stimulus (H(2) =7.06, p=0.017), with a mean rank of 11.2 for condition1, 12.5 for condition2, 4.83 for condition3. Post hoc comparisons using Ryan's test indicated that the mean score for the condition2 (M=12.5, SD=2.66) was significantly different than the condition3 (M=4.83, SD=0.81). The mean score for the condition1 (M=11.2, SD=1.27) was significantly different than the condition3 (M=4.83, SD=0.82). However, the condition1 did not significantly differ from codition2."
             draw_box_graph.draw_graph(data, "test", "x", "y")
 
         elif args[1] == "2":
@@ -64,6 +65,7 @@ if __name__ == '__main__':
             data["E"] = [4,4,5,3,1,5,1]
             paired_multiple_sample_test_of_ordinal_scale = PairedMultipleSampleTestOfOrdinalScale()
             paired_multiple_sample_test_of_ordinal_scale.test(data)
+            print "A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of 3.66, which was not significant (p =  0.55)."
             draw_box_graph.draw_graph(data, "test", "x", "y")
 
         else:

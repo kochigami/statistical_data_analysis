@@ -74,7 +74,7 @@ if __name__ == '__main__':
             data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
             paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
             paired_multiple_sample_test_of_nominal_scale.test(data)
-            print "A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C. It rendered a X^2(2) = 8.0 which was significant (p = 0.009). Post hoc comparisons using the Tukey HSD test indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6)."
+            print "A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C. It rendered a X^2(2) = 8.0 which was significant (p = 0.009). Post hoc comparisons using Ryan's method indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6)."
             draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired", is_scale_nominal=True)
 
         else:
