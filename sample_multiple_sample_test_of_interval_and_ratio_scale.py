@@ -54,6 +54,7 @@ if __name__ == '__main__':
         data['HamburgerB'] = [75, 70, 80, 85, 90, 75, 85, 80, 80, 75, 80, 75, 70, 85, 80, 75, 80, 80, 90, 80]
         data['HamburgerC'] = [80, 80, 80, 90, 95, 85, 95, 90, 85, 90, 95, 85, 98, 95, 85, 85, 90, 90]
         one_way_anova_draw_table.draw_table(data, mode="CR")
+        print "A one-way between subjects ANOVA was conducted to compare the effect of a type of hamburger on the score of taste. An analysis of variance showed that the effect of a type of hamburger on the score was significant at the p<.05 level, F(2, 55)=12.26, p=0.001. Post hoc comparisons using the holm test indicated that the mean score for the HamburgerA (M=84.0, SD=5.39) was significantly different than the HamburgerB (M=79.5, SD=5.45) (p<.001). The HamburgerA (M=84.0, SD=5.39) was significantly different than the HamburgerC (M=88.5, SD=5.52) (p=0.0076). The HamburgerB (M=79.5, SD=5.45) was significantly different than the HamburgerC (M=88.5, SD=5.52) (p=0.0091). "
         draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="unpaired")
 
     elif args[1] == "2":
