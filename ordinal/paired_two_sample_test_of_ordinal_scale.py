@@ -140,7 +140,13 @@ class PairedTwoSampleTestOfOrdinalScale:
                 print "median ({}) = {}".format((data.keys())[1], numpy.median(y))
                 print "t: {}".format(t)
                 print "n: {}".format(len(diff))
-                print "If t is smaller than T_threshold at n = {}, you can reject null hypothesis.".format(len(diff))
+                # t distribution at possiblity = 0.05 level (2-tail)
+                # reference: https://stackoverflow.com/questions/19339305/python-function-to-get-the-t-statistic
+                if t > stats.t.ppf(1-0.025, (len(diff))):
+                    print "You can reject null hypothesis. (obtailed t value: {}, t_threshold at df={} and p=0.05 level: {})".format(t, len(diff), stats.t.ppf(1-0.025, (len(diff))))
+                else:
+                    print "You cannot reject null hypothesis. (obtailed t value: {}, t_threshold at df={} and p=0.05 level: {})".format(t, len(diff), stats.t.ppf(1-0.025, (len(diff))))
+
                 return True
 
         elif mode == "signed_test":

@@ -36,6 +36,7 @@ if __name__ == '__main__':
             data["Middle"] = [10, 5, 6]
             data["End"] = [8, 20, 7]
             unpaired_multiple_sample_test_of_nominal_scale = UnpairedMultipleSampleTestOfNominalScale()
+            print "A chi-square test of independence was performed to examine the relation between learning method (vision, audition, vision + audition) and the place of the learning word people remembered. The relation between these variables was significant, X^2(4) = 10.6, p<.01."
             unpaired_multiple_sample_test_of_nominal_scale.test(data)
 
         elif args[1] == "2":
@@ -73,6 +74,7 @@ if __name__ == '__main__':
             data["CandidateC"] = [1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0]
             paired_multiple_sample_test_of_nominal_scale = PairedMultipleSampleTestOfNominalScale()
             paired_multiple_sample_test_of_nominal_scale.test(data)
+            print "A Cochran's Q Test was performed to compare an approval rating between Candidate A, Candidate B and Candidate C. It rendered a X^2(2) = 8.0 which was significant (p = 0.009). Post hoc comparisons using Ryan's method indicated that the mean score for the Candidate C (Total=14) was significantly different than the Candidate A (Total=6)."
             draw_graph.draw_graph(data, "test", "x", "y", tight_layout=True, sample_type="paired", is_scale_nominal=True)
 
         else:

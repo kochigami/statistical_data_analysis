@@ -75,7 +75,8 @@ class PairedMultipleSampleTestOfNominalScale:
 
         df = k - 1.0
         p = stats.chi2.pdf(q, df)
-        print "q: {}".format(q)
+        # q can be an approximate of X^2
+        print "X^2: {}".format(q)
         print "df: {}".format(df)
         print "p: {}".format(p)
 
