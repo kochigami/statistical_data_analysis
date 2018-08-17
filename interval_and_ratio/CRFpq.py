@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import numpy as np
 from scipy.stats import f as calc_f
 from utils import Utils
 '''
@@ -106,6 +107,27 @@ class CRF_pq:
             # A_sum: sum list of category A
             A_sum = utils.condition_sum(data, label_A)
 
+            # A_sum: sum list of category A
+            A_sum = utils.condition_sum(data, label_A)
+            # A_std
+            A_std = []
+            for i in range(len(label_A)):
+                tmp = []
+                for j in range(len(data.keys())):
+                    if label_A[i] in (data.keys())[j]:
+                        tmp += data[data.keys()[j]]
+                A_std.append(np.std(tmp))
+            A_num = []
+            for j in range(len(label_A)):
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    if label_A[j] in (data.keys())[i]:
+                        tmp += len(data[(data.keys())[i]])
+                A_num.append(tmp)
+            # for calculating average per category
+            for i in range(len(A_num)):
+                print "mean {}: {}, std {}: {}".format(label_A[i], A_sum[i]/float(A_num[i]), label_A[i], A_std[i])
+
             # A: Aj^2 / nq (j=0~len(A_sum), Aj: A_sum[j])
             A = 0.0
             for i in range(len(A_sum)):
@@ -113,6 +135,25 @@ class CRF_pq:
 
             # B_sum: sum list of category B
             B_sum = utils.condition_sum(data, label_B)
+            # B_std
+            B_std = []
+            for i in range(len(label_B)):
+                tmp = []
+                for j in range(len(data.keys())):
+                    if label_B[i] in (data.keys())[j]:
+                        tmp += data[data.keys()[j]]
+                B_std.append(np.std(tmp))
+
+            B_num = []
+            for j in range(len(label_B)):
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    if label_B[j] in (data.keys())[i]:
+                        tmp += len(data[(data.keys())[i]])
+                B_num.append(tmp)
+            # for calculating average per category
+            for i in range(len(B_num)):
+                print "mean {}: {}, std {}: {}".format(label_B[i], B_sum[i]/float(B_num[i]), label_B[i], B_std[i])
 
             # B: Bi^2 / np (i=0~len(B_sum), Bi: B_sum[i])
             B = 0.0
@@ -204,6 +245,49 @@ class CRF_pq:
 
             # G_dash: sum of unweighted_mean
             G_dash = sum(unweighted_mean)
+
+
+            # for calculating average per category
+            # A_sum: sum list of category A
+            A_sum = utils.condition_sum(data, label_A)
+            # A_std
+            A_std = []
+            for i in range(len(label_A)):
+                tmp = []
+                for j in range(len(data.keys())):
+                    if label_A[i] in (data.keys())[j]:
+                        tmp += data[data.keys()[j]]
+                A_std.append(np.std(tmp))
+            A_num = []
+            for j in range(len(label_A)):
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    if label_A[j] in (data.keys())[i]:
+                        tmp += len(data[(data.keys())[i]])
+                A_num.append(tmp)
+            for i in range(len(A_num)):
+                print "mean {}: {}, std {}: {}".format(label_A[i], A_sum[i]/float(A_num[i]), label_A[i], A_std[i])
+
+            # for calculating average per category
+            # B_sum: sum list of category B
+            B_sum = utils.condition_sum(data, label_B)
+            # B_std
+            B_std = []
+            for i in range(len(label_B)):
+                tmp = []
+                for j in range(len(data.keys())):
+                    if label_B[i] in (data.keys())[j]:
+                        tmp += data[data.keys()[j]]
+                B_std.append(np.std(tmp))
+            B_num = []
+            for j in range(len(label_B)):
+                tmp = 0.0
+                for i in range(len(data.keys())):
+                    if label_B[j] in (data.keys())[i]:
+                        tmp += len(data[(data.keys())[i]])
+                B_num.append(tmp)
+            for i in range(len(B_num)):
+                print "mean {}: {}, std {}: {}".format(label_B[i], B_sum[i]/float(B_num[i]), label_B[i], B_std[i])
 
             # A_sum: list of unweighted mean [NAO, Pepper]
             A_sum = utils.condition_sum_of_unweighted_mean(data, label_A, unweighted_mean)
