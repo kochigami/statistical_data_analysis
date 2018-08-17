@@ -100,9 +100,9 @@ Robot type included two levels (NAO and Pepper) and people age consisted of two 
 
 All effects were statistically significant at the .05 significance level except for robot type.
 
-The main effect for robot type type yielded an F ratio of F(1, 54)=1.48, p=0.23, indicating a significant difference between NAO (M=, SD=), Pepper (M=, SD=).
+The main effect for robot type type yielded an F ratio of F(1, 54)=1.48, p=0.23, indicating a significant difference between NAO (M=75.3, SD=8.56), Pepper (M=72.9, SD=7.49).
 
-The main effect for people age yielded an F ratio of F(1, 54)=4.15, p=0.047, indicating a significant difference between Children (M=, SD=) and Adults (M=, SD=).
+The main effect for people age yielded an F ratio of F(1, 54)=4.15, p=0.047, indicating a significant difference between Children (M=72.0, SD=7.36) and Adults (M=76.2, SD=8.33).
 
 The interaction effect was significant, F(1, 54)=5.02, p=0.03.
 
