@@ -6,27 +6,25 @@ from nominal.fisher_test import FisherTest
 
 class UnpairedTwoSampleTestOfNominalScale:
     def test(self, data):
-        # check data length
-        if len(data.keys()) != 2:
-            print "len(data.keys()) should be two"
-            sys.exit()
-        elif len(data[(data.keys())[0]]) != len(data[(data.keys())[1]]):
-            print "len(data[(data.keys())[0]]) and len(data[(data.keys())[1]]) should be same"
+        # check if the number of samples are appropriate 
+        if len(data.keys()) != 2 or len(data[data.keys()[0]]) != len(data[data.keys()[1]]):
+            print ("Please check the components of your data.")
+            print ("the number of each data should be equal")
             sys.exit()
         else:
             """
-            Is there any difference between the number of people who satisfies Condition1 and Yes (a) and that of people who satisfies Condition2 and Yes (c)?
+            Is there any difference between the number of people who satisfies Condition1 as Yes (a) and that of people who satisfies Condition2 as Yes (c)?
             data = {"Condition1": [a, b], "Condition2": [c, d]}
-            OrderedDict([('Illness', [52, 8]), ('Healty', [48, 42])])
+            ex. OrderedDict([('Illness', [52, 8]), ('Healty', [48, 42])])
 
-                            Yes   No   Total <= sum_row
+                            Yes   No   Total <= sum_row: [a+b, c+d]
               --------------------------------------
               Condition1     a     b    a+b
               Condition2     c     d    c+d
               --------------------------------------
               Total         a+c   b+d    n (= a+b+c+d)
                ^
-               |_ sum_column 
+               |_ sum_column: [a+c, b+d] 
 
             """
             # calculate n

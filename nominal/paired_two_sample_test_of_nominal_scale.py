@@ -12,6 +12,7 @@ reference: http://hs-www.hyogo-dai.ac.jp/~kawano/HStat/?2009%2F13th%2FMcNemar_Te
 class PairedTwoSampleTestOfNominalScale:
     def test(self, data):
         """
+        There is a question which we can answer yes (1) or no (0).
         data = {"Before": [1,1,1,1,1,...,0], "After": [1,1,1,1,1,...,0]}
         
                        Yes   No   Total
@@ -26,10 +27,10 @@ class PairedTwoSampleTestOfNominalScale:
         number of Yes => No: b
         number of No => Yes: c
         """
-        # check data length is 2
-        if len(data.keys()) != 2 and len(data[data.keys()[0]]) != len(data[data.keys()[1]]):
-            print "Please check the components of your data."
-            print "length of data should be four"
+        # check if the number of samples are appropriate 
+        if len(data.keys()) != 2 or len(data[data.keys()[0]]) != len(data[data.keys()[1]]):
+            print ("Please check the components of your data.")
+            print ("the number of each data should be equal")
             sys.exit()
         else:
             b = 0
@@ -39,13 +40,17 @@ class PairedTwoSampleTestOfNominalScale:
                     b += 1
                 elif data[(data.keys())[0]][i] == 0 and data[(data.keys())[1]][i] == 1:
                     c += 1
-            # z = abs(b-c)-1 / root(b+c)
-            # chi2 = pow((abs(b-c)-1), 2.0) / (b+c)
+            # calculating chi-square value with Yate's continuity correction (イェーツの連続修正) 
+            chi2 = pow((abs(b-c)-1), 2.0) / (b+c)
+            
+            '''
+            If there is no consideration on Yate's continuity correction:
             chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
+            '''
             p = stats.chi2.pdf(chi2, df=1)
-            # pdf: probability density function
-            # cdf: Cumulative distribution function
-            # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.chi2.html
             print "chi2 value: {}".format(chi2)
             print "p value: {}".format(p)
             return p
+
+if __name__ == '__main__':
+    pass
