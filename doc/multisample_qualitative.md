@@ -1,26 +1,18 @@
-# 対応有り
+# 質的データ ３組以上の評価
+
+## 対応有り
 
 - 名義尺度：コクランのQ検定  
 - 順位尺度：フリードマンの検定  
 
 
-# 対応無し
+## 対応無し
 
 - 名義尺度：カイ二乗検定  
 - 順位尺度：クラスカル・ウォリスの検定    
 
 
-[用語の説明]
-
-対応有り：例えば，同じ被験者に体験前後でアンケート 
-
-対応無し：例えば，条件1、条件2ごとに異なる被験者にアンケート
-
-名義尺度：Yes/ No 形式
-
-順位尺度：グレード形式
-
-# サンプル
+## サンプル
 
 - 名義尺度
 
@@ -38,9 +30,9 @@ unpaired test (Kruskal-Wallis test):
 paired test (Friedman test):  
 ```python sample_multiple_sample_test_of_ordinal_scale.py 2```
 
-# how to report results
+## how to report results
 
-## nominal
+### nominal
 
 - Chi-square Test
 
@@ -58,7 +50,7 @@ was conducted and rendered a X^2(<fill dof, ex. 2>) = <Q value> which was signif
 
 ```
 
-## ordinal
+### ordinal
 
 - Kruskal Wallis Test
 

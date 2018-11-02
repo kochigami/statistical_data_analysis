@@ -1,26 +1,20 @@
-# 対応有り
+# 量的データ ２組の評価
+
+## 対応有り
 
 - 対応のあるt検定
 
-# 対応無し
+## 対応無し
 
 - 対応のない等分散のt検定（分散が等質な場合）
 
 - Welchのt検定（分散が等質でない場合）
 
 
-[用語の説明]
-
-t検定：2条件の平均値の差の検定
-
-対応有り：同じ被験者の条件ごとの計量尺度に基づくデータの比較 
-
-対応無し：異なる被験者の条件ごとの計量尺度に基づくデータの比較
-
-計量尺度に基づくデータ：例えば，ふれ合い時間
+% t検定：2条件の平均値の差の検定
 
 
-# サンプル
+## サンプル
 
 - 対応のあるt検定
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 1```
@@ -33,7 +27,7 @@ t検定：2条件の平均値の差の検定
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 3```
 ![](fig/sample_paired_student_test.png)
 
-# How to report results
+## How to report results
 
 - A paired-samples t-test
 
