@@ -1,17 +1,12 @@
-# 対応有り
+# 質的データ ２組の評価
+
+## 対応有り
 
 - 名義尺度：マクニマーの検定
 - 順位尺度：符号付き順位和検定 (Wilcoxon Signed-ranks test)
 
-[用語の説明]
 
-対応有り：例：同じ被験者に体験前後でアンケート
-
-名義尺度：Yes/ No 形式
-
-順位尺度：グレード形式
-
-# 対応無し
+## 対応無し
 
 - 名義尺度：カイ2乗検定 
 
@@ -19,17 +14,10 @@
 
 - 順位尺度：マン・ホイトニーの検定
 
-[用語の説明]
-
-対応無し：条件1、条件2ごとに異なる被験者に試してもらい，アンケート
-
-名義尺度：Yes/ No 形式
-
-順位尺度：グレード形式 
 
 （注） 最近は，パソコンで計算できるからどんなときもフィッシャーの直接法を用いるべきという意見もある．しかし，このパッケージではpythonでのオーバーフローの問題を回避できないので，コクラン・ルールを満たすかどうかの判定を行う．  
 
-# サンプル
+## サンプル
 
 - 名義尺度
 
@@ -56,9 +44,9 @@ paired sample, signed rank sum test:
 unpaired sample, mann-whitney test:  
 ```python sample_two_sample_test_of_ordinal_scale.py 4```
 
-# how to report results
+## how to report results
 
-## nominal
+### nominal
 
 - McNemar Test
 
@@ -83,7 +71,7 @@ reference: http://www.pmean.com/08/ReportingFishersExact.html
 
 ```
 
-## ordinal
+### ordinal
 
 - Mann Whitney U test
 
