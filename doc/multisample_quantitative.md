@@ -86,7 +86,7 @@ SPFpq デザイン（データ数異なる）
 RBFpq デザイン  
 ```python sample_multiple_sample_test_of_interval_and_ratio_scale.py 11```  
 
-# How to report results
+# 英語でのレポートの方法
 
 - A one-way between subjects ANOVA
 

@@ -30,7 +30,7 @@ unpaired test (Kruskal-Wallis test):
 paired test (Friedman test):  
 ```python sample_multiple_sample_test_of_ordinal_scale.py 2```
 
-## how to report results
+## 英語でのレポートの方法
 
 ### nominal
 

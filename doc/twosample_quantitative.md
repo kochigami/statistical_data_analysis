@@ -27,7 +27,7 @@
 ```python sample_two_sample_test_of_interval_and_ratio_scale.py 3```
 ![](fig/sample_paired_student_test.png)
 
-## How to report results
+## 英語でのレポート方法
 
 - A paired-samples t-test
 
