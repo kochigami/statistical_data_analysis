@@ -29,16 +29,14 @@
 
 ## 英語でのレポート方法
 
-- A paired-samples t-test
+- 対応のあるt検定 (A paired-samples t-test)
 
 ```
-A paired-samples t-test was conducted to compare <fill DV measure> in <fill IV level/ condition1> and <fill IV level / condition2> conditions.
-There was a significant (not a significant) difference in the scores for <fill IV level1> (M=<fill average1> , SD=<fill SD1> ) and IV level2 (M=<fill average2> , SD=<fill SD2>) conditions; t(<fill df>)=<fill t value>, p=<fill p value>.
+A paired-samples t-test was conducted to compare <fill DV measure> in <fill IV level/ condition1> and <fill IV level / condition2> conditions. There was a significant (not a significant) difference in the scores for <fill IV level1> (M=<fill average1> , SD=<fill SD1> ) and IV level2 (M=<fill average2> , SD=<fill SD2>) conditions; t(<fill df>)=<fill t value>, p=<fill p value>.
 ```
 
-- an independent-samples t-test 
+- 対応のない等分散のt検定 (An independent-samples t-test) 
 
 ```
-An independent-samples t-test was conducted to compare <fill DV measure> in <fill IV level/ condition1> and <fill IV level / condition2> conditions.
-There was a significant (not a significant) difference in the scores for <fill IV level1> (M=<fill average1> , SD=<fill SD1> ) and IV level2 (M=<fill average2> , SD=<fill SD2>) conditions; t(<fill df>)=<fill t value>, p=<fill p value>.
+An independent-samples t-test was conducted to compare <fill DV measure> in <fill IV level/ condition1> and <fill IV level / condition2> conditions. There was a significant (not a significant) difference in the scores for <fill IV level1> (M=<fill average1> , SD=<fill SD1> ) and IV level2 (M=<fill average2> , SD=<fill SD2>) conditions; t(<fill df>)=<fill t value>, p=<fill p value>.
 ```
