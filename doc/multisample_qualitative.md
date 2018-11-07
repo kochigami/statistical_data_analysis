@@ -32,34 +32,31 @@ paired test (Friedman test):
 
 ## 英語でのレポートの方法
 
-### nominal
+### 名義尺度
 
-- Chi-square Test
-
-```
-A chi-square test of independence was performed to examine the relation between <ex. religion> and <ex. college interest>. 
-The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. Catholic teens> were less likely to <ex. show an interest in attending college> than were <ex. Protestant teens>.
-```
-
-- Cochran's Q Test
+- カイ二乗検定 (Chi-square Test)
 
 ```
-A Cochran's Q Test was performed to compare an approval rating between <ex. candidate1>, <ex. candidate2> and <ex. <ex. candidate3>.
-It indicated that 
-was conducted and rendered a X^2(<fill dof, ex. 2>) = <Q value> which was significant (p < .01).
-
+A chi-square test of independence was performed to examine the relation between religion and college interest. The relation between these variables was significant, X^2(1) = 14.14, p<.01. Catholic teens were less likely to show an interest in attending college than were Protestant teens.
 ```
 
-### ordinal
-
-- Kruskal Wallis Test
+- コクランのQ検定 (Cochran's Q Test)
 
 ```
-A Kruskal Wallis Test indicated that there was a statistically significant difference between <fill dependent variable> (H(<fill dof>) = <fill H>, p=<fill p>), with a mean rank of <fill mean rank1> for <independent value1>, <fill mean rank2> for <independent value2>, <fill mean rank3> for <independent value3>.
+A Cochran's Q Test was performed to compare an approval rating between candidate1, candidate2 and candidate3.
+The relation between these variables was significant, X^2(2) = <Q value>, p<.01. Candidate1 was more likely to be approved than other candidates. 
 ```
 
-- Friedman Test
+### 順位尺度
+
+- クラスカル・ウォリスの検定 (Kruskal Wallis Test)
 
 ```
-A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of <fill chi-square value, in program, S value> which was significant (p < .01).
+A Kruskal Wallis Test indicated that there was a statistically significant difference between <fill dependent variable> (H(<fill dof>) = <fill H>, p=<fill p>), with a mean rank of <fill mean rank1> for <independent value1>, <fill mean rank2> for <independent value2>, <fill mean rank3> for <independent value3>. <indenpendent value1> was more likely to be faster than others. 
+```
+
+- フリードマンの検定 (Friedman Test)
+
+```
+A Friedman test of differences among <indenpendent value1>, <indenpendent value2> and <indenpendent value3> was conducted and rendered a Chi-square value of <fill chi-square value (in this statistical_data_analysis program, it is given as S value)> which was significant (p < .01). <indenpendent value1> was more likely to be favored than others.
 ```
