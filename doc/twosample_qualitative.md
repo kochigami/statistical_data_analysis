@@ -3,7 +3,7 @@
 ## 対応有り
 
 - 名義尺度：マクニマーの検定
-- 順位尺度：符号付き順位和検定 (Wilcoxon Signed-ranks test)
+- 順位尺度：符号付き順位和検定
 
 
 ## 対応無し
@@ -44,39 +44,34 @@ paired sample, signed rank sum test:
 unpaired sample, mann-whitney test:  
 ```python sample_two_sample_test_of_ordinal_scale.py 4```
 
-## how to report results
+## 英語でのレポート方法
 
-### nominal
+### 名義尺度
 
-- McNemar Test
-
-```
-A McNemar Test was performed to examine the relation between <ex. approval of product A> and <ex. a lecture from a company>.
-The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. People before taking a lecture from a company> were less likely to <ex. show an approval of productA> than were <ex. people after taking a lecture from a company>.
-```
-
-- Chi-square Test
+- マクニマーの検定 (McNemar Test)
 
 ```
-A chi-square test of independence was performed to examine the relation between <ex. religion> and <ex. college interest>. 
-The relation between these variables was significant, X^2(<dof ex. 1>) = <ex. 14.14>, p<.01. <ex. Catholic teens> were less likely to <ex. show an interest in attending college> than were <ex. Protestant teens>.
+A McNemar Test was performed to examine the relation between approval of product A and a lecture from a company. The relation between these variables was significant, X^2(1) = 14.14, p<.01. People before taking a lecture from a company were less likely to show an approval of product A than were people after taking a lecture from a company. 
 ```
 
-- Fisher's Exact Test 
+- カイ2乗検定 (Chi-square Test)
 
 ```
-ex. 
+A chi-square test of independence was performed to examine the relation between religion and college interest. The relation between these variables was significant, X^2(1) = 14.14, p<.01. Catholic teens were less likely to show an interest in attending college than were Protestant teens.
+```
+
+- フィッシャーの直接法 (Fisher's Exact Test)
+
+```
 Fisher's Exact Test indicated that primary outcome results indicated a non-significant reduction in the acquisition of plasma cell endometritis in the antibiotic group with a prevalence of 28% (9/32), compared to 50% (14/28) in the placebo group (p=0.11). 
-reference: http://www.pmean.com/08/ReportingFishersExact.html
+```
+reference: http://www.pmean.com/08/ReportingFishersExact.html  
+
+### 順位尺度
+
+- マン・ホイトニーの検定 (Mann Whitney U test)
 
 ```
-
-### ordinal
-
-- Mann Whitney U test
-
-```
-補足
 To study the differences in <dependent variable> between <level1 of the independent variable> and <level2 of the independent variable>, we used the Mann-Whitney U test to analyse <dependent variable>. We ran the Mann-Whitney U test using <type of independent variable> as the grouping variable and <dependent variable> as the dependent variable.
 ```
 
@@ -84,16 +79,16 @@ To study the differences in <dependent variable> between <level1 of the independ
 A Mann-Whitney test indicated that the <fill dependent variable> was greater for <fill level1 of the independent variable> (Mdn = <fill median1>) than for <fill level2 of the independent variable> (Mdn = <fill median2>), U=<fill U>, p=<fill p>.   
 ```
 
-- Sign test
+- 符号検定 (Sign test)
 
 ```
-A sign test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>.
+A sign test indicated that <fill time1 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time2 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>.
 ```
 
-- Wilcoxon Signed-ranks test
+- 符号付き順位和検定 (Wilcoxon Signed-ranks test)
 
 ```
-A Wilcoxon Signed-Ranks Test indicated that <fill time2 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time1 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>. 
+A Wilcoxon Signed-Ranks Test indicated that <fill time1 of independent variable; ex. post-test ranks> (Mdn = <fill median1>) was statistically significantly higher than <fill time2 of independent variable; ex. pre-test ranks> (Mdn = <fill median2>); Z=<fill Z>, p= <fill p>. 
 
 # if the reason you used a Wilcoxon Signed-Ranks Test is because your data is very skewed or non-normal, just report it the same way but replace "ranks" with "scores".
 ```
