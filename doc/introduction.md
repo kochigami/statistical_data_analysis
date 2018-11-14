@@ -10,6 +10,13 @@
 
 使用は自己責任でお願いします．
 
+# 使用環境
+
+- Ubuntu 16.04
+- scipy ver 1.1.0
+
+To install scipy, please refer to the explanation in `Install system-wide via a Linux package manager` -> `Ubuntu & Debian` of [here](https://www.scipy.org/install.html). 
+
 # 参考文献
 
 - 心理学のためのデータ解析テクニカルブック　 森 敏昭, 吉田 寿夫編著　北大路書房
