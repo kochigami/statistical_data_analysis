@@ -39,8 +39,8 @@ class DrawBoxGraph:
             for i in range(len(tmp_data)):
                 nobs.append(len(tmp_data[i]))
                 medians.append(np.median(tmp_data[i]))
-                scoreatpercentile_25.append(stats.scoreatpercentile(tmp_data[i], 25))
-                scoreatpercentile_75.append(stats.scoreatpercentile(tmp_data[i], 75))
+                scoreatpercentile_25.append(np.percentile(tmp_data[i], 25))
+                scoreatpercentile_75.append(np.percentile(tmp_data[i], 75))
                 min_data.append(min(tmp_data[i]))
                 max_data.append(max(tmp_data[i]))
 
