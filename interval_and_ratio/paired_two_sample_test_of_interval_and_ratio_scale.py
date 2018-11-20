@@ -21,11 +21,11 @@ class PairedTwoSampleTestOfIntervalAndRatioScale:
         x = data[(data.keys())[0]]
         y = data[(data.keys())[1]]
         if len(x) == len(y):
-            t_value, p_value = stats.ttest_rel(x, y)
+            t, p = stats.ttest_rel(x, y)
             print ("dof = {}".format(len(x) - 1))
-            print ("t value = {}".format(t_value))
-            print ("p value = {}".format(p_value))
-            return p_value
+            print ("t value = {}".format(t))
+            print ("p value = {}".format(p))
+            return p
         else:
             print "Please make sure the sample num is same in two conditions."
             sys.exit()
