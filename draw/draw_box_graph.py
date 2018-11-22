@@ -21,9 +21,10 @@ class DrawBoxGraph:
             tmp_label.append(i)
         ax.set_xticklabels(tmp_label)
 
-        # print SD
+        # calculate SD for text output
+        SD = []
         for i in range(len(tmp_data)):
-            print "std {}: {}".format(tmp_label[i], np.std(tmp_data[i]))
+            SD.append(np.std(tmp_data[i]))
 
         if text:
             '''
@@ -68,6 +69,9 @@ class DrawBoxGraph:
         
         # 描画
         plt.show()
+
+        # return medians and SD for text output
+        return medians, SD
 
 if __name__ == '__main__':
     pass

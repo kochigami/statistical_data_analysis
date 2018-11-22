@@ -36,9 +36,9 @@ if __name__ == '__main__':
             data["B"] = [2.86,9.02,4.27,9.86,3.66,5.48] 
             data["C"] = [1.82,4.21,3.10,1.99,2.75,2.18]
             unpaired_multiple_sample_test_of_ordinal_scale = UnpairedMultipleSampleTestOfOrdinalScale()
-            unpaired_multiple_sample_test_of_ordinal_scale.test(data)
-            print "A Kruskal Wallis Test indicated that there was a statistically significant difference between the time which infants reacted to a specific stimulus (H(2) =7.06, p=0.017), with a mean rank of 11.2 for condition1, 12.5 for condition2, 4.83 for condition3. Post hoc comparisons using Ryan's test indicated that the mean score for the condition2 (M=12.5, SD=2.66) was significantly different than the condition3 (M=4.83, SD=0.81). The mean score for the condition1 (M=11.2, SD=1.27) was significantly different than the condition3 (M=4.83, SD=0.82). However, the condition1 did not significantly differ from codition2."
-            draw_box_graph.draw_graph(data, "test", "x", "y")
+            dof, H, p, mean_rank = unpaired_multiple_sample_test_of_ordinal_scale.test(data)
+            y_data, y_error = draw_box_graph.draw_graph(data, "test", "x", "y")
+            print "A Kruskal Wallis Test indicated that there was a statistically significant difference between the time which infants reacted to a specific stimulus (H({}) ={}, p={}), with a mean rank of {} for condition1, {} for condition2, {} for condition3. Post hoc comparisons using Ryan's test indicated that the mean score for the condition2 (M=12.5, SD=2.66) was significantly different than the condition3 (M=4.83, SD=0.81). The mean score for the condition1 (M=11.2, SD=1.27) was significantly different than the condition3 (M=4.83, SD=0.82). However, the condition1 did not significantly differ from codition2.".format(dof, H, p, mean_rank[0], mean_rank[1], mean_rank[2], y_data[0], y_error[0], y_data[1], y_error[1], y_data[2], y_error[2])
 
         elif args[1] == "2":
             '''
@@ -64,9 +64,9 @@ if __name__ == '__main__':
             data["D"] = [5,2,4,2,3,3,3]            
             data["E"] = [4,4,5,3,1,5,1]
             paired_multiple_sample_test_of_ordinal_scale = PairedMultipleSampleTestOfOrdinalScale()
-            paired_multiple_sample_test_of_ordinal_scale.test(data)
-            print "A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of 3.66, which was not significant (p =  0.55)."
-            draw_box_graph.draw_graph(data, "test", "x", "y")
+            S, p = paired_multiple_sample_test_of_ordinal_scale.test(data)
+            y_data, y_error = draw_box_graph.draw_graph(data, "test", "x", "y")
+            print "A non-parametric Friedman test of differences among repeated measures was conducted and rendered a Chi-square value of {}, which was not significant (p =  {}).".format(S, p)
 
         else:
             print "python sample_multiple_sample_test_of_ordinal_scale.py <sample_type>"

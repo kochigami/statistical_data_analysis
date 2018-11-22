@@ -66,6 +66,7 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
             for j in range(len(data[(data.keys())[i]])):
                 all_data.append(data[(data.keys())[i]][j])
 
+        dof = N-1
         sorted_all_data = sorted(all_data)
         
         '''
@@ -143,8 +144,10 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         calculate H value
         '''
         H = 0.0
+        mean_rank = []
         for i in range(len(all_rank.keys())):
             print "mean rank ({}) : {}".format((all_rank.keys())[i], numpy.mean(all_rank[(all_rank.keys())[i]]))
+            mean_rank.append(numpy.mean(all_rank[(all_rank.keys())[i]]))
             H += pow(sum(all_rank[(all_rank.keys())[i]]), 2.0) / len(all_rank[(all_rank.keys())[i]])
         H *= 12.0 / (N * (N + 1.0)) 
         H -= 3.0 * (N + 1.0)
@@ -166,4 +169,4 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
                 multiple_comparison = MultipleComparison()
                 multiple_comparison.test(data, test="kruskal-wallis")
 
-        return p
+        return dof, H, p, mean_rank

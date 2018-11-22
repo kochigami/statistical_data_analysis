@@ -63,4 +63,4 @@ class PairedMultipleSampleTestOfOrdinalScale:
             multiple_comparison = MultipleComparison()
             multiple_comparison.test(data, test="friedman")
 
-        return p
+        return S, p
