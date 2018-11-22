@@ -55,12 +55,6 @@ class PairedMultipleSampleTestOfOrdinalScale:
             S += pow(sum_of_order[i], 2.0)
         S *= 12.0 / (n * k * (k + 1.0))
         S -= 3.0 * n * (k + 1.0)
-        p = stats.chi2.cdf(S, k - 1.0)
         print "S value: {}".format(S)
-        print "p value: {}".format(p)
         
-        if p < threshold:
-            multiple_comparison = MultipleComparison()
-            multiple_comparison.test(data, test="friedman")
-
-        return S, p
+        return S
