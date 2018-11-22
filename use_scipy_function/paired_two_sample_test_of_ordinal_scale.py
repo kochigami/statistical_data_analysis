@@ -37,13 +37,12 @@ class PairedTwoSampleTestOfOrdinalScale:
             else:
                 if mode == "signed_rank_sum_test":
                     statistic, p = ranksums(data_x, data_y)
+                    return p
                 elif mode == "signed_test":
                     # https://kusuri-jouhou.com/statistics/fugou.html
                     statistic, p = wilcoxon(data_x, data_y)
+                    return p
+
                 else:
                     print "Please choose mode: 'signed_test' or 'signed_rank_test'"
                     sys.exit()
-                print "median ({}) = {}".format((label_x, numpy.median(data_x))
-                print "median ({}) = {}".format((label_y, numpy.median(data_y))
-                print "p value: {}".format(p)
-                return p
