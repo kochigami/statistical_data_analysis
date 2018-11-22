@@ -25,4 +25,4 @@ class UnpairedTwoSampleTestOfIntervalAndRatioScale:
         print("dof = {}".format(dof))
         print("t value = {}".format(t))
         print("p value = {}".format(p))
-        return p
+        return t, dof, p

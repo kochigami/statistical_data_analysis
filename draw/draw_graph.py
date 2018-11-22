@@ -145,6 +145,7 @@ class DrawGraph:
         show graph
         """
         plt.show()
+        return y_data, y_error
 
 if __name__ == '__main__':
     pass
