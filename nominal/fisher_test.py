@@ -14,17 +14,17 @@ class FisherTest:
 
       elif len(data[(data.keys())[0]]) == 2 and len(data[(data.keys())[1]]) == 2:
          """
-                    Yes   No   Total
-      -------------------------------
-      Condition1     a     b    a+b
-      Condition2     c     d    c+d
-      -------------------------------
-      Total         a+c   b+d   n (= a+b+c+d)
-
-      data[(data.keys())[0]][0] = a
-      data[(data.keys())[0]][1] = b
-      data[(data.keys())[1]][0] = c
-      data[(data.keys())[1]][1] = d
+                       Yes   No   Total
+         -------------------------------
+         Condition1     a     b    a+b
+         Condition2     c     d    c+d
+         -------------------------------
+         Total         a+c   b+d   n (= a+b+c+d)
+         
+         data[(data.keys())[0]][0] = a
+         data[(data.keys())[0]][1] = b
+         data[(data.keys())[1]][0] = c
+         data[(data.keys())[1]][1] = d
          """
 
          a = data[(data.keys())[0]][0]
