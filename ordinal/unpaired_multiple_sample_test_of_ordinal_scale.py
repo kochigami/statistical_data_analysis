@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from scipy import stats
 import sys
-from multiple_comparison.multiple_comparison import MultipleComparison
 import numpy
 from collections import OrderedDict
 
@@ -66,6 +65,7 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
             for j in range(len(data[(data.keys())[i]])):
                 all_data.append(data[(data.keys())[i]][j])
 
+        dof = N-1
         sorted_all_data = sorted(all_data)
         
         '''
@@ -143,27 +143,13 @@ class UnpairedMultipleSampleTestOfOrdinalScale:
         calculate H value
         '''
         H = 0.0
+        mean_rank = []
         for i in range(len(all_rank.keys())):
             print "mean rank ({}) : {}".format((all_rank.keys())[i], numpy.mean(all_rank[(all_rank.keys())[i]]))
+            mean_rank.append(numpy.mean(all_rank[(all_rank.keys())[i]]))
             H += pow(sum(all_rank[(all_rank.keys())[i]]), 2.0) / len(all_rank[(all_rank.keys())[i]])
         H *= 12.0 / (N * (N + 1.0)) 
         H -= 3.0 * (N + 1.0)
         print "H value: {}".format(H)
         
-        '''
-        add conditions based on N and the number of conditions
-        reference: https://kusuri-jouhou.com/statistics/ichigen.html
-        '''
-        p = -1.0
-        if N == 17 or N < 17 and len(data.keys()) == 3:
-            print "Please refer the ditribution list of H value from Kruskal-Wallis test"
-            print "ex. https://kusuri-jouhou.com/statistics/bunpuhyou2.html"
-        else:
-            p = stats.chi2.cdf(H, N - 1.0)
-            print "p value: {}".format(p)
-
-            if p < threshold:
-                multiple_comparison = MultipleComparison()
-                multiple_comparison.test(data, test="kruskal-wallis")
-
-        return p
+        return dof, H, mean_rank

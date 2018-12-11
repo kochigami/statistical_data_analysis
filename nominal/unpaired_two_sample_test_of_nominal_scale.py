@@ -67,8 +67,14 @@ class UnpairedTwoSampleTestOfNominalScale:
             else:
                 # use chi-square test
                 chi_squared_test = ChiSquaredTest()
-                p = chi_squared_test.test(data)
-                return p
+                '''
+                squared: 検定統計量
+                p: p value
+                dof: 自由度
+                ef: 期待度数
+                '''
+                squared, p, dof, ef = chi_squared_test.test(data)
+                return squared, p, dof, ef
                 
 if __name__ == '__main__':
     pass

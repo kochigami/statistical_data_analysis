@@ -40,7 +40,7 @@ class PairedTwoSampleTestOfNominalScale:
                 elif data[(data.keys())[0]][i] == 0 and data[(data.keys())[1]][i] == 1:
                     c += 1
             # z = abs(b-c)-1 / root(b+c)
-            # chi2 = pow((abs(b-c)-1), 2.0) / (b+c)
+            # z^2 = chi2
             chi2 = pow(abs(b-c) - 1.0, 2.0) / (b+c)
             p = stats.chi2.pdf(chi2, df=1)
             # pdf: probability density function

@@ -35,13 +35,13 @@ class ChiSquaredTest:
 
             data_tmp = [data1, data2]
             '''
-            # squared: 検定統計量
-            # p: p value
-            # dof: 自由度
-            # ef: 期待度数
+            squared: 検定統計量
+            p: p value
+            dof: 自由度
+            ef: 期待度数
             '''
             squared, p, dof, ef = stats.chi2_contingency(data_tmp)
             print "chi_squared: {}".format(squared)
             print "dof: {}".format(dof)
             print "p_value: {}".format(p)
-            return p
+            return squared, p, dof, ef
